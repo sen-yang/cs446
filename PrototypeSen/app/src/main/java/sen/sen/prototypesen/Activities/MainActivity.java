@@ -123,6 +123,8 @@ public class MainActivity extends AppCompatActivity{
     gameOver = false;
     targetTextView.setText(Integer.toString(targetNumber));
     currentTextView.setText(Integer.toString(currentNumber));
+
+    timeRemainingTextView.setText(String.format("%ss",new SimpleDateFormat("ss.SS").format(new Date(MAX_TIME))));
     countDownTimer = new CountDownTimer(MAX_TIME, 10){
       @Override
       public void onTick(long timeRemaining){
@@ -148,7 +150,7 @@ public class MainActivity extends AppCompatActivity{
     if(targetNumber == currentNumber){
       gameOver = true;
       countDownTimer.cancel();
-      showGameEndDialog(getString(R.string.winner_title), String.format(getString(R.string.winner_message), currentNumberListPosition, new SimpleDateFormat("ss.SS").format(new Date(timeRemaining))));
+      showGameEndDialog(getString(R.string.winner_title), String.format(getString(R.string.winner_message), currentNumberListPosition, new SimpleDateFormat("ss.SS").format(new Date(MAX_TIME - timeRemaining))));
       return true;
     }
     return false;
