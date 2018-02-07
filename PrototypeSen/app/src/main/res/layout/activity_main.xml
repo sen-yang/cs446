@@ -5,15 +5,131 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="sen.sen.prototypesen.MainActivity">
+    tools:context="sen.sen.prototypesen.Activities.MainActivity">
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/target"
+        app:layout_constraintEnd_toStartOf="@+id/targetTextView"
+        app:layout_constraintTop_toTopOf="@+id/targetTextView"/>
+
+    <TextView
+        android:id="@+id/targetTextView"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/current"
+        app:layout_constraintBottom_toBottomOf="@+id/currentTextView"
+        app:layout_constraintEnd_toStartOf="@+id/currentTextView"
+        app:layout_constraintTop_toTopOf="@+id/currentTextView"/>
+
+    <TextView
+        android:id="@+id/currentTextView"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textSize="35sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/targetTextView"/>
+
+    <TextView
+        android:id="@+id/timeRemainingTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/numberListView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/currentTextView"/>
+
+    <sen.sen.prototypesen.CustomUI.NumberListVIew
+        android:id="@+id/numberListView"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currentTextView"
+        android:clipToPadding="false"
+        android:paddingLeft="55dp"/>
+
+    <ImageView
+        android:id="@+id/addButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/red"
+        android:onClick="addButtonPressed"
+        android:src="@drawable/icon_add"
+        app:layout_constraintBottom_toTopOf="@+id/multiplyButton"
+        app:layout_constraintEnd_toStartOf="@+id/subtractButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/numberListView"/>
+
+    <ImageView
+        android:id="@+id/subtractButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/blue"
+        android:onClick="subtractButtonPressed"
+        android:src="@drawable/icon_subtract"
+        app:layout_constraintBottom_toTopOf="@+id/divideButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/addButton"
+        app:layout_constraintTop_toBottomOf="@+id/numberListView"/>
+
+    <ImageView
+        android:id="@+id/multiplyButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/green"
+        android:onClick="multiplyButtonPressed"
+        android:src="@drawable/icon_multiply"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/divideButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addButton"/>
+
+    <ImageView
+        android:id="@+id/divideButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/orange"
+        android:onClick="divideButtonPressed"
+        android:src="@drawable/icon_divide"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/multiplyButton"
+        app:layout_constraintTop_toBottomOf="@+id/subtractButton"/>
 </android.support.constraint.ConstraintLayout>

@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">PrototypeSen</string>
+    <string name="winner_title">Winner!</string>
+    <string name="winner_message">You got to the target in %d moves with %s time remaining</string>
+    <string name="loser_title">Oooo u lose</string>
+    <string name="divide_by_0_message">Cant divide by 0 homie....</string>
+    <string name="time_lose_message">damm u ran outta time, were just %d away :\'^)</string>
+    <string name="target">Target:</string>
+    <string name="current">Current:</string>
 </resources>
