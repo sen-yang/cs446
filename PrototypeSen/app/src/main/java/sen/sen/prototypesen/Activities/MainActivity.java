@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity{
       @Override
       public void onTick(long timeRemaining){
         MainActivity.this.timeRemaining = timeRemaining;
-        timeRemainingTextView.setText(new SimpleDateFormat("ss.SS").format(new Date(timeRemaining)));
+        timeRemainingTextView.setText(String.format("%ss",new SimpleDateFormat("ss.SS").format(new Date(timeRemaining))));
       }
 
       @Override
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity{
     if(targetNumber == currentNumber){
       gameOver = true;
       countDownTimer.cancel();
-      showGameEndDialog(getString(R.string.winner_title), String.format(getString(R.string.winner_message), currentNumberListPosition, new SimpleDateFormat("ss:SS").format(new Date(timeRemaining))));
+      showGameEndDialog(getString(R.string.winner_title), String.format(getString(R.string.winner_message), currentNumberListPosition, new SimpleDateFormat("ss.SS").format(new Date(timeRemaining))));
       return true;
     }
     return false;
