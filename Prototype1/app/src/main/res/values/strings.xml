@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Prototype1</string>
+    <string name="title_activity_game_">Game_Activity</string>
+
+    <string name="title_activity_fullscreen">GameActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>
