@@ -26,8 +26,9 @@ function searchGame(){
   });
 
   socket.on('SecondPlayerJoined', function(msg){
-  console.log("player " + msg.playerTwo + " has joined the game!");
+  console.log("player " + msg.playerJoined + " has joined the game!");
   });
+
 
 
 
