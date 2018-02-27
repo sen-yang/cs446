@@ -18,7 +18,7 @@ var gameCollection =  new function() {
 
 ///////////////////////////////////////////////////////
 server.listen(3000);
-var roomid = 0;
+var roomID = 0;
 var connectedclients = [];
 var inroomclients = [];
 
@@ -28,13 +28,14 @@ io.on('connection', function(socket){
   connectedclients.push(socket.id);
   console.log(connectedclients);
   console.log('a user connected');
+
   /////////////create room and make game//////////////////////////////////////////
   socket.on('makeGame', function () {
     makeGame(socket);
   });
   ////////////////////////////////////////////////////
   socket.on('searchGame', function(){
-    searchGame(socket);
+    searchGame(socket,findPlayerRoom(socket.id));
   });
   socket.on('startGame', function(){
     startGame(socket);
@@ -137,12 +138,11 @@ function disconnectUser(socket){
   }
 
 
-
-
   ////////////////////////////////////////////////
 
 
-  function startGame(){
+
+function startGame(socket, gameName){
     var goal = RandomizeGoal;
     var listno = 30;
     var i = 0;
@@ -150,9 +150,12 @@ function disconnectUser(socket){
     for(i = 0; i < listno; i++){
       list[i] = RandomizeNum;
     }
-
-
-  }//with two users, starting the game when prompted by players
+    io.to(gameName).emit('startingGame',{
+      goalNumber: goal,
+      Numlist : list,
+      time: Date.getTime()
+    });
+}//with two users, starting the game when prompted by players
 
 
 

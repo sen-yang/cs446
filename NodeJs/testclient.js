@@ -27,7 +27,24 @@ function searchGame(){
 
   socket.on('SecondPlayerJoined', function(msg){
   console.log("player " + msg.playerJoined + " has joined the game!");
+  setTimeout(function () {
+      socket.emit('startGame');
+    }, 5000);
+
+    });
+
+  socket.on('startingGame', function(msg){
+    var goalNumber = msg.goalNumber;
+    var time = msg.time;
+    var list = msg.Numlist;
+    console.log(goalNumber);
+    console.log(time);
+    console.log(list);
+
+  })
+
   });
+
 
 
 
