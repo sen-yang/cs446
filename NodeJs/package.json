@@ -1,0 +1,20 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "req": "^0.1.4",
+    "socket.io": "^2.0.4",
+    "test": "^0.6.0",
+    "uniqid": "^4.1.1",
+    "websocket": "^1.0.25",
+    "ws": "file:ws"
+  }
+}
