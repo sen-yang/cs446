@@ -19,7 +19,7 @@ import sen.sen.numericonsandroid.Models.User;
 import sen.sen.numericonsandroid.Networking.WebsocketController;
 import sen.sen.numericonsandroid.R;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements WebsocketController.WebsocketListener{
   private ProgressBar progressBar;
   private User user;
 
@@ -35,64 +35,7 @@ public class MainActivity extends AppCompatActivity{
   protected void onResume(){
     super.onResume();
 
-    WebsocketController.getInstance().addWebsocketListener(new WebsocketController.WebsocketListener(){
-      @Override
-      public void onConnected(){
-        runOnUiThread(new Runnable(){
-          @Override
-          public void run(){
-            progressBar.setVisibility(View.GONE);
-          }
-        });
-      }
-
-      @Override
-      public void onClose(){
-
-      }
-
-      @Override
-      public void loginConfirmed(boolean isConfirmed, User user){
-        if(isConfirmed){
-          MainActivity.this.user = user;
-        }
-      }
-
-      @Override
-      public void gameInitialized(final GameState gameState){
-        Log.d("asdf", "gameInitialized1");
-        runOnUiThread(new Runnable(){
-          @Override
-          public void run(){
-            Log.d("asdf", "gameInitialized2");
-            Intent intent = new Intent(MainActivity.this, MainGameActivity.class);
-            intent.putExtra(Constants.GAME_STATE, gameState);
-            intent.putExtra(Constants.USER, user);
-            startActivity(intent);
-          }
-        });
-      }
-
-      @Override
-      public void gameStarted(GameState gameState){
-
-      }
-
-      @Override
-      public void gameFinished(GameState gameState){
-
-      }
-
-      @Override
-      public void gameStateUpdated(GameState gameState){
-
-      }
-
-      @Override
-      public void itemDropped(DroppedItem droppedItem){
-
-      }
-    });
+    WebsocketController.getInstance().addWebsocketListener(this);
     if(WebsocketController.getInstance().isConnected()){
       progressBar.setVisibility(View.GONE);
     }
@@ -118,5 +61,61 @@ public class MainActivity extends AppCompatActivity{
       }
     });
     alert.show();
+  }
+  @Override
+  public void onConnected(){
+    runOnUiThread(new Runnable(){
+      @Override
+      public void run(){
+        progressBar.setVisibility(View.GONE);
+      }
+    });
+  }
+
+  @Override
+  public void onClose(){
+
+  }
+
+  @Override
+  public void loginConfirmed(boolean isConfirmed, User user){
+    if(isConfirmed){
+      MainActivity.this.user = user;
+    }
+  }
+
+  @Override
+  public void gameInitialized(final GameState gameState){
+    Log.d("asdf", "gameInitialized1");
+    runOnUiThread(new Runnable(){
+      @Override
+      public void run(){
+        Log.d("asdf", "gameInitialized2");
+        Intent intent = new Intent(MainActivity.this, MainGameActivity.class);
+        intent.putExtra(Constants.GAME_STATE, gameState);
+        intent.putExtra(Constants.USER, user);
+        startActivity(intent);
+      }
+    });
+  }
+
+  @Override
+  public void gameStarted(GameState gameState){
+
+  }
+
+  @Override
+  public void gameFinished(GameState gameState){
+
+  }
+
+  @Override
+  public void gameStateUpdated(GameState gameState){
+
+  }
+
+  @Override
+  public void itemDropped(DroppedItem droppedItem){
+
   }
 }
