@@ -1,7 +1,7 @@
 const genUUID = require('uuid/v1');
 const User = require('./User');
 
-module.exports = class GameState{
+module.exports = class WebsocketClient{
   constructor(ws){
     this.id = genUUID();
     this.user = new User(genUUID());

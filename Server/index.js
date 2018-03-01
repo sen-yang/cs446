@@ -84,7 +84,7 @@ function findGame(message, client1){
 }
 
 function playerAction(message, client){
-
+  client.currentRoom.playerList
 }
 
 function createGame(client1, client2){
