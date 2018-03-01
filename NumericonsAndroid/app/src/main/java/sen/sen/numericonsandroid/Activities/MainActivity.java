@@ -29,6 +29,11 @@ public class MainActivity extends AppCompatActivity{
     setContentView(R.layout.activity_main);
 
     progressBar = findViewById(R.id.progressBar);
+  }
+
+  @Override
+  protected void onResume(){
+    super.onResume();
 
     WebsocketController.getInstance().addWebsocketListener(new WebsocketController.WebsocketListener(){
       @Override

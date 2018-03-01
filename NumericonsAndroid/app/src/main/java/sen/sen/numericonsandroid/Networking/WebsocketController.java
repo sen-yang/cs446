@@ -204,13 +204,11 @@ public class WebsocketController{
       WeakReference<WebsocketListener> listenerWeakReference = listenerIterator.next();
 
       if(listenerWeakReference.get() == null){
-        listenerIterator.remove();
       }
       else{
         WebsocketListener websocketListener = listenerWeakReference.get();
 
         if(websocketListener != null){
-          Log.d("asdf", "handle");
           switch(websocketMessage.getType()){
             case PING:
               break;
@@ -219,6 +217,7 @@ public class WebsocketController{
               websocketListener.loginConfirmed(((ConfirmationMessage)websocketMessage).isConfirmed(), ((ConfirmationMessage)websocketMessage).getUser());
               break;
             case GAME_INIT:
+              Log.d("asdf", "handle");
               websocketListener.gameInitialized(((GameStateMessage)websocketMessage).getGameState());
               break;
             case GAME_START:

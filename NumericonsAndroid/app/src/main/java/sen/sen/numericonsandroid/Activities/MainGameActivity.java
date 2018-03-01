@@ -115,6 +115,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
     }
     totalNumberTextView.setText(Integer.toString(currentPlayer.getCurrentNumber()));
     countDownTimer.setProgress((int) (((float) gameState.getTimeRemaining()) / TOTAL_GAME_TIME) * 100);
+    Log.d("timer", (((float) gameState.getTimeRemaining()) / TOTAL_GAME_TIME) * 100 + " ");
     //todo show other players
 
     if(gameStage == Constants.GAME_STAGE.FINISHED && gameState.getWinner() != null){
@@ -197,11 +198,8 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
   public void itemDropped(final DroppedItem droppedItem){
     runOnUiThread(new Runnable(){
       public void run(){
-        Log.d("asdf", droppedItem.getNumber() + " " + droppedItem.getxPosition() + " " + droppedItem.getyPosition() + " " + droppedItem.getySpeed());
         backgroundLayoutView.addDroppedItem(droppedItem);
         droppedItemList.add(droppedItem);
-        Log.d("asdf1","aaaaa");
-
       }
     });
   }
