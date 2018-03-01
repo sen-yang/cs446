@@ -20,6 +20,7 @@ let gameRooms = {};
 let clientsSearchingForGame = {};
 
 server.on('connection', function(ws){
+  console.log('connected');
   let client = new WebsocketClient(ws);
   connectedClients[client.id] = client;
 
@@ -48,7 +49,7 @@ function verifyClient(info){
 // client message handlers
 
 function handleMessage(message, client){
-  switch(message.type){
+  switch(+message.type){
     case Constants.messageType.PING:
       break;
 

@@ -10,12 +10,12 @@ module.exports = class Player{
   }
 
   doPlayerAction(playerAction){
-    switch(playerAction.commandType){
+    switch(+playerAction.commandType){
       case Constants.playerActionType.ADDITION:
       case Constants.playerActionType.SUBTRACTION:
       case Constants.playerActionType.MULTIPLICATION:
       case Constants.playerActionType.DIVISION:
-        player.currentOperation = playerAction.commandType;
+        player.currentOperation = +playerAction.commandType;
         break;
       case Constants.playerActionType.GET_NUMBER:
         player.updateCurrentNumber(playerAction.value);
@@ -44,5 +44,9 @@ module.exports = class Player{
         this.currentNumber /= newNumber;
         break;
     }
+  }
+
+  toJSON(){
+    return {currentNumber: this.currentNumber};
   }
 };

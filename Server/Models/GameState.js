@@ -45,21 +45,41 @@ module.exports = class GameState{
     let now = Date.now();
     this.delta = now - this.previousTickTime;
     this.previousTickTime = now;
+    this.timeRemaining -= this.delta;
 
     let winner;
     let loser;
-    this.playerList.forEach((player) =>{
+    this.playerList.every((player) =>{
       if(player.currentNumber == this.targetNumber){
         this.isComplete = true;
         this.winner = player;
+        return false;
       }
       else if(player.lost){
         this.isComplete = true;
         this.loser = player;
+        return false;
       }
+      return true;
     });
 
-    if(this.gameFinished){
+    if((this.winner == null) && (this.loser == null) && (this.timeRemaining <= 0)){
+      this.isComplete = true;
+
+      let minDifference = Number.MAX_VALUE;
+      let minPlayer = null;
+      this.playerList.forEach((player)=>{
+        let difference = Math.abs(this.targetNumber - player.currentNumber);
+
+        if(difference < minDifference){
+          minDifference = difference;
+          minPlayer = player;
+        }
+      });
+      this.winner = minPlayer;
+    }
+
+    if(this.isComplete){
       return Constants.messageType.GAME_FINISH;
     }
     if(Math.random() > this.delta / 1000){
@@ -72,5 +92,24 @@ module.exports = class GameState{
 
   generateDrop(){
     return new DroppedItem(Helpers.randomIntInRage(Constants.MIN_DROP, Constants.MAX_DROP, true, this.seed), Helpers.randomFloat(this.seed));
+  }
+
+  toJSON(){
+    let winner = this.winner;
+
+    if(winner == null && this.isComplete){
+      this.playerList.every((player) =>{
+        if(player != this.loser){
+          winner = player;
+          return false;
+        }
+        return true;
+      });
+    }
+    return {targetNumber: this.targetNumber,
+            playerList: Object.keys(this.playerList).map(key => this.playerList[key]),
+            isComplete: this.isComplete,
+            winner: winner,
+            timeRemaining: this.timeRemaining};
   }
 };
