@@ -117,7 +117,7 @@
             app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
-    <RelativeLayout
+    <sen.sen.numericonsandroid.CustomUI.backgroundGameView
         android:id="@+id/background"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -137,12 +137,25 @@
             android:background="@drawable/ground"/>
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/basket"
             android:layout_width="89dp"
             android:layout_height="80dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="19dp"
             android:src="@drawable/basket2" />
-    </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/countDownTimer"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+    </sen.sen.numericonsandroid.CustomUI.backgroundGameView>
 
 </android.support.constraint.ConstraintLayout>

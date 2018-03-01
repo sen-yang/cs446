@@ -12,4 +12,5 @@ public class GameState{
   private Player winner;
   private long timeRemaining;
   private List<DroppedItem> droppedItemList;
+  private Basket basket;
 }
