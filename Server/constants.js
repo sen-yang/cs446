@@ -1,6 +1,11 @@
 module.exports = {
   PORT_NUMBER: 6969,
-  TICK_TIME: 1000 / 10 // (1s in ms) / fps
+  TICK_TIME: 1000 / 10, // (1s in ms) / fps
+  GAME_READY_TIME: 5000,
+  MIN_TARGET: -99,
+  MAX_TARGET: 100,
+  MIN_DROP: -9,
+  MAX_DROP: 10
 };
 
 module.exports.messageType = {

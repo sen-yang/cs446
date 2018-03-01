@@ -1,9 +1,12 @@
 const Player = require('./Player');
+const DroppedItem = require('./DroppedItem');
 const Constants = require('../constants');
 
 module.exports = class GameState{
+
   constructor(seedString, clientList){
     //todo generate from seed
+    this.seed = seedString;
     this.targetNumber = Math.round(Math.random() * 200) - 100;
     this.isComplete = false;
     this.winner = null;
@@ -13,6 +16,7 @@ module.exports = class GameState{
     this.delta = 0;
     this.startTime = 0;
     this.gameLoop = null;
+    this.updateCallback = null;
 
     this.playerList = {};
     clientList.forEach((client) =>{
@@ -23,8 +27,17 @@ module.exports = class GameState{
   startGame(updateCallback){
     this.startTime = Date.now();
     this.previousTickTime = this.startTime;
-    this.gameLoop = new DeltaTimer(()=>{
-      updateCallback(this.updateGame());
+    this.updateCallback = updateCallback;
+    this.tick();
+  }
+
+  tick(){
+    this.gameLoop = setTimeout(()=>{
+      this.updateCallback(this.updateGame());
+
+      if(!this.isComplete){
+        this.tick();
+      }
     }, Constants.TICK_TIME);
   }
 
@@ -55,5 +68,9 @@ module.exports = class GameState{
     else{
       return Constants.messageType.GAME_STATE_UPDATE;
     }
+  }
+
+  generateDrop(){
+    return new DroppedItem(Helpers.randomIntInRage(Constants.MIN_DROP, Constants.MAX_DROP, true, this.seed), Helpers.randomFloat(this.seed));
   }
 };

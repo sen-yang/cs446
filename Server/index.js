@@ -3,6 +3,7 @@ const WebSocketServer = require('ws').Server;
 const genUUID = require('uuid/v1');
 const WebsocketClient = require('./Models/WebsocketClient');
 const GameRoom = require('./Models/GameRoom');
+const WebsocketMessage = require('./Models/WebsocketMessage');
 
 const config = {
   host: "0.0.0.0",
@@ -59,14 +60,21 @@ function handleMessage(message, client){
       findGame(message, client);
       break;
     case Constants.messageType.PLAYER_ACTION:
+      playerAction(message, client);
       break;
   }
 }
 
 function loginUser(message, client){
+  let confirmed = false;
+
   if((message.username != null) && (!usernamesSet.has(message.username))){
-    client.user = {username: message.username}
+    client.user = {username: message.username};
+    confirmed = true;
   }
+  let websocketMessage = new WebsocketMessage(Constants.messageType.LOGIN_CONFIRMATION);
+  websocketMessage.isConfirmed = confirmed;
+  client.ws.send(JSON.stringify(websocketMessage));
 }
 
 function findGame(message, client1){
@@ -85,7 +93,11 @@ function findGame(message, client1){
 
 function playerAction(message, client){
   let player = client.getPlayerInCurrentRoom();
-  let playerAction = message.playerAction;
+
+  if(player != null){
+    player.doPlayerAction(message.playerAction);
+  }
+
 }
 
 function createGame(client1, client2){
@@ -94,16 +106,5 @@ function createGame(client1, client2){
   clientList[client1.id] = client1;
   clientList[client2.id] = client2;
   let gameRoom = new GameRoom(0, clientList,genUUID());
-  gameRoom.startGame();
-}
-
-function updateGame(gameRoom){
-  let gameFinished = false;
-  let winnerList = [];
-  gameRoom.gameState.playerList.forEach((player)=>{
-    if(player.currentNumber == gameRoom.gameState.targetNumber){
-      gameFinished = true;
-      winnerList.push(player);
-    }
-  });
+  gameRoom.initGame();
 }
