@@ -1,11 +1,11 @@
 module.exports = {};
 
 module.exports.randomFloat = (seed)=>{
-  //todo
+  //todo implement seed
   return Math.random();
 };
 
-module.exports.randomNumberInRage = (min, max, shouldRound = true, seed = null) =>{
+module.exports.randomNumberInRange = (min, max, shouldRound = true, seed = null) =>{
   let number = module.exports.randomFloat(seed) * (max - min) + min;
 
   if(shouldRound){

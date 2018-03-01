@@ -1,6 +1,7 @@
 const Player = require('./Player');
 const DroppedItem = require('./DroppedItem');
 const Constants = require('../constants');
+const Helpers = require('../Helpers');
 
 module.exports = class GameState{
 
@@ -18,9 +19,9 @@ module.exports = class GameState{
     this.gameLoop = null;
     this.updateCallback = null;
 
-    this.playerList = {};
+    this.playerList = [];
     clientList.forEach((client) =>{
-      this.playerList[client.id] = new Player(this.targetNumber, client.id);
+      this.playerList.push(new Player(this.targetNumber, client.id));
     });
   }
 
@@ -47,8 +48,6 @@ module.exports = class GameState{
     this.previousTickTime = now;
     this.timeRemaining -= this.delta;
 
-    let winner;
-    let loser;
     this.playerList.every((player) =>{
       if(player.currentNumber == this.targetNumber){
         this.isComplete = true;
@@ -82,7 +81,7 @@ module.exports = class GameState{
     if(this.isComplete){
       return Constants.messageType.GAME_FINISH;
     }
-    if(Math.random() > this.delta / 1000){
+    if(Math.random() < this.delta / 1000){
       return Constants.messageType.GAME_DROPPED_ITEM;
     }
     else{
@@ -91,7 +90,7 @@ module.exports = class GameState{
   }
 
   generateDrop(){
-    return new DroppedItem(Helpers.randomIntInRage(Constants.MIN_DROP, Constants.MAX_DROP, true, this.seed), Helpers.randomFloat(this.seed));
+    return new DroppedItem(Helpers.randomNumberInRange(Constants.MIN_DROP, Constants.MAX_DROP, true, this.seed), Helpers.randomFloat(this.seed));
   }
 
   toJSON(){
@@ -107,9 +106,15 @@ module.exports = class GameState{
       });
     }
     return {targetNumber: this.targetNumber,
-            playerList: Object.keys(this.playerList).map(key => this.playerList[key]),
+            playerList: this.playerList,
             isComplete: this.isComplete,
             winner: winner,
             timeRemaining: this.timeRemaining};
+  }
+
+  clientLeft(client){
+    this.isComplete = true;
+    this.loser = client.getPlayerInCurrentRoom();
+    //todo maybe shouldn't wait till next tick
   }
 };
