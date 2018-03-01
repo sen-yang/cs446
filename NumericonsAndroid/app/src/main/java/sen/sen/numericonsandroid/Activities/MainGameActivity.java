@@ -20,13 +20,14 @@ import java.util.List;
 import java.util.Random;
 
 import sen.sen.numericonsandroid.CustomUI.backgroundGameView;
+import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.Basket;
 import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Networking.WebsocketController;
 import sen.sen.numericonsandroid.R;
 
-public class MainGameActivity extends AppCompatActivity implements WebsocketController.WebsocketListener{
+public class MainGameActivity extends AppCompatActivity implements WebsocketController.WebsocketListener, backgroundGameView.BackgroundGameViewDelegate{
 
   // View widgets
   backgroundGameView backgroundLayoutView;
@@ -43,7 +44,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
   List<DroppedItem> droppedItemList;
 
   //@TODO: this is shit, but just for demo use for now..
-  int operationMode = 1; //+ : 1, - : 2, * : 3, and / : 4;
+  Constants.PLAYER_ACTION_TYPE operationMode = Constants.PLAYER_ACTION_TYPE.ADDITION;
 
   @Override
   protected void onCreate(Bundle savedInstanceState){
@@ -51,7 +52,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
     setContentView(R.layout.activity_main_game);
     this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     backgroundLayoutView = findViewById(R.id.background);
-//    backgroundLayoutView.setDelegate(this);
+    backgroundLayoutView.setDelegate(this);
 
     //Setup Buttons References
     addButton = findViewById(R.id.buttonAdd);
@@ -65,9 +66,9 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
     multiplyButton.setOnClickListener(multHandler);
     divideButton.setOnClickListener(divideHandler);
 
-    //targetNumberTextView.findViewById(R.id.targetNumberTextView);
+    targetNumberTextView = findViewById(R.id.targetNumberTextView);
     //@TODO: change "currentNumberTextView" to totalNumberTextView.
-//    totalNumberTextView.findViewById(R.id.currentNumberTextView);
+    totalNumberTextView = findViewById(R.id.currentNumberTextView);
 
     droppedItemList = new ArrayList<>();
     initDroppedItemList(20);
@@ -142,35 +143,40 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
     });
   }
 
-//  @Override
-//  public void updateScore(){
-//    //todo
-//    Log.i("updateScore", "updateScore: !!");
-//
-//  }
+  @Override
+  public void updateScore(){
+    //todo
+    Log.i("updateScore", "updateScore: !!");
+
+    switch(operationMode){
+      case ADDITION:
+        
+    }
+
+  }
 
   View.OnClickListener addHandler = new View.OnClickListener() {
     public void onClick(View v) {
-      operationMode = 1;
+      operationMode = Constants.PLAYER_ACTION_TYPE.ADDITION;
     }
   };
 
 
   View.OnClickListener subHandler = new View.OnClickListener() {
     public void onClick(View v) {
-      operationMode = 2;
+      operationMode = Constants.PLAYER_ACTION_TYPE.SUBTRACTION;
     }
   };
 
   View.OnClickListener multHandler = new View.OnClickListener() {
     public void onClick(View v) {
-      operationMode = 3;
+      operationMode = Constants.PLAYER_ACTION_TYPE.MULTIPLICATION;
     }
   };
 
   View.OnClickListener divideHandler = new View.OnClickListener() {
     public void onClick(View v) {
-      operationMode = 4;
+      operationMode = Constants.PLAYER_ACTION_TYPE.DIVISION;
     }
   };
 }
