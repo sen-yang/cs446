@@ -28,6 +28,7 @@ import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.PlayerAction;
+import sen.sen.numericonsandroid.Models.User;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.ConfirmationMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.FindGameMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.GameDroppedItemMessage;
@@ -44,7 +45,7 @@ public class WebsocketController{
   public interface WebsocketListener{
     void onConnected();
     void onClose();
-    void loginConfirmed(boolean isConfirmed);
+    void loginConfirmed(boolean isConfirmed, User user);
     void gameInitialized(GameState gameState);
     void gameStarted(GameState gameState);
     void gameFinished(GameState gameState);
@@ -206,7 +207,7 @@ public class WebsocketController{
             case PING:
               break;
             case LOGIN_CONFIRMATION:
-              websocketListener.loginConfirmed(((ConfirmationMessage)websocketMessage).isConfirmed());
+              websocketListener.loginConfirmed(((ConfirmationMessage)websocketMessage).isConfirmed(), ((ConfirmationMessage)websocketMessage).getUser());
               break;
             case GAME_INIT:
               websocketListener.gameInitialized(((GameStateMessage)websocketMessage).getGameState());

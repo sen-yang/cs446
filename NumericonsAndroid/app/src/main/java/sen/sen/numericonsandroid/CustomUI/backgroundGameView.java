@@ -30,7 +30,7 @@ import sen.sen.numericonsandroid.R;
 public class backgroundGameView extends RelativeLayout{
 
   public interface BackgroundGameViewDelegate{
-    void updateScore();
+    void updateScore(int value);
   }
 
   ImageView basketImageView;
@@ -96,7 +96,8 @@ public class backgroundGameView extends RelativeLayout{
   }
 
   public void addDroppedItem(DroppedItem item){
-    Log.i("Add item", "addDroppedItem: " + item.getxPosition() + ", " + item.getyPosition());
+    Log.d("Add item", "addDroppedItem: " + item.getxPosition() + ", " + item.getyPosition());
+    item.setAlive(true);
     droppedItemList.add(item);
   }
 
@@ -116,6 +117,7 @@ public class backgroundGameView extends RelativeLayout{
 
     for(DroppedItem item: droppedItemList) {
       if(item.isAlive()) {
+
         item.fall();
         if(!checkCollision(item)) {
           canvas.drawText(Float.toString(item.getNumber()), ratioToPixel_Width(item.getxPosition()),
@@ -125,7 +127,7 @@ public class backgroundGameView extends RelativeLayout{
           Log.i("checkCollision: ", "HITTTT");
 
           if(this.delegate != null){
-            this.delegate.updateScore();
+            this.delegate.updateScore(item.getNumber());
           }
         }
       }

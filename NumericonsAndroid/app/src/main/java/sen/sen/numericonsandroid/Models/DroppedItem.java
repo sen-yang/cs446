@@ -1,6 +1,8 @@
 package sen.sen.numericonsandroid.Models;
 
-public class DroppedItem{
+import java.io.Serializable;
+
+public class DroppedItem implements Serializable{
   private int number;
   private float xPosition;
   private float yPosition;

@@ -1,10 +1,12 @@
 package sen.sen.numericonsandroid.Models;
 
+import java.io.Serializable;
+
 /**
  * Created by Jennifer on 2018-02-28.
  */
 
-public class Basket{
+public class Basket implements Serializable{
   private float xPosition;
   private float yPosition;
   private float xScale;
