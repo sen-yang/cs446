@@ -9,6 +9,11 @@ import java.util.Map;
 public class Constants{
   public static final String SERVER_URL = "ws://sen.ddns.net";
 
+  public static final String GAME_STATE = "GAME_STATE";
+  public static final String USER = "USER";
+
+  public static final int TOTAL_GAME_TIME = 60 * 1000;
+
   public enum MESSAGE_TYPE{
     @SerializedName("0")
     PING(0),
@@ -97,5 +102,11 @@ public class Constants{
     public int getValue(){
       return value;
     }
+  }
+
+  public enum GAME_STAGE{
+    INIT,
+    RUNNING,
+    FINISHED
   }
 }

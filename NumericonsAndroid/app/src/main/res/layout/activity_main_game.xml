@@ -136,16 +136,6 @@
             android:layout_alignParentStart="true"
             android:background="@drawable/ground"/>
 
-        <ImageView
-            android:id="@+id/basket"
-            android:layout_width="89dp"
-            android:layout_height="80dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="19dp"
-            android:src="@drawable/basket2" />
-
         <ProgressBar
             android:id="@+id/countDownTimer"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"

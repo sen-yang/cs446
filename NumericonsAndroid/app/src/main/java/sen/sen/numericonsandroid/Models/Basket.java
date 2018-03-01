@@ -1,12 +1,14 @@
 package sen.sen.numericonsandroid.Models;
 
+import java.io.Serializable;
+
 /**
  * Created by Jennifer on 2018-02-28.
  */
 
-public class Basket{
+public class Basket implements Serializable{
   private float xPosition;
-  private final float yPosition;
+  private float yPosition;
   private float xScale;
 
   public Basket(float _xPosition, float _yPosition) {
@@ -24,6 +26,10 @@ public class Basket{
 
   public void setxPosition(float xPosition){
     this.xPosition = xPosition;
+  }
+
+  public void setyPosition(float yPosition){
+    this.yPosition = yPosition;
   }
 
   public boolean checkCollision() {
