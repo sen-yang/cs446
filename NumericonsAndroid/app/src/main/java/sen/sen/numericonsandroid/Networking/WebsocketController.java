@@ -3,13 +3,17 @@ package sen.sen.numericonsandroid.Networking;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -122,7 +126,18 @@ public class WebsocketController{
             return null;
           }
         });
-    gson = builder.createGsonBuilder().create();
+
+    gson = builder.createGsonBuilder().registerTypeAdapter(Constants.MESSAGE_TYPE.class, new JsonDeserializer<Constants.MESSAGE_TYPE>(){
+      @Override
+      public Constants.MESSAGE_TYPE deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException{
+        return Constants.MESSAGE_TYPE.valueOf(json.getAsInt());
+      }
+    }).registerTypeAdapter(Constants.PLAYER_ACTION_TYPE.class, new JsonDeserializer<Constants.PLAYER_ACTION_TYPE>(){
+      @Override
+      public Constants.PLAYER_ACTION_TYPE deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException{
+        return Constants.PLAYER_ACTION_TYPE.valueOf(json.getAsInt());
+      }
+    }).create();
     websocketListenerList = new ArrayList<>();
 
     URI uri;
@@ -180,7 +195,7 @@ public class WebsocketController{
     while(listenerIterator.hasNext()){
       WeakReference<WebsocketListener> listenerWeakReference = listenerIterator.next();
 
-      if(listenerIterator.next().get() == null){
+      if(listenerWeakReference.get() == null){
         listenerIterator.remove();
       }
       else{

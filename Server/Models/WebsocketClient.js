@@ -11,7 +11,22 @@ module.exports = class WebsocketClient{
 
   getPlayerInCurrentRoom(){
     if(this.currentRoom != null){
-      return this.currentRoom.gameState.playerList[this.id];
+      for(let index = 0; index < this.currentRoom.gameState.playerList.length; index++){
+        if(this.currentRoom.gameState.playerList[index].clientId == this.id){
+          return this.currentRoom.gameState.playerList[index];
+        }
+      }
+    }
+  }
+
+  //returns false if failed
+  sendMessage(message){
+    if(this.ws.readyState === this.ws.OPEN){
+      this.ws.send(message);
+      return true;
+    }
+    else{
+      return false;
     }
   }
 };

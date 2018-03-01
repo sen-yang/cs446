@@ -1,14 +1,30 @@
 const Constants = require('../constants');
 
 module.exports = class Player{
-  constructor(targetNumber){
+  constructor(targetNumber, clientId){
     this.targetNumber = targetNumber;
     this.currentNumber = 0;
     this.currentOperation = 0;
+    this.lost = false;
+    this.clientId = clientId;
   }
 
-  //return -1 if divide by 0
-  //return -2 if invalid
+  doPlayerAction(playerAction){
+    switch(+playerAction.commandType){
+      case Constants.playerActionType.ADDITION:
+      case Constants.playerActionType.SUBTRACTION:
+      case Constants.playerActionType.MULTIPLICATION:
+      case Constants.playerActionType.DIVISION:
+        player.currentOperation = +playerAction.commandType;
+        break;
+      case Constants.playerActionType.GET_NUMBER:
+        player.updateCurrentNumber(playerAction.value);
+        break;
+      case Constants.playerActionType.USE_POWER_UP:
+        break;
+    }
+  }
+
   updateCurrentNumber(newNumber){
     switch(this.currentOperation){
       case Constants.playerActionType.ADDITION:
@@ -22,13 +38,15 @@ module.exports = class Player{
         break;
       case Constants.playerActionType.DIVISION:
         if(newNumber == 0){
-          return -1;
+          this.lost = true;
+          return;
         }
         this.currentNumber /= newNumber;
         break;
-      default:
-        return -2;
     }
-    return 0;
+  }
+
+  toJSON(){
+    return {currentNumber: this.currentNumber};
   }
 };

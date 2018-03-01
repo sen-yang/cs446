@@ -3,6 +3,7 @@ const WebSocketServer = require('ws').Server;
 const genUUID = require('uuid/v1');
 const WebsocketClient = require('./Models/WebsocketClient');
 const GameRoom = require('./Models/GameRoom');
+const WebsocketMessage = require('./Models/WebsocketMessage');
 
 const config = {
   host: "0.0.0.0",
@@ -13,12 +14,13 @@ const server = new WebSocketServer(config, function(){
   console.log('Server started on port', Constants.PORT_NUMBER);
 });
 
-let connectedClients = {};
+let connectedClients = [];
 let usernamesSet = new Set();
 let gameRooms = {};
-let clientsSearchingForGame = {};
+let clientsSearchingForGame = [];
 
 server.on('connection', function(ws){
+  console.log('connected');
   let client = new WebsocketClient(ws);
   connectedClients[client.id] = client;
 
@@ -31,6 +33,13 @@ server.on('connection', function(ws){
     console.log('connection is closed');
     delete connectedClients[client.id];
 
+    for(var i = clientsSearchingForGame.length; i >= 0; i--){
+      if(clientsSearchingForGame[i] == client){
+        clientsSearchingForGame.splice(i, 1);
+        break;
+      }
+    }
+
     if(client.user != null){
       usernamesSet.delete(client.user.username);
     }
@@ -39,7 +48,7 @@ server.on('connection', function(ws){
 
 function verifyClient(info){
   // console.log('verifyClient', info);
-  //todo
+  //todo wat i do here...
   return true;
 }
 
@@ -47,7 +56,7 @@ function verifyClient(info){
 // client message handlers
 
 function handleMessage(message, client){
-  switch(message.type){
+  switch(+message.type){
     case Constants.messageType.PING:
       break;
 
@@ -59,56 +68,61 @@ function handleMessage(message, client){
       findGame(message, client);
       break;
     case Constants.messageType.PLAYER_ACTION:
+      playerAction(message, client);
       break;
   }
 }
 
 function loginUser(message, client){
+  let confirmed = false;
+
   if((message.username != null) && (!usernamesSet.has(message.username))){
-    client.user = {username: message.username}
+    client.user = {username: message.username};
+    confirmed = true;
   }
+  let websocketMessage = new WebsocketMessage(Constants.messageType.LOGIN_CONFIRMATION);
+  websocketMessage.isConfirmed = confirmed;
+  client.sendMessage(JSON.stringify(websocketMessage));
 }
 
 function findGame(message, client1){
-  if(clientsSearchingForGame.length > 0){
-    client2 = clientsSearchingForGame[Object.keys(clientsSearchingForGame)[0]];
+  if(client1.currentRoom != null){
+    //already in room
+  }
+  else if(clientsSearchingForGame.length > 0){
+    client2 = clientsSearchingForGame[0];
 
     if(client1.id != client2.id){
-      delete clientsSearchingForGame[client2.id];
+      clientsSearchingForGame.splice(0, 1);
       createGame(client1, client2);
     }
   }
   else{
-    clientsSearchingForGame[client1.id] = client1;
+    clientsSearchingForGame.push(client1);
   }
 }
 
 function playerAction(message, client){
   let player = client.getPlayerInCurrentRoom();
-  let playerAction = message.playerAction;
-  switch(playerAction.commandType){
-    case Constants.playerActionType.ADDITION:
-    case Constants.playerActionType.SUBTRACTION:
-    case Constants.playerActionType.MULTIPLICATION:
-    case Constants.playerActionType.DIVISION:
-      player.currentOperation = playerAction.commandType;
-      break;
-    case Constants.playerActionType.GET_NUMBER:
-      player.updateCurrentNumber(playerAction.value);
-      break;
-    case Constants.playerActionType.USE_POWER_UP:
-      break;
+
+  if(player != null){
+    player.doPlayerAction(message.playerAction);
   }
-  //todo send update game state to clients
+
 }
 
 function createGame(client1, client2){
   //todo game types not implemented
-  let clientList = {};
-  clientList[client1.id] = client1;
-  clientList[client2.id] = client2;
-  let gameRoom = new GameRoom(0, clientList,genUUID());
-  client1.currentRoom = gameRoom;
-  client2.currentRoom = gameRoom;
-  //todo start game
+  let clientList = [];
+  clientList.push(client1);
+  clientList.push(client2);
+  let gameRoom = new GameRoom(0, clientList, genUUID(), (gameRoom) =>{
+    gameFinished(gameRoom);
+  });
+  gameRoom.initGame();
+  gameRooms[gameRoom.id] = gameRoom;
+}
+
+function gameFinished(gameRoom){
+  delete gameRooms[gameRoom.id];
 }
