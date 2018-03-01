@@ -21,6 +21,7 @@ module.exports = class GameRoom{
     websocketMessage.gameState = this.gameState;
     let messageString = JSON.stringify(websocketMessage);
     this.clientList.forEach((client)=>{
+      console.log("asdf", client.user.username, messageString);
       client.sendMessage(messageString);
     });
 

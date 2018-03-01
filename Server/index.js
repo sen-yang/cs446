@@ -4,6 +4,7 @@ const genUUID = require('uuid/v1');
 const WebsocketClient = require('./Models/WebsocketClient');
 const GameRoom = require('./Models/GameRoom');
 const WebsocketMessage = require('./Models/WebsocketMessage');
+const User = require('./Models/User');
 
 const config = {
   host: "0.0.0.0",
@@ -76,12 +77,13 @@ function handleMessage(message, client){
 function loginUser(message, client){
   let confirmed = false;
 
-  if((message.username != null) && (!usernamesSet.has(message.username))){
-    client.user = {username: message.username};
+  if((message.username != null)){// && (!usernamesSet.has(message.username))){
+    client.user = new User(message.username);
     confirmed = true;
   }
   let websocketMessage = new WebsocketMessage(Constants.messageType.LOGIN_CONFIRMATION);
   websocketMessage.isConfirmed = confirmed;
+  websocketMessage.user = client.user;
   client.sendMessage(JSON.stringify(websocketMessage));
 }
 

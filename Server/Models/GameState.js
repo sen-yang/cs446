@@ -21,7 +21,7 @@ module.exports = class GameState{
 
     this.playerList = [];
     clientList.forEach((client) =>{
-      this.playerList.push(new Player(this.targetNumber, client.id));
+      this.playerList.push(new Player(this.targetNumber, client));
     });
   }
 

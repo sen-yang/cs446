@@ -12,7 +12,7 @@ module.exports = class WebsocketClient{
   getPlayerInCurrentRoom(){
     if(this.currentRoom != null){
       for(let index = 0; index < this.currentRoom.gameState.playerList.length; index++){
-        if(this.currentRoom.gameState.playerList[index].clientId == this.id){
+        if(this.currentRoom.gameState.playerList[index].client.id == this.id){
           return this.currentRoom.gameState.playerList[index];
         }
       }

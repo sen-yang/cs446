@@ -1,12 +1,12 @@
 const Constants = require('../constants');
 
 module.exports = class Player{
-  constructor(targetNumber, clientId){
+  constructor(targetNumber, client){
     this.targetNumber = targetNumber;
     this.currentNumber = 0;
     this.currentOperation = 0;
     this.lost = false;
-    this.clientId = clientId;
+    this.client = client;
   }
 
   doPlayerAction(playerAction){
@@ -15,10 +15,10 @@ module.exports = class Player{
       case Constants.playerActionType.SUBTRACTION:
       case Constants.playerActionType.MULTIPLICATION:
       case Constants.playerActionType.DIVISION:
-        player.currentOperation = +playerAction.commandType;
+        this.currentOperation = +playerAction.commandType;
         break;
       case Constants.playerActionType.GET_NUMBER:
-        player.updateCurrentNumber(playerAction.value);
+        this.updateCurrentNumber(playerAction.value);
         break;
       case Constants.playerActionType.USE_POWER_UP:
         break;
@@ -47,6 +47,7 @@ module.exports = class Player{
   }
 
   toJSON(){
-    return {currentNumber: this.currentNumber};
+    return {currentNumber: this.currentNumber,
+            username: this.client.user.username};
   }
 };
