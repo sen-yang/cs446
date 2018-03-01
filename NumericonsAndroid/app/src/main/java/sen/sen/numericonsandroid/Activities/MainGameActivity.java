@@ -2,6 +2,7 @@ package sen.sen.numericonsandroid.Activities;
 
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -216,6 +217,10 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
 
   View.OnClickListener addHandler = new View.OnClickListener(){
     public void onClick(View v){
+      addButton.setBackgroundColor(Color.RED);
+      subButton.setBackgroundColor(Color.DKGRAY);
+      multiplyButton.setBackgroundColor(Color.DKGRAY);
+      divideButton.setBackgroundColor(Color.DKGRAY);
       operationMode = Constants.PLAYER_ACTION_TYPE.ADDITION;
       playerActionPerformed(operationMode, 0);
     }
@@ -224,6 +229,11 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
 
   View.OnClickListener subHandler = new View.OnClickListener(){
     public void onClick(View v){
+      subButton.setBackgroundColor(Color.RED);
+      addButton.setBackgroundColor(Color.DKGRAY);
+      multiplyButton.setBackgroundColor(Color.DKGRAY);
+      divideButton.setBackgroundColor(Color.DKGRAY);
+
       operationMode = Constants.PLAYER_ACTION_TYPE.SUBTRACTION;
       playerActionPerformed(operationMode, 0);
     }
@@ -231,6 +241,12 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
 
   View.OnClickListener multHandler = new View.OnClickListener(){
     public void onClick(View v){
+      multiplyButton.setBackgroundColor(Color.RED);
+      subButton.setBackgroundColor(Color.DKGRAY);
+      addButton.setBackgroundColor(Color.DKGRAY);
+      divideButton.setBackgroundColor(Color.DKGRAY);
+
+      operationMode = Constants.PLAYER_ACTION_TYPE.ADDITION;
       operationMode = Constants.PLAYER_ACTION_TYPE.MULTIPLICATION;
       playerActionPerformed(operationMode, 0);
     }
@@ -238,6 +254,11 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
 
   View.OnClickListener divideHandler = new View.OnClickListener(){
     public void onClick(View v){
+      divideButton.setBackgroundColor(Color.RED);
+      subButton.setBackgroundColor(Color.DKGRAY);
+      addButton.setBackgroundColor(Color.DKGRAY);
+      multiplyButton.setBackgroundColor(Color.DKGRAY);
+
       operationMode = Constants.PLAYER_ACTION_TYPE.DIVISION;
       playerActionPerformed(operationMode, 0);
     }

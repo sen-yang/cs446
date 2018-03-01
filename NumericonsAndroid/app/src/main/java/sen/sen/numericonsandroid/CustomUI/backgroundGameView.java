@@ -71,10 +71,10 @@ public class backgroundGameView extends RelativeLayout{
     basketImageView.setOnTouchListener(basket_onTouchListener());
     basketModel = new Basket(0, 0);
     droppedItemList = new ArrayList<>();
-    textSize = 40;
+    textSize = 60;
 
     textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    textPaint.setColor(Color.RED);
+    textPaint.setColor(Color.rgb(250,150,200));
     textPaint.setTextSize(textSize);
 
     clipBounds = new Rect();
@@ -120,12 +120,10 @@ public class backgroundGameView extends RelativeLayout{
 
         item.fall();
         if(!checkCollision(item)) {
-          canvas.drawText(Float.toString(item.getNumber()), ratioToPixel_Width(item.getxPosition()),
+          canvas.drawText(Integer.toString(item.getNumber()), ratioToPixel_Width(item.getxPosition()),
                           ratioToPixel_Height(item.getyPosition()), textPaint);
         } else {
           canvas.drawCircle(ratioToPixel_Width(item.getxPosition()),ratioToPixel_Height(item.getyPosition()), 30, textPaint);
-          Log.i("checkCollision: ", "HITTTT");
-
           if(this.delegate != null){
             this.delegate.updateScore(item.getNumber());
           }
@@ -149,7 +147,7 @@ public class backgroundGameView extends RelativeLayout{
 
 //    Log.i("item_Pixel_position: ", Float.toString(item_XPixel_position) + ", " + Float.toString(item_YPixel_position) + ", " +  Float.toString(clipBounds.height()));
 //    Log.i("Basket_position: ", Float.toString(basketModel.getxPosition()) + ", " +
-//          Float.toString(basketImageView.getWidth()) + ", " + Float.toString(basketModel.getyPosition()));
+//          Float.toString(basketImageView.getWidth())/ + ", " + Float.toString(basketModel.getyPosition()));
 
     if(itemNumber == null) {
       return false;
