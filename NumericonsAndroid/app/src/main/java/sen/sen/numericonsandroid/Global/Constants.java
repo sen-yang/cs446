@@ -52,11 +52,22 @@ public class Constants{
   }
 
   public enum PLAYER_ACTION_TYPE{
-    ADDITION,
-    SUBTRACTION,
-    MULTIPLICATION,
-    DIVISION,
-    GET_NUMBER,
-    USE_POWER_UP
+    ADDITION(0),
+    SUBTRACTION(1),
+    MULTIPLICATION(2),
+    DIVISION(3),
+    GET_NUMBER(4),
+    USE_POWER_UP(5);
+
+    private int value;
+    private static Map map = new HashMap<>();
+
+    PLAYER_ACTION_TYPE(int value){
+      this.value = value;
+    }
+
+    public int getValue(){
+      return value;
+    }
   }
 }

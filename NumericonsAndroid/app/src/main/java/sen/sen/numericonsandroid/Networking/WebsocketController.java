@@ -51,10 +51,10 @@ public class WebsocketController{
   private WebSocketClient webSocketClient;
   private boolean isConnected;
 
-  public WebsocketController getInstance(){
+  public static WebsocketController getInstance(){
     if(staticWebsocketController == null){
       staticWebsocketController = new WebsocketController();
-      initialize();
+      staticWebsocketController.initialize();
     }
     return staticWebsocketController;
   }
