@@ -84,7 +84,22 @@ function findGame(message, client1){
 }
 
 function playerAction(message, client){
-  client.currentRoom.playerList
+  let player = client.getPlayerInCurrentRoom();
+  let playerAction = message.playerAction;
+  switch(playerAction.commandType){
+    case Constants.playerActionType.ADDITION:
+    case Constants.playerActionType.SUBTRACTION:
+    case Constants.playerActionType.MULTIPLICATION:
+    case Constants.playerActionType.DIVISION:
+      player.currentOperation = playerAction.commandType;
+      break;
+    case Constants.playerActionType.GET_NUMBER:
+      player.updateCurrentNumber(playerAction.value);
+      break;
+    case Constants.playerActionType.USE_POWER_UP:
+      break;
+  }
+  //todo send update game state to clients
 }
 
 function createGame(client1, client2){

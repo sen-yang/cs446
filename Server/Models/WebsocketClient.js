@@ -8,4 +8,10 @@ module.exports = class WebsocketClient{
     this.ws = ws;
     this.currentRoom = null;
   }
+
+  getPlayerInCurrentRoom(){
+    if(this.currentRoom != null){
+      return this.currentRoom.gameState.playerList[this.id];
+    }
+  }
 };
