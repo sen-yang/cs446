@@ -56,7 +56,6 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
 
   private GameState gameState;
   private Player currentPlayer;
-  private User user;
   private Constants.GAME_STAGE gameStage;
 
   Constants.PLAYER_ACTION_TYPE operationMode = Constants.PLAYER_ACTION_TYPE.ADDITION;
@@ -67,7 +66,6 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
     setContentView(R.layout.activity_main_game);
 
     gameState = (GameState) getIntent().getSerializableExtra(Constants.GAME_STATE);
-    user = (User) getIntent().getSerializableExtra(Constants.USER);
     gameStage = Constants.GAME_STAGE.INIT;
 
     this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -110,7 +108,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
     targetNumberTextView.setText(Integer.toString(gameState.getTargetNumber()));
 
     for(Player player : gameState.getPlayerList()){
-      if(player.getUsername().equals(user.getUsername())){
+      if(player.getUsername().equals(WebsocketController.getInstance().getUser().getUsername())){
         currentPlayer = player;
         break;
       }
@@ -119,7 +117,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
     countDownTimer.setProgress((int) (((float) gameState.getTimeRemaining()) / TOTAL_GAME_TIME) * 100);
     //todo show other players
 
-    if(gameStage == Constants.GAME_STAGE.FINISHED){
+    if(gameStage == Constants.GAME_STAGE.FINISHED && gameState.getWinner() != null){
       AlertDialog.Builder builder;
       if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
         builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
@@ -129,7 +127,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
       }
       String title = "You lose:(";
 
-      if(gameState.getWinner().getUsername().equals(user.getUsername())){
+      if(gameState.getWinner().getUsername().equals(WebsocketController.getInstance().getUser().getUsername())){
         title = "You Win!";
       }
       builder.setTitle(title)
