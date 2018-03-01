@@ -1,5 +1,5 @@
-var genUUID = require('uuid/v1');
-var User = require('./User');
+const genUUID = require('uuid/v1');
+const User = require('./User');
 
 module.exports = class GameState{
   constructor(ws){

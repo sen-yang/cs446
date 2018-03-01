@@ -1,6 +1,6 @@
 module.exports = class GameState{
-  constructor(seedString){
-    this.targetNumber = 0;
+  constructor(seedString, playerList){
+    this.targetNumber = ;
     this.playerList = [];
     this.isComplete = false;
     this.winner = null;

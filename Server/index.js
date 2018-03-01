@@ -2,6 +2,7 @@ const Constants = require('./constants');
 const WebSocketServer = require('ws').Server;
 const genUUID = require('uuid/v1');
 const WebsocketClient = require('./Models/WebsocketClient');
+const GameRoom = require('./Models/GameRoom');
 
 const config = {
   host: "0.0.0.0",
@@ -42,6 +43,9 @@ function verifyClient(info){
   return true;
 }
 
+
+// client message handlers
+
 function handleMessage(message, client){
   switch(message.type){
     case Constants.messageType.PING:
@@ -74,11 +78,22 @@ function findGame(message, client1){
       createGame(client1, client2);
     }
   }
+  else{
+    clientsSearchingForGame[client1.id] = client1;
+  }
 }
 
 function playerAction(message, client){
+
 }
 
 function createGame(client1, client2){
-
+  //todo game types not implemented
+  let clientList = {};
+  clientList[client1.id] = client1;
+  clientList[client2.id] = client2;
+  let gameRoom = new GameRoom(0, clientList,genUUID());
+  client1.currentRoom = gameRoom;
+  client2.currentRoom = gameRoom;
+  //todo start game
 }
