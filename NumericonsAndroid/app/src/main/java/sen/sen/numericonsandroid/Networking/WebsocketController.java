@@ -38,6 +38,8 @@ public class WebsocketController{
   private static WebsocketController staticWebsocketController;
 
   public interface WebsocketListener{
+    void onConnected();
+    void onClose();
     void loginConfirmed(boolean isConfirmed);
     void gameInitialized(GameState gameState);
     void gameStarted(GameState gameState);
@@ -136,6 +138,12 @@ public class WebsocketController{
       @Override
       public void onOpen(ServerHandshake handshakedata){
         Log.d(TAG, "onOpen");
+
+        for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().onConnected();
+          }
+        }
         isConnected = true;
       }
 
@@ -148,6 +156,12 @@ public class WebsocketController{
       @Override
       public void onClose(int code, String reason, boolean remote){
         Log.d(TAG, "onClose: " + code + " " + reason);
+
+        for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().onConnected();
+          }
+        }
         isConnected = false;
       }
 
