@@ -3,12 +3,24 @@ package sen.sen.numericonsandroid.Models;
 public class DroppedItem{
   private int number;
   private float xPosition;
-  private long dropTime;
+  private float yPosition;
+  private float ySpeed;
+  private boolean alive;
 
-  public DroppedItem(int number, float xPosition, long dropTime){
+  public DroppedItem(int number, float xPosition, float ySpeed){
     this.number = number;
     this.xPosition = xPosition;
-    this.dropTime = dropTime;
+    this.ySpeed = ySpeed;
+    this.alive = true;
+    this.yPosition = 0;
+  }
+
+  public float getyPosition(){
+    return yPosition;
+  }
+
+  public void setyPosition(float yPosition){
+    this.yPosition = yPosition;
   }
 
   public int getNumber(){
@@ -27,11 +39,23 @@ public class DroppedItem{
     this.xPosition = xPosition;
   }
 
-  public long getDropTime(){
-    return dropTime;
+  public float getySpeed(){
+    return ySpeed;
   }
 
-  public void setDropTime(long dropTime){
-    this.dropTime = dropTime;
+  public void setySpeed(long ySpeed){
+    this.ySpeed = ySpeed;
   }
+
+  public boolean isAlive(){
+    return alive;
+  }
+  public void setAlive(boolean alive){
+    this.alive = alive;
+  }
+
+  public void fall(){
+    yPosition += ySpeed;
+  }
+
 }

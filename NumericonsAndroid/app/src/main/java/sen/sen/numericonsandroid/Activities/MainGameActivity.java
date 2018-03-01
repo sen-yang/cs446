@@ -9,12 +9,15 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.graphics.PointF;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import sen.sen.numericonsandroid.CustomUI.backgroundGameView;
 import sen.sen.numericonsandroid.Models.Basket;
@@ -26,65 +29,72 @@ import sen.sen.numericonsandroid.R;
 public class MainGameActivity extends AppCompatActivity implements WebsocketController.WebsocketListener{
 
   // View widgets
-//  ImageView basketImageView;
   backgroundGameView backgroundLayoutView;
+  TextView targetNumberTextView;
+  TextView totalNumberTextView;
+
+  //Buttons
+  Button addButton;
+  Button subButton;
+  Button multiplyButton;
+  Button divideButton;
 
   //Private GameState Items
   List<DroppedItem> droppedItemList;
-//  Basket basketModel;
+
+  //@TODO: this is shit, but just for demo use for now..
+  int operationMode = 1; //+ : 1, - : 2, * : 3, and / : 4;
 
   @Override
   protected void onCreate(Bundle savedInstanceState){
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main_game);
     this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//    basketImageView = findViewById(R.id.basket);
-//    basketImageView.setOnTouchListener(basket_onTouchListener());
-//    basketModel = new Basket(basketImageView.getX(), basketImageView.getY());
     backgroundLayoutView = findViewById(R.id.background);
+//    backgroundLayoutView.setDelegate(this);
+
+    //Setup Buttons References
+    addButton = findViewById(R.id.buttonAdd);
+    subButton = findViewById(R.id.buttonMinus);
+    multiplyButton = findViewById(R.id.buttonTimes);
+    divideButton = findViewById(R.id.buttonDiv);
+
+    //Setup Event Listener
+    addButton.setOnClickListener(addHandler);
+    subButton.setOnClickListener(subHandler);
+    multiplyButton.setOnClickListener(multHandler);
+    divideButton.setOnClickListener(divideHandler);
+
+    //targetNumberTextView.findViewById(R.id.targetNumberTextView);
+    //@TODO: change "currentNumberTextView" to totalNumberTextView.
+//    totalNumberTextView.findViewById(R.id.currentNumberTextView);
+
     droppedItemList = new ArrayList<>();
-    //initDroppedItemList(100);
+    initDroppedItemList(20);
     WebsocketController.getInstance().addWebsocketListener(this);
   }
-//
-//  private View.OnTouchListener basket_onTouchListener() {
-//    return new View.OnTouchListener(){
-//      PointF DownPT = new PointF(); // Record Mouse Position When Pressed Down
-//      PointF StartPT = new PointF(); // Record Start Position of 'img'
-//      @Override
-//      public boolean onTouch(View view, MotionEvent motionEvent){
-//        switch (motionEvent.getAction())
-//        {
-//          case MotionEvent.ACTION_MOVE :
-//            //@TODO: Change basketImageView.getWidth()/2 into a constant instead.
-//            basketModel.setxPosition(StartPT.x + motionEvent.getX() - DownPT.x);
-//            basketImageView.setX(basketModel.getxPosition());
-//            StartPT.set((basketModel.getxPosition() - basketImageView.getWidth()/2), basketModel.getyPosition());
-//            break;
-//          default :
-//            break;
-//        }
-//        return true;
-//      }
-//    };
-//  }
-
 
   int randomInt_Range(int min, int max) {
     return min + (int)(Math.random() * ((max - min) + 1));
   }
-//  void initDroppedItemList(int amount) {
-//    float backgroundX = backgroundLayoutView.getX();
-//    float backgroundWidth = backgroundLayoutView.getWidth();
-//    float backgroundEndX = backgroundX + backgroundWidth;
-//
-//    for(int i = 0; i < amount; i++) {
-//      DroppedItem item = new DroppedItem(randomInt_Range(0,9),
-//                                         randomInt_Range((int)backgroundX,(int)backgroundEndX),
-//                                         100);
-//      droppedItemList.add(item);
-//    }
-//  }
+
+  float randomFloat_Range(float min, float max) {
+    Random r = new Random();
+    return min + r.nextFloat() * (max - min);
+  }
+  void initDroppedItemList(int amount) {
+    float backgroundX = backgroundLayoutView.getX();
+    float backgroundWidth = backgroundLayoutView.getWidth();
+    float backgroundEndX = backgroundX + backgroundWidth;
+
+    for(int i = 0; i < amount; i++) {
+      DroppedItem item = new DroppedItem(randomInt_Range(0,9),
+                                         randomFloat_Range(0,0.9f),
+                                         randomFloat_Range(0.005f,0.01f));
+      droppedItemList.add(item);
+      backgroundLayoutView.addDroppedItem(item);
+    }
+  }
 
   @Override
   public void onConnected(){
@@ -131,4 +141,36 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
       }
     });
   }
+
+//  @Override
+//  public void updateScore(){
+//    //todo
+//    Log.i("updateScore", "updateScore: !!");
+//
+//  }
+
+  View.OnClickListener addHandler = new View.OnClickListener() {
+    public void onClick(View v) {
+      operationMode = 1;
+    }
+  };
+
+
+  View.OnClickListener subHandler = new View.OnClickListener() {
+    public void onClick(View v) {
+      operationMode = 2;
+    }
+  };
+
+  View.OnClickListener multHandler = new View.OnClickListener() {
+    public void onClick(View v) {
+      operationMode = 3;
+    }
+  };
+
+  View.OnClickListener divideHandler = new View.OnClickListener() {
+    public void onClick(View v) {
+      operationMode = 4;
+    }
+  };
 }

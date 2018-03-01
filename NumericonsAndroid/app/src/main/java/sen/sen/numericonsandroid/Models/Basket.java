@@ -6,7 +6,7 @@ package sen.sen.numericonsandroid.Models;
 
 public class Basket{
   private float xPosition;
-  private final float yPosition;
+  private float yPosition;
   private float xScale;
 
   public Basket(float _xPosition, float _yPosition) {
@@ -24,6 +24,10 @@ public class Basket{
 
   public void setxPosition(float xPosition){
     this.xPosition = xPosition;
+  }
+
+  public void setyPosition(float yPosition){
+    this.yPosition = yPosition;
   }
 
   public boolean checkCollision() {
