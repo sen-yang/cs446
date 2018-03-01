@@ -1,5 +1,6 @@
 package sen.sen.numericonsandroid.Activities;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -106,6 +107,9 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
   }
 
   private void updateFromServer(GameState gameState){
+    if(this.isFinishing()){
+      return;
+    }
     targetNumberTextView.setText(Integer.toString(gameState.getTargetNumber()));
 
     for(Player player : gameState.getPlayerList()){
@@ -116,17 +120,11 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
     }
     totalNumberTextView.setText(Integer.toString(currentPlayer.getCurrentNumber()));
     countDownTimer.setProgress((int) (((float) gameState.getTimeRemaining()) / TOTAL_GAME_TIME) * 100);
-    Log.d("timer", (((float) gameState.getTimeRemaining()) / TOTAL_GAME_TIME) * 100 + " ");
     //todo show other players
 
     if(gameStage == Constants.GAME_STAGE.FINISHED && gameState.getWinner() != null){
       AlertDialog.Builder builder;
-      if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-        builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-      }
-      else{
-        builder = new AlertDialog.Builder(this);
-      }
+      builder = new AlertDialog.Builder(this);
       String title = "You lose:(";
 
       if(gameState.getWinner().getUsername().equals(WebsocketController.getInstance().getUser().getUsername())){
@@ -212,7 +210,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
       case ADDITION:
 
     }
-    playerActionPerformed(GET_NUMBER, value);
+    playerActionPerformed(GET_NUMBER, value, null);
   }
 
   View.OnClickListener addHandler = new View.OnClickListener(){
@@ -222,7 +220,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
       multiplyButton.setBackgroundColor(Color.DKGRAY);
       divideButton.setBackgroundColor(Color.DKGRAY);
       operationMode = Constants.PLAYER_ACTION_TYPE.ADDITION;
-      playerActionPerformed(operationMode, 0);
+      playerActionPerformed(operationMode, 0, (Button) v);
     }
   };
 
@@ -235,7 +233,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
       divideButton.setBackgroundColor(Color.DKGRAY);
 
       operationMode = Constants.PLAYER_ACTION_TYPE.SUBTRACTION;
-      playerActionPerformed(operationMode, 0);
+      playerActionPerformed(operationMode, 0, (Button) v);
     }
   };
 
@@ -248,7 +246,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
 
       operationMode = Constants.PLAYER_ACTION_TYPE.ADDITION;
       operationMode = Constants.PLAYER_ACTION_TYPE.MULTIPLICATION;
-      playerActionPerformed(operationMode, 0);
+      playerActionPerformed(operationMode, 0, (Button) v);
     }
   };
 
@@ -260,11 +258,18 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
       multiplyButton.setBackgroundColor(Color.DKGRAY);
 
       operationMode = Constants.PLAYER_ACTION_TYPE.DIVISION;
-      playerActionPerformed(operationMode, 0);
+      playerActionPerformed(operationMode, 0, (Button) v);
     }
   };
 
-  private void playerActionPerformed(Constants.PLAYER_ACTION_TYPE operationMode, int value){
+  private void playerActionPerformed(Constants.PLAYER_ACTION_TYPE operationMode, int value, Button selectedButton){
+    addButton.setTextColor(getResources().getColor(R.color.black));
+    subButton.setTextColor(getResources().getColor(R.color.black));
+    multiplyButton.setTextColor(getResources().getColor(R.color.black));
+    divideButton.setTextColor(getResources().getColor(R.color.black));
+    if(selectedButton != null){
+      selectedButton.setTextColor(getResources().getColor(R.color.white));
+    }
     WebsocketController.getInstance().sendPlayerAction(new PlayerAction(operationMode, value));
   }
 }
