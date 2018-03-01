@@ -5,6 +5,6 @@ module.exports = class DroppedItem{
     this.number = number;
     this.xPosition = xPosition;
     this.yPosition = 0;
-    this.ySpeed = Helpers.randomNumberInRange(0.005, 0.01, false);
+    this.ySpeed = Helpers.randomNumberInRange(0.005, 0.02, false);
   }
 };

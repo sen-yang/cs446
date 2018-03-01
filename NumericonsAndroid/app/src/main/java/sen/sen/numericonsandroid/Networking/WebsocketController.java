@@ -57,6 +57,7 @@ public class WebsocketController{
   private List<WeakReference<WebsocketListener>> websocketListenerList;
   private WebSocketClient webSocketClient;
   private boolean isConnected;
+  private User user;
 
   public static WebsocketController getInstance(){
     if(staticWebsocketController == null){
@@ -96,6 +97,10 @@ public class WebsocketController{
 
   public boolean isConnected(){
     return isConnected;
+  }
+
+  public User getUser(){
+    return user;
   }
 
   private void initialize(){
@@ -154,6 +159,7 @@ public class WebsocketController{
       @Override
       public void onOpen(ServerHandshake handshakedata){
         Log.d(TAG, "onOpen");
+        login(android.os.Build.MODEL);
 
         for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
           if(listenerWeakReference.get() != null){
@@ -193,11 +199,11 @@ public class WebsocketController{
     WebsocketMessage websocketMessage = gson.fromJson(message, WebsocketMessage.class);
     Iterator<WeakReference<WebsocketListener>> listenerIterator = websocketListenerList.iterator();
 
+    Log.d("asdf", "handle" + (websocketMessage.getType() == Constants.MESSAGE_TYPE.GAME_INIT));
     while(listenerIterator.hasNext()){
       WeakReference<WebsocketListener> listenerWeakReference = listenerIterator.next();
 
       if(listenerWeakReference.get() == null){
-        listenerIterator.remove();
       }
       else{
         WebsocketListener websocketListener = listenerWeakReference.get();
@@ -207,9 +213,11 @@ public class WebsocketController{
             case PING:
               break;
             case LOGIN_CONFIRMATION:
+              user = ((ConfirmationMessage)websocketMessage).getUser();
               websocketListener.loginConfirmed(((ConfirmationMessage)websocketMessage).isConfirmed(), ((ConfirmationMessage)websocketMessage).getUser());
               break;
             case GAME_INIT:
+              Log.d("asdf", "handle");
               websocketListener.gameInitialized(((GameStateMessage)websocketMessage).getGameState());
               break;
             case GAME_START:

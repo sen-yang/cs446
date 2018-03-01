@@ -81,7 +81,7 @@ module.exports = class GameState{
     if(this.isComplete){
       return Constants.messageType.GAME_FINISH;
     }
-    if(Math.random() < this.delta / 1000){
+    if(Math.random() < (this.delta / 1500)){
       return Constants.messageType.GAME_DROPPED_ITEM;
     }
     else{

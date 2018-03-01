@@ -29,6 +29,11 @@ public class MainActivity extends AppCompatActivity{
     setContentView(R.layout.activity_main);
 
     progressBar = findViewById(R.id.progressBar);
+  }
+
+  @Override
+  protected void onResume(){
+    super.onResume();
 
     WebsocketController.getInstance().addWebsocketListener(new WebsocketController.WebsocketListener(){
       @Override
@@ -55,10 +60,11 @@ public class MainActivity extends AppCompatActivity{
 
       @Override
       public void gameInitialized(final GameState gameState){
+        Log.d("asdf", "gameInitialized1");
         runOnUiThread(new Runnable(){
           @Override
           public void run(){
-            Log.d("asdf", "gameInitialized");
+            Log.d("asdf", "gameInitialized2");
             Intent intent = new Intent(MainActivity.this, MainGameActivity.class);
             intent.putExtra(Constants.GAME_STATE, gameState);
             intent.putExtra(Constants.USER, user);
