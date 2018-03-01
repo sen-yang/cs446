@@ -86,20 +86,6 @@ function findGame(message, client1){
 function playerAction(message, client){
   let player = client.getPlayerInCurrentRoom();
   let playerAction = message.playerAction;
-  switch(playerAction.commandType){
-    case Constants.playerActionType.ADDITION:
-    case Constants.playerActionType.SUBTRACTION:
-    case Constants.playerActionType.MULTIPLICATION:
-    case Constants.playerActionType.DIVISION:
-      player.currentOperation = playerAction.commandType;
-      break;
-    case Constants.playerActionType.GET_NUMBER:
-      player.updateCurrentNumber(playerAction.value);
-      break;
-    case Constants.playerActionType.USE_POWER_UP:
-      break;
-  }
-  //todo send update game state to clients
 }
 
 function createGame(client1, client2){
@@ -108,7 +94,16 @@ function createGame(client1, client2){
   clientList[client1.id] = client1;
   clientList[client2.id] = client2;
   let gameRoom = new GameRoom(0, clientList,genUUID());
-  client1.currentRoom = gameRoom;
-  client2.currentRoom = gameRoom;
-  //todo start game
+  gameRoom.startGame();
+}
+
+function updateGame(gameRoom){
+  let gameFinished = false;
+  let winnerList = [];
+  gameRoom.gameState.playerList.forEach((player)=>{
+    if(player.currentNumber == gameRoom.gameState.targetNumber){
+      gameFinished = true;
+      winnerList.push(player);
+    }
+  });
 }

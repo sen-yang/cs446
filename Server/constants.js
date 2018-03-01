@@ -1,5 +1,6 @@
 module.exports = {
   PORT_NUMBER: 6969,
+  TICK_TIME: 1000 / 10 // (1s in ms) / fps
 };
 
 module.exports.messageType = {
