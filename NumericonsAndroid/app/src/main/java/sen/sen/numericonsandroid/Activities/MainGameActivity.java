@@ -215,10 +215,6 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
 
   View.OnClickListener addHandler = new View.OnClickListener(){
     public void onClick(View v){
-      addButton.setBackgroundColor(Color.RED);
-      subButton.setBackgroundColor(Color.DKGRAY);
-      multiplyButton.setBackgroundColor(Color.DKGRAY);
-      divideButton.setBackgroundColor(Color.DKGRAY);
       operationMode = Constants.PLAYER_ACTION_TYPE.ADDITION;
       playerActionPerformed(operationMode, 0, (Button) v);
     }
@@ -227,11 +223,6 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
 
   View.OnClickListener subHandler = new View.OnClickListener(){
     public void onClick(View v){
-      subButton.setBackgroundColor(Color.RED);
-      addButton.setBackgroundColor(Color.DKGRAY);
-      multiplyButton.setBackgroundColor(Color.DKGRAY);
-      divideButton.setBackgroundColor(Color.DKGRAY);
-
       operationMode = Constants.PLAYER_ACTION_TYPE.SUBTRACTION;
       playerActionPerformed(operationMode, 0, (Button) v);
     }
@@ -239,12 +230,6 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
 
   View.OnClickListener multHandler = new View.OnClickListener(){
     public void onClick(View v){
-      multiplyButton.setBackgroundColor(Color.RED);
-      subButton.setBackgroundColor(Color.DKGRAY);
-      addButton.setBackgroundColor(Color.DKGRAY);
-      divideButton.setBackgroundColor(Color.DKGRAY);
-
-      operationMode = Constants.PLAYER_ACTION_TYPE.ADDITION;
       operationMode = Constants.PLAYER_ACTION_TYPE.MULTIPLICATION;
       playerActionPerformed(operationMode, 0, (Button) v);
     }
@@ -252,22 +237,17 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
 
   View.OnClickListener divideHandler = new View.OnClickListener(){
     public void onClick(View v){
-      divideButton.setBackgroundColor(Color.RED);
-      subButton.setBackgroundColor(Color.DKGRAY);
-      addButton.setBackgroundColor(Color.DKGRAY);
-      multiplyButton.setBackgroundColor(Color.DKGRAY);
-
       operationMode = Constants.PLAYER_ACTION_TYPE.DIVISION;
       playerActionPerformed(operationMode, 0, (Button) v);
     }
   };
 
   private void playerActionPerformed(Constants.PLAYER_ACTION_TYPE operationMode, int value, Button selectedButton){
-    addButton.setTextColor(getResources().getColor(R.color.black));
-    subButton.setTextColor(getResources().getColor(R.color.black));
-    multiplyButton.setTextColor(getResources().getColor(R.color.black));
-    divideButton.setTextColor(getResources().getColor(R.color.black));
     if(selectedButton != null){
+      addButton.setTextColor(Color.DKGRAY);
+      subButton.setTextColor(Color.DKGRAY);
+      multiplyButton.setTextColor(Color.DKGRAY);
+      divideButton.setTextColor(Color.DKGRAY);
       selectedButton.setTextColor(getResources().getColor(R.color.white));
     }
     WebsocketController.getInstance().sendPlayerAction(new PlayerAction(operationMode, value));

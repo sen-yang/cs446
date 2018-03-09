@@ -4,6 +4,7 @@
     <dimen name="basket_height">80dp</dimen>
     <dimen name="basket_margin_bottom">19dp</dimen>
 
+    <dimen name="dropTextSize">20sp</dimen>
     <dimen name="buttonUnselectedSize">48dip</dimen>
     <dimen name="buttonSelectedSize">55dip</dimen>
 </resources>

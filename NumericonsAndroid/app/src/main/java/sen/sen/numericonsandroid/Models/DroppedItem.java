@@ -57,7 +57,7 @@ public class DroppedItem implements Serializable{
   }
 
   public void fall(){
-    yPosition += ySpeed;
+    yPosition += ySpeed / 2;
   }
 
 }

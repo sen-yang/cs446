@@ -71,10 +71,10 @@ public class backgroundGameView extends RelativeLayout{
     basketImageView.setOnTouchListener(basket_onTouchListener());
     basketModel = new Basket(0, 0);
     droppedItemList = new ArrayList<>();
-    textSize = 60;
+    textSize = getResources().getDimension(R.dimen.dropTextSize);
 
     textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    textPaint.setColor(Color.rgb(250,150,200));
+    textPaint.setColor(Color.rgb(180,40,130));
     textPaint.setTextSize(textSize);
 
     clipBounds = new Rect();
@@ -82,7 +82,7 @@ public class backgroundGameView extends RelativeLayout{
     autoRun = new Runnable(){
       public void run(){
         invalidate();
-        handler.postDelayed(this, 100);
+        handler.postDelayed(this, 50);
       }
     };
     handler.removeCallbacks(autoRun);
