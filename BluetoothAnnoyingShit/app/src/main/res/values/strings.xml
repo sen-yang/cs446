@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BluetoothAnnoyingShit</string>
+    <string name="title_activity_display_devices">DisplayDevices</string>
+</resources>
