@@ -8,6 +8,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
+import org.java_websocket.WebSocketListener;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
@@ -44,20 +45,21 @@ public class WebsocketController{
 
   public interface WebsocketListener{
     void onConnected();
-    void onClose();
+
+    void onClose(int code, String reason, boolean remote);
+
     void loginConfirmed(boolean isConfirmed, User user);
+
     void gameInitialized(GameState gameState);
-    void gameStarted(GameState gameState);
-    void gameFinished(GameState gameState);
-    void gameStateUpdated(GameState gameState);
-    void itemDropped(DroppedItem droppedItem);
   }
 
   private Gson gson;
   private List<WeakReference<WebsocketListener>> websocketListenerList;
+  private List<WeakReference<GameListener>> gameListenerList;
   private WebSocketClient webSocketClient;
   private boolean isConnected;
   private User user;
+  private GameState gameState;
 
   public static WebsocketController getInstance(){
     if(staticWebsocketController == null){
@@ -79,6 +81,19 @@ public class WebsocketController{
     }
   }
 
+
+  public void addGameListener(GameListener gameListener){
+    boolean existsInList = false;
+    for(WeakReference listenerReference : gameListenerList){
+      if(listenerReference.get() != null && listenerReference.get() == gameListener){
+        existsInList = true;
+      }
+    }
+    if(existsInList == false){
+      gameListenerList.add(new WeakReference<GameListener>(gameListener));
+    }
+  }
+
   //temporary??
   public void login(String username){
     WebsocketMessage websocketMessage = new LoginMessage(username);
@@ -97,6 +112,10 @@ public class WebsocketController{
 
   public boolean isConnected(){
     return isConnected;
+  }
+
+  public GameState getGameState(){
+    return gameState;
   }
 
   public User getUser(){
@@ -145,11 +164,12 @@ public class WebsocketController{
       }
     }).create();
     websocketListenerList = new ArrayList<>();
+    gameListenerList = new ArrayList<>();
 
     URI uri;
     try{
       uri = new URI(Constants.SERVER_URL);
-    } catch(URISyntaxException e){
+    }catch(URISyntaxException e){
       e.printStackTrace();
       return;
     }
@@ -181,7 +201,12 @@ public class WebsocketController{
 
         for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
           if(listenerWeakReference.get() != null){
-            listenerWeakReference.get().onConnected();
+            listenerWeakReference.get().onClose(code, reason, remote);
+          }
+        }
+        for(WeakReference<GameListener> listenerWeakReference : gameListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().disconnected();
           }
         }
         isConnected = false;
@@ -197,46 +222,61 @@ public class WebsocketController{
 
   private void handleMessage(String message){
     WebsocketMessage websocketMessage = gson.fromJson(message, WebsocketMessage.class);
-    Iterator<WeakReference<WebsocketListener>> listenerIterator = websocketListenerList.iterator();
 
-    Log.d("asdf", "handle" + (websocketMessage.getType() == Constants.MESSAGE_TYPE.GAME_INIT));
-    while(listenerIterator.hasNext()){
-      WeakReference<WebsocketListener> listenerWeakReference = listenerIterator.next();
-
-      if(listenerWeakReference.get() == null){
-      }
-      else{
-        WebsocketListener websocketListener = listenerWeakReference.get();
-
-        if(websocketListener != null){
-          switch(websocketMessage.getType()){
-            case PING:
-              break;
-            case LOGIN_CONFIRMATION:
-              user = ((ConfirmationMessage)websocketMessage).getUser();
-              websocketListener.loginConfirmed(((ConfirmationMessage)websocketMessage).isConfirmed(), ((ConfirmationMessage)websocketMessage).getUser());
-              break;
-            case GAME_INIT:
-              Log.d("asdf", "handle");
-              websocketListener.gameInitialized(((GameStateMessage)websocketMessage).getGameState());
-              break;
-            case GAME_START:
-              websocketListener.gameStarted(((GameStateMessage)websocketMessage).getGameState());
-              break;
-            case GAME_FINISH:
-              websocketListener.gameFinished(((GameStateMessage)websocketMessage).getGameState());
-              break;
-            case GAME_STATE_UPDATE:
-              websocketListener.gameStateUpdated(((GameStateMessage)websocketMessage).getGameState());
-              break;
-            case GAME_DROPPED_ITEM:
-              websocketListener.itemDropped(((GameDroppedItemMessage)websocketMessage).getDroppedItem());
-              break;
-            default:
-              break;
+    switch(websocketMessage.getType()){
+      case PING:
+        break;
+      case LOGIN_CONFIRMATION:
+        user = ((ConfirmationMessage) websocketMessage).getUser();
+        for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().loginConfirmed(((ConfirmationMessage) websocketMessage).isConfirmed(), ((ConfirmationMessage) websocketMessage).getUser());
           }
         }
-      }
+        break;
+      case GAME_INIT:
+        gameState = ((GameStateMessage) websocketMessage).getGameState();
+
+        for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().gameInitialized(gameState);
+          }
+        }
+        break;
+      case GAME_START:
+        gameState = ((GameStateMessage) websocketMessage).getGameState();
+        for(WeakReference<GameListener> listenerWeakReference : gameListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().gameStarted(gameState);
+          }
+        }
+        break;
+      case GAME_FINISH:
+        gameState = ((GameStateMessage) websocketMessage).getGameState();
+        for(WeakReference<GameListener> listenerWeakReference : gameListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().gameFinished(gameState);
+          }
+        }
+        break;
+      case GAME_STATE_UPDATE:
+        gameState = ((GameStateMessage) websocketMessage).getGameState();
+        for(WeakReference<GameListener> listenerWeakReference : gameListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().gameStateUpdated(gameState);
+          }
+        }
+        break;
+      case GAME_DROPPED_ITEM:
+        DroppedItem droppedItem = ((GameDroppedItemMessage) websocketMessage).getDroppedItem();
+        for(WeakReference<GameListener> listenerWeakReference : gameListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().itemDropped(droppedItem);
+          }
+        }
+        break;
+      default:
+        break;
     }
   }
 }

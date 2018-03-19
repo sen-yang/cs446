@@ -9,8 +9,7 @@ import java.util.Map;
 public class Constants{
   public static final String SERVER_URL = "ws://sen.ddns.net";
 
-  public static final String GAME_STATE = "GAME_STATE";
-  public static final String USER = "USER";
+  public static final String GAME_CONTROLLER = "GAME_CONTROLLER";
 
   public static final int TOTAL_GAME_TIME = 60 * 1000;
 
@@ -31,6 +30,8 @@ public class Constants{
     GAME_STATE_UPDATE(5),
     @SerializedName("6")
     GAME_DROPPED_ITEM(6),
+    @SerializedName("7")
+    GAME_FOUND(7),
 
     //client messages
     @SerializedName("100")

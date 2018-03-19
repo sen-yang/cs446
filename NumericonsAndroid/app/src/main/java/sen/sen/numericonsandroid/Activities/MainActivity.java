@@ -7,8 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
@@ -16,6 +14,8 @@ import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.User;
+import sen.sen.numericonsandroid.Networking.GameController;
+import sen.sen.numericonsandroid.Networking.ServerListener;
 import sen.sen.numericonsandroid.Networking.WebsocketController;
 import sen.sen.numericonsandroid.R;
 
@@ -43,6 +43,16 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
 
   public void onFindGameButtonPressed(View view){
     WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.RANKED);
+  }
+
+
+  public void onSinglePlayerButtonPressed(View view){
+    //todo
+  }
+
+  public void onBluetoothButtonPressed(View view){
+    Intent intent = new Intent(this, BluetoothConnectionActivity.class);
+    startActivity(intent);
   }
 
   public void changeNameButtonPressed(View view){
@@ -73,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
   }
 
   @Override
-  public void onClose(){
+  public void onClose(int code, String reason, boolean remote){
 
   }
 
@@ -90,32 +100,11 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
     runOnUiThread(new Runnable(){
       @Override
       public void run(){
-        Log.d("asdf", "gameInitialized2");
+        GameController gameController = new GameController(WebsocketController.class);
         Intent intent = new Intent(MainActivity.this, MainGameActivity.class);
-        intent.putExtra(Constants.GAME_STATE, gameState);
-        intent.putExtra(Constants.USER, user);
+        intent.putExtra(Constants.GAME_CONTROLLER, gameController);
         startActivity(intent);
       }
     });
-  }
-
-  @Override
-  public void gameStarted(GameState gameState){
-
-  }
-
-  @Override
-  public void gameFinished(GameState gameState){
-
-  }
-
-  @Override
-  public void gameStateUpdated(GameState gameState){
-
-  }
-
-  @Override
-  public void itemDropped(DroppedItem droppedItem){
-
   }
 }

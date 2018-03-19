@@ -6,6 +6,7 @@ import java.util.List;
 import sen.sen.numericonsandroid.Global.Constants;
 
 public class GameState implements Serializable{
+  private String gameId;
   private int targetNumber;
   private Constants.GAME_TYPE matchType;
   private List<Player> playerList;

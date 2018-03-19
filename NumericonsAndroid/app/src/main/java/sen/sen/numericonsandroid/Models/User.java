@@ -6,6 +6,7 @@ public class User implements Serializable{
   private String username;
   private String imageUrl;
   private String imageUrlThumbnail;
+  private String id;
 
   public String getUsername(){
     return username;

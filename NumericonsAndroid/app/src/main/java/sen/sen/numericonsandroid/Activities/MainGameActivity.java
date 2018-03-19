@@ -1,25 +1,15 @@
 package sen.sen.numericonsandroid.Activities;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.graphics.PointF;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,19 +17,21 @@ import java.util.Random;
 
 import sen.sen.numericonsandroid.CustomUI.backgroundGameView;
 import sen.sen.numericonsandroid.Global.Constants;
-import sen.sen.numericonsandroid.Models.Basket;
 import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.Player;
 import sen.sen.numericonsandroid.Models.PlayerAction;
 import sen.sen.numericonsandroid.Models.User;
+import sen.sen.numericonsandroid.Networking.GameController;
+import sen.sen.numericonsandroid.Networking.GameListener;
+import sen.sen.numericonsandroid.Networking.ServerListener;
 import sen.sen.numericonsandroid.Networking.WebsocketController;
 import sen.sen.numericonsandroid.R;
 
 import static sen.sen.numericonsandroid.Global.Constants.PLAYER_ACTION_TYPE.GET_NUMBER;
 import static sen.sen.numericonsandroid.Global.Constants.TOTAL_GAME_TIME;
 
-public class MainGameActivity extends AppCompatActivity implements WebsocketController.WebsocketListener, backgroundGameView.BackgroundGameViewDelegate{
+public class MainGameActivity extends AppCompatActivity implements GameListener, backgroundGameView.BackgroundGameViewDelegate{
 
   // View widgets
   backgroundGameView backgroundLayoutView;
@@ -56,7 +48,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
   //Private GameState Items
   List<DroppedItem> droppedItemList;
 
-  private GameState gameState;
+  private GameController gameController;
   private Player currentPlayer;
   private Constants.GAME_STAGE gameStage;
 
@@ -67,7 +59,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main_game);
 
-    gameState = (GameState) getIntent().getSerializableExtra(Constants.GAME_STATE);
+    gameController = (GameController) getIntent().getSerializableExtra(Constants.GAME_CONTROLLER);
     gameStage = Constants.GAME_STAGE.INIT;
 
     this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -93,8 +85,8 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
     totalNumberTextView = findViewById(R.id.currentNumberTextView);
 
     droppedItemList = new ArrayList<>();
-    WebsocketController.getInstance().addWebsocketListener(this);
-    updateFromServer(gameState);
+    gameController.addGameListener(this);
+    updateFromServer(gameController.getGameState());
   }
 
   int randomInt_Range(int min, int max){
@@ -113,7 +105,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
     targetNumberTextView.setText(Integer.toString(gameState.getTargetNumber()));
 
     for(Player player : gameState.getPlayerList()){
-      if(player.getUsername().equals(WebsocketController.getInstance().getUser().getUsername())){
+      if(player.getUsername().equals(gameController.getUser().getUsername())){
         currentPlayer = player;
         break;
       }
@@ -127,7 +119,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
       builder = new AlertDialog.Builder(this);
       String title = "You lose:(";
 
-      if(gameState.getWinner().getUsername().equals(WebsocketController.getInstance().getUser().getUsername())){
+      if(gameState.getWinner().getUsername().equals(gameController.getUser().getUsername())){
         title = "You Win!";
       }
       builder.setTitle(title)
@@ -142,22 +134,7 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
   }
 
   @Override
-  public void onConnected(){
-
-  }
-
-  @Override
-  public void onClose(){
-
-  }
-
-  @Override
-  public void loginConfirmed(boolean isConfirmed, User user){
-
-  }
-
-  @Override
-  public void gameInitialized(GameState gameState){
+  public void disconnected(){
 
   }
 
@@ -250,6 +227,6 @@ public class MainGameActivity extends AppCompatActivity implements WebsocketCont
       divideButton.setTextColor(Color.DKGRAY);
       selectedButton.setTextColor(getResources().getColor(R.color.white));
     }
-    WebsocketController.getInstance().sendPlayerAction(new PlayerAction(operationMode, value));
+    gameController.sendPlayerAction(new PlayerAction(operationMode, value));
   }
 }
