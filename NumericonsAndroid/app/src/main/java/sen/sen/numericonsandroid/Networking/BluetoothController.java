@@ -5,9 +5,13 @@ import com.google.gson.Gson;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.PlayerAction;
 import sen.sen.numericonsandroid.Models.User;
+import sen.sen.numericonsandroid.Networking.WebsocketModels.ConfirmationMessage;
+import sen.sen.numericonsandroid.Networking.WebsocketModels.GameDroppedItemMessage;
+import sen.sen.numericonsandroid.Networking.WebsocketModels.GameStateMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.PlayerActionMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.WebsocketMessage;
 
@@ -87,7 +91,55 @@ public class BluetoothController{
 
   }
 
-  private void handleMessage(){
+  private void handleMessage(String message){
+    WebsocketMessage websocketMessage = gson.fromJson(message, WebsocketMessage.class);
 
+    switch(websocketMessage.getType()){
+      case PING:
+        break;
+      case GAME_INIT:
+        gameState = ((GameStateMessage) websocketMessage).getGameState();
+
+        for(WeakReference<BluetoothListener> listenerWeakReference : bluetoothListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().gameInitialized(gameState);
+          }
+        }
+        break;
+      case GAME_START:
+        gameState = ((GameStateMessage) websocketMessage).getGameState();
+        for(WeakReference<GameListener> listenerWeakReference : gameListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().gameStarted(gameState);
+          }
+        }
+        break;
+      case GAME_FINISH:
+        gameState = ((GameStateMessage) websocketMessage).getGameState();
+        for(WeakReference<GameListener> listenerWeakReference : gameListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().gameFinished(gameState);
+          }
+        }
+        break;
+      case GAME_STATE_UPDATE:
+        gameState = ((GameStateMessage) websocketMessage).getGameState();
+        for(WeakReference<GameListener> listenerWeakReference : gameListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().gameStateUpdated(gameState);
+          }
+        }
+        break;
+      case GAME_DROPPED_ITEM:
+        DroppedItem droppedItem = ((GameDroppedItemMessage) websocketMessage).getDroppedItem();
+        for(WeakReference<GameListener> listenerWeakReference : gameListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().itemDropped(droppedItem);
+          }
+        }
+        break;
+      default:
+        break;
+    }
   }
 }

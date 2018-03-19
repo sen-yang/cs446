@@ -21,11 +21,8 @@ import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.Player;
 import sen.sen.numericonsandroid.Models.PlayerAction;
-import sen.sen.numericonsandroid.Models.User;
 import sen.sen.numericonsandroid.Networking.GameController;
 import sen.sen.numericonsandroid.Networking.GameListener;
-import sen.sen.numericonsandroid.Networking.ServerListener;
-import sen.sen.numericonsandroid.Networking.WebsocketController;
 import sen.sen.numericonsandroid.R;
 
 import static sen.sen.numericonsandroid.Global.Constants.PLAYER_ACTION_TYPE.GET_NUMBER;

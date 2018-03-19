@@ -11,11 +11,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import sen.sen.numericonsandroid.Global.Constants;
-import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.User;
 import sen.sen.numericonsandroid.Networking.GameController;
-import sen.sen.numericonsandroid.Networking.ServerListener;
 import sen.sen.numericonsandroid.Networking.WebsocketController;
 import sen.sen.numericonsandroid.R;
 
