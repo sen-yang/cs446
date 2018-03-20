@@ -120,6 +120,7 @@ public class Constants{
   public static final int MESSAGE_DEVICE_NAME = 4;
   public static final int MESSAGE_TOAST = 5;
 
-  public static final String DEVICE_NAME = "device_name";
-  public static final String TOAST = "toast";
+  public static final String DEVICE = "DEVICE";
+  public static final String IS_ACCEPTING = "IS_ACCEPTING";
+  public static final String TOAST = "TOAST";
 }

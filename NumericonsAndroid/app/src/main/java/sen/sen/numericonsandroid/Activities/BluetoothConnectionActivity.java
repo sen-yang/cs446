@@ -15,15 +15,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import sen.sen.numericonsandroid.CustomUI.BluetoothDevicesRecyclerViewAdaptor;
+import sen.sen.numericonsandroid.Global.Constants;
+import sen.sen.numericonsandroid.Models.GameState;
+import sen.sen.numericonsandroid.Networking.BluetoothController;
+import sen.sen.numericonsandroid.Networking.GameController;
+import sen.sen.numericonsandroid.Networking.WebsocketController;
 import sen.sen.numericonsandroid.R;
 
-public class BluetoothConnectionActivity extends AppCompatActivity implements BluetoothDevicesRecyclerViewAdaptor.AdaptorDelegate{
+public class BluetoothConnectionActivity extends AppCompatActivity implements BluetoothDevicesRecyclerViewAdaptor.AdaptorDelegate, BluetoothController.BluetoothListener{
   private static final int REQUEST_ENABLE_BT = 6969;
   private static final int REQUEST_ENABLE_LOCATION = 9696;
 
@@ -48,6 +54,18 @@ public class BluetoothConnectionActivity extends AppCompatActivity implements Bl
     if(initBluetooth()){
       startBluetooth();
     }
+  }
+
+  @Override
+  protected void onResume(){
+    super.onResume();
+    BluetoothController.getInstance().listenForInvites(true);
+  }
+
+  @Override
+  protected void onPause(){
+    super.onPause();
+    BluetoothController.getInstance().listenForInvites(false);
   }
 
   @Override
@@ -86,6 +104,7 @@ public class BluetoothConnectionActivity extends AppCompatActivity implements Bl
   private void startBluetooth(){
     getPairedDevices();
     discoverDevices();
+    BluetoothController.getInstance().listenForInvites(true);
   }
 
   private void discoverDevices(){
@@ -151,6 +170,54 @@ public class BluetoothConnectionActivity extends AppCompatActivity implements Bl
 
   @Override
   public void inviteDeviceAtPosition(int position){
+    BluetoothController.getInstance().inviteDeviceToGame(bluetoothDeviceList.get(position));
+  }
 
+  @Override
+  public void onConnected(){
+
+  }
+
+  @Override
+  public void onClose(int code, String reason, boolean remote){
+
+  }
+
+  @Override
+  public void invitedToMatch(final BluetoothDevice device){
+    AlertDialog.Builder builder;
+    builder = new AlertDialog.Builder(this);
+    builder.setTitle(device.getName() + " invited you to a match!")
+        .setPositiveButton("Accept", new DialogInterface.OnClickListener(){
+          public void onClick(DialogInterface dialog, int which){
+            BluetoothController.getInstance().respondToInvitation(device, true);
+          }
+        })
+        .setNegativeButton("Decline", new DialogInterface.OnClickListener(){
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i){
+            BluetoothController.getInstance().respondToInvitation(device, false);
+          }
+        })
+        .show();
+  }
+
+  @Override
+  public void matchConfirmed(BluetoothDevice device){
+    Toast.makeText(this, "Match confirmed!",
+        Toast.LENGTH_LONG).show();
+  }
+
+  @Override
+  public void gameInitialized(GameState gameState){
+    runOnUiThread(new Runnable(){
+      @Override
+      public void run(){
+        GameController gameController = new GameController(BluetoothController.class);
+        Intent intent = new Intent(BluetoothConnectionActivity.this, MainGameActivity.class);
+        intent.putExtra(Constants.GAME_CONTROLLER, gameController);
+        startActivity(intent);
+      }
+    });
   }
 }
