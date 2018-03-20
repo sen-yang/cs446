@@ -1,0 +1,53 @@
+create database public;
+CREATE TABLE public.users
+(
+    UID serial UNIQUE NOT NULL,
+    username character varying(12) NOT NULL,
+    hashpassword character varying(16) NOT NULL,
+    email character varying(50) NOT NULL,
+    image character varying(60),
+    PRIMARY KEY (UID, username)
+);
+
+CREATE TABLE public.rankingsdata
+(
+    UID serial UNIQUE,
+    rank integer,
+    rating double precision,
+    ratingdev double precision,
+    volatility double precision,
+    PRIMARY KEY(UID),
+	constraint users_Rank
+	foreign key (UID)
+	REFERENCES public.users (UID)
+);
+
+INSERT INTO public.users(
+ username, hashpassword, email, image)
+	VALUES ( 'user1', 'password', '', 'image1');
+	INSERT INTO public.users(
+ username, hashpassword, email, image)
+	VALUES ( 'user2', 'password', '', 'image2');
+	INSERT INTO public.users(
+ username, hashpassword, email, image)
+	VALUES ( 'user3', 'password', '', 'image3');
+  INSERT INTO public.users(
+ username, hashpassword, email, image)
+  VALUES ( 'user4', 'password', '', 'image3');
+
+
+  INSERT INTO public.rankingsdata(
+	uid, rank, rating, ratingdev, violatility)
+	VALUES (1, 1, 1, 1, 1);
+
+	INSERT INTO public.rankingsdata(
+	uid, rank, rating, ratingdev, violatility)
+	VALUES (2, 2, 1, 1, 1);
+
+	INSERT INTO public.rankingsdata(
+	uid, rank, rating, ratingdev, violatility)
+	VALUES (3, 3, 1, 1, 1);
+
+	INSERT INTO public.rankingsdata(
+	uid, rank, rating, ratingdev, violatility)
+	VALUES (4, 4, 1, 1, 1);
