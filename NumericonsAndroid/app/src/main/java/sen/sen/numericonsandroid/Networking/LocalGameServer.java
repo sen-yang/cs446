@@ -2,25 +2,23 @@ package sen.sen.numericonsandroid.Networking;
 
 
 import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
-import android.util.Log;
 
 import sen.sen.numericonsandroid.Models.*;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Random;
 
 
-public class LocalGameServer {
+public class LocalGameServer implements Runnable{
     public static final int ADDITION = 1;
     public static final int SUBTRACTION = 2;
-    public static final int MUTLIPLICATION = 3;
+    public static final int MULTIPLICATION = 3;
     public static final int DIVISION = 4;
-    public static final int GET_NUMBER = 5;
-    public static final int USE_POWERUP = 5;
 
 
-    BluetoothController BC = new BluetoothController();
+
+    private BluetoothServerController BSC = new BluetoothServerController();
     private GameRoom gameroom1;
     BluetoothServerSocket bsocket;
 
@@ -67,12 +65,12 @@ public class LocalGameServer {
                 return current + next;
             case SUBTRACTION:
                 return current - next;
-            case MUTLIPLICATION:
+            case MULTIPLICATION:
                 return current * next;
             case DIVISION:
                 if (next == 0)
                     //error ??? send
-                    return 11111111;
+                    return 0;
                 return current / next;
             default:
                 return 0;
@@ -93,16 +91,27 @@ public class LocalGameServer {
         gs.setTargetNumber(goalnumber);
         gameroom1 = new GameRoom(gs, userList);
         //send both to the client
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        DroppedItem[] listitem = generatesDroppeditem(4);
-                        //sends to both clients
-                        //sends to client
-                    }
-                },
-                2000);
+        new Runnable(){
+            public void run() {
+                new android.os.Handler().
+
+                        postDelayed(
+                                new Runnable() {
+                                    public void run () {
+                                        Random rm = new Random();
+                                        int amt = rm.nextInt(8);
+                                        DroppedItem[] listitem = generatesDroppeditem(amt);
+                                        //sends to both clients
+                                        //sends to client
+                                    }
+                                },
+                                2000);
+            }
+        };
+
+    }
 
 
+    public void run(){
     }
 }

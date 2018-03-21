@@ -8,14 +8,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +22,6 @@ import sen.sen.numericonsandroid.Networking.WebsocketModels.GameDroppedItemMessa
 import sen.sen.numericonsandroid.Networking.WebsocketModels.GameStateMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.PlayerActionMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.WebsocketMessage;
-//import org.apache.commons.*;
 import org.apache.commons.lang.SerializationUtils;
 
 
@@ -110,8 +102,14 @@ public class BluetoothController{
   public void respondToInvitation(BluetoothDevice device, boolean accepted){
     if(bluetoothChatService.getConnectedDevice() != null){
       if(accepted){
-//        WebsocketMessage wsm = new ();
-//        bluetoothChatService.write();//send an init game
+        WebsocketMessage wsm = new WebsocketMessage(Constants.MESSAGE_TYPE.GAME_INIT);
+        try {
+          byte[] datatobesend = convertToBytes(wsm);
+          bluetoothChatService.write(datatobesend);
+        }catch(IOException e){
+          Log.e("ERROR","DATA Cannot be send : "+ e);
+        }
+      //start own game too.
       }
     }
   }
