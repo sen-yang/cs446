@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
-
     <TextView
         android:id="@+id/userRank"
         android:layout_width="0dp"

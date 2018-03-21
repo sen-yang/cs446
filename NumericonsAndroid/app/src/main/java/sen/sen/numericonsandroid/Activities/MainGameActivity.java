@@ -64,6 +64,7 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     gameView = findViewById(R.id.background);
     gameView.setDelegate(this);
+    gameView.setGameState(gameController.getGameState());
 
     countDownTimer = findViewById(R.id.countDownTimer);
 

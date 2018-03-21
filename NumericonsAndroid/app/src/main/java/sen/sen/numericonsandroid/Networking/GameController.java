@@ -41,7 +41,7 @@ public class GameController implements Serializable{
     return false;
   }
 
-  public GameState getGameState(){
+  public GameState getGameState() {
     if(serverType == WebsocketController.class){
       return WebsocketController.getInstance().getGameState();
     }
