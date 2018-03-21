@@ -76,7 +76,7 @@ module.exports = class GameRoom{
 
   clientDropped(client){
     //todo implement client droppped
-    this.this.gameManager.clientLeft(client);
+    this.gameManager.clientLeft(client);
   }
 
   clearRoom(){
