@@ -8,6 +8,8 @@ public class DroppedItem implements Serializable{
   private float yPosition;
   private float ySpeed;
   private boolean alive;
+  public DroppedItem(){
+  }
 
   public DroppedItem(int number, float xPosition, float ySpeed){
     this.number = number;

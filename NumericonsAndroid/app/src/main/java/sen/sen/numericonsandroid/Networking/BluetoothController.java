@@ -57,7 +57,7 @@ public class BluetoothController{
     return staticBluetoothController;
   }
 
-  public void addBlluetoothListener(BluetoothListener bluetoothListener){
+  public void addBluetoothListener(BluetoothListener bluetoothListener){
     boolean existsInList = false;
     for(WeakReference listenerReference : bluetoothListenerList){
       if(listenerReference.get() != null && listenerReference.get() == bluetoothListener){
