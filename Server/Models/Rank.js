@@ -1,4 +1,4 @@
-module.exports = class User{
+module.exports = class Rank{
   constructor(UID, rank, rating, ratingdev, volatility){
     this.UID = UID;
     this.rankno = rank;
