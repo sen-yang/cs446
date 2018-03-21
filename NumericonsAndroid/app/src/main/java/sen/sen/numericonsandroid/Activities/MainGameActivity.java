@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 import sen.sen.numericonsandroid.CustomUI.GameView;
-import sen.sen.numericonsandroid.CustomUI.MultiPlayerMode_PlayerInfoView;
+import sen.sen.numericonsandroid.CustomUI.PlayerListInfoLayout;
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
@@ -67,9 +67,11 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     gameView = findViewById(R.id.background);
     gameView.setDelegate(this);
 
+    //IF game type is multiPlayer, append multiPlayer layoutView
     if(gameController.getGameState().getMatchType() == Constants.GAME_TYPE.RANKED) {
-      MultiPlayerMode_PlayerInfoView multiPlayerModePlayerInfoView = new MultiPlayerMode_PlayerInfoView(gameView.getContext(), gameController.getGameState().getPlayerList());
+      PlayerListInfoLayout multiPlayerModePlayerInfoView = new PlayerListInfoLayout(gameView.getContext());
       multiPlayerModePlayerInfoView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+      multiPlayerModePlayerInfoView.setPlayerList(gameController.getGameState().getPlayerList());
       gameView.addView(multiPlayerModePlayerInfoView);
     }
 

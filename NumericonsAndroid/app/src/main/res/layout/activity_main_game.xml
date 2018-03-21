@@ -149,16 +149,6 @@
             android:max="100"
             android:min="0"
             tools:visibility="visible" />
-        <!--<include-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--layout="@layout/activity_multiplayer" />-->
-
-        <!--<sen.sen.numericonsandroid.CustomUI.MultiPlayerMode_PlayerInfoView-->
-            <!--android:id="@+id/multiplayerview"-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content">-->
-        <!--</sen.sen.numericonsandroid.CustomUI.MultiPlayerMode_PlayerInfoView>-->
     </sen.sen.numericonsandroid.CustomUI.GameView>
 
 </android.support.constraint.ConstraintLayout>

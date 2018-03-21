@@ -6,23 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
+        android:id="@+id/multiplayerlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <include
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            layout="@layout/cell_multiplayer_playerinfo" />
-        <include
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            layout="@layout/cell_multiplayer_playerinfo" />
-        <include
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            layout="@layout/cell_multiplayer_playerinfo" />
+        <!--<include-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--layout="@layout/cell_multiplayer_playerinfo" />-->
+        <!--<include-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--layout="@layout/cell_multiplayer_playerinfo" />-->
+        <!--<include-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--layout="@layout/cell_multiplayer_playerinfo" />-->
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
