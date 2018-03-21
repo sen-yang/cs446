@@ -21,8 +21,17 @@ public class PlayerAction implements Serializable{
     this.value = value;
   }
 
+  public DroppedItem getItem(){
+    return item;
+  }
+
+  public void setItem(DroppedItem item){
+    this.item = item;
+  }
+
   private Constants.PLAYER_ACTION_TYPE commandType;
   private int value;
+  private DroppedItem item;
 
   public PlayerAction(Constants.PLAYER_ACTION_TYPE commandType, int value){
     this.commandType = commandType;

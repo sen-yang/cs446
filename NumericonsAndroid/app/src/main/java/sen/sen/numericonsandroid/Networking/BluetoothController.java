@@ -198,6 +198,7 @@ public class BluetoothController{
       case GAME_INIT:
         gameState = ((GameStateMessage) websocketMessage).getGameState();
 
+
         for(WeakReference<BluetoothListener> listenerWeakReference : bluetoothListenerList){
           if(listenerWeakReference.get() != null){
             listenerWeakReference.get().gameInitialized(gameState);
