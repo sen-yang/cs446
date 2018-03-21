@@ -10,6 +10,7 @@ public class Player implements Serializable{
   private Constants.PLAYER_ACTION_TYPE currentOperation;
   private String username;
   private String imageUrlThumbnail;
+  private DroppedItem itemInInventory;
 
   public Player(int targetNumber, String username) {
       this.targetNumber = targetNumber;

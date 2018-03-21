@@ -2,12 +2,15 @@ package sen.sen.numericonsandroid.Models;
 
 import java.io.Serializable;
 
+import sen.sen.numericonsandroid.Global.Constants;
+
 public class DroppedItem implements Serializable{
   private int number;
   private float xPosition;
   private float yPosition;
   private float ySpeed;
   private boolean alive;
+  private int itemType;
   public DroppedItem(){
   }
 

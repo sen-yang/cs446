@@ -1,4 +1,4 @@
-const Rank = requires(./Rank);
+const Rank = require('./Rank');
 
 module.exports = class User{
   constructor(UID,username, password, email, image){

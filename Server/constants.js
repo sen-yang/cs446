@@ -18,6 +18,8 @@ module.exports.messageType = {
   GAME_FINISH: 4,
   GAME_STATE_UPDATE: 5,
   GAME_DROPPED_ITEM: 6,
+  GAME_FOUND: 7,
+  GET_RANKINGS: 8,
 
   //client messages
   LOGIN: 100,
@@ -31,5 +33,6 @@ module.exports.playerActionType = {
   MULTIPLICATION: 2,
   DIVISION: 3,
   GET_NUMBER: 4,
-  USE_POWER_UP: 5
+  USE_ITEM: 5,
+  GET_ITEM: 6
 };

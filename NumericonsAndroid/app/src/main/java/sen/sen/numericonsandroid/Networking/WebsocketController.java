@@ -100,6 +100,10 @@ public class WebsocketController {
     webSocketClient.send(gson.toJson(websocketMessage));
   }
 
+  public void getRankings(int limit, int offset){
+    //todo get rankings
+  }
+
   public void lookForMatch(Constants.GAME_TYPE gameType){
     WebsocketMessage websocketMessage = new FindGameMessage(gameType);
     webSocketClient.send(gson.toJson(websocketMessage));

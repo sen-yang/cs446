@@ -65,6 +65,9 @@ function handleMessage(message, client){
     case Constants.messageType.LOGIN:
       loginUser(message, client);
       break;
+    case Constants.messageType.GET_RANKINGS:
+      getRankings(message, client);
+      break;
     case Constants.messageType.FIND_GAME:
       findGame(message, client);
       break;
@@ -78,7 +81,7 @@ function loginUser(message, client){
   let confirmed = false;
 
   if((message.username != null)){// && (!usernamesSet.has(message.username))){
-    client.user = new User(message.username);
+    client.user = new User("", message.username);
     confirmed = true;
   }
   let websocketMessage = new WebsocketMessage(Constants.messageType.LOGIN_CONFIRMATION);
@@ -87,25 +90,30 @@ function loginUser(message, client){
   client.sendMessage(JSON.stringify(websocketMessage));
 }
 
-function findGame(message, client1){
-  if(client1.currentRoom != null){
-    //already in room
-  }
-  else if(clientsSearchingForGame.length > 0){
-    client2 = clientsSearchingForGame[0];
+function getRankings(message, client){
+  //todo get rankings
+}
 
-    if(client1.id != client2.id){
-      clientsSearchingForGame.splice(0, 1);
-      createGame(client1, client2);
-    }
-  }
-  else{
-    clientsSearchingForGame.push(client1);
-  }
+function findGame(message, client1){
+  createSinglePlayerGame(client1);
+  // if(client1.currentRoom != null){
+  //   //already in room
+  // }
+  // else if(clientsSearchingForGame.length > 0){
+  //   client2 = clientsSearchingForGame[0];
+  //
+  //   if(client1.id != client2.id){
+  //     clientsSearchingForGame.splice(0, 1);
+  //     createGame(client1, client2);
+  //   }
+  // }
+  // else{
+  //   clientsSearchingForGame.push(client1);
+  // }
 }
 
 function playerAction(message, client){
-  let player = client.getPlayerInCurrentRoom();
+  let player = client.playerInCurrentRoom;
 
   if(player != null){
     player.doPlayerAction(message.playerAction);
@@ -113,12 +121,22 @@ function playerAction(message, client){
 
 }
 
+function createSinglePlayerGame(client1){
+  let clientList = [];
+  clientList.push(client1);
+  let gameRoom = new GameRoom(0, clientList, (gameRoom) =>{
+    gameFinished(gameRoom);
+  });
+  gameRoom.initGame();
+  gameRooms[gameRoom.id] = gameRoom;
+}
+
 function createGame(client1, client2){
   //todo game types not implemented
   let clientList = [];
   clientList.push(client1);
   clientList.push(client2);
-  let gameRoom = new GameRoom(0, clientList, genUUID(), (gameRoom) =>{
+  let gameRoom = new GameRoom(0, clientList, (gameRoom) =>{
     gameFinished(gameRoom);
   });
   gameRoom.initGame();

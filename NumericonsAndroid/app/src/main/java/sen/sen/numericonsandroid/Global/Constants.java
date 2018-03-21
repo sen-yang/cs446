@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Constants{
-  public static final String SERVER_URL = "ws://sen.ddns.net";
+  //public static final String SERVER_URL = "ws://sen.ddns.net";
+  public static final String SERVER_URL = "ws://192.168.1.30:6969";
 
   public static final String GAME_CONTROLLER = "GAME_CONTROLLER";
 
@@ -37,6 +38,8 @@ public class Constants{
     GAME_DROPPED_ITEM(6),
     @SerializedName("7")
     GAME_FOUND(7),
+    @SerializedName("8")
+    GET_RANKINGS(8),
 
     //client messages
     @SerializedName("100")
