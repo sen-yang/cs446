@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
 
   public void onSinglePlayerButtonPressed(View view){
     //todo
+    Log.i("Single Player", "onSinglePlayerButtonPressed: ");
+
+
   }
 
   public void onBluetoothButtonPressed(View view){

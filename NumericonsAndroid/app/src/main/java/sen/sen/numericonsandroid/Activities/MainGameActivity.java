@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import sen.sen.numericonsandroid.CustomUI.backgroundGameView;
+import sen.sen.numericonsandroid.CustomUI.GameView;
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
@@ -28,11 +28,11 @@ import sen.sen.numericonsandroid.R;
 import static sen.sen.numericonsandroid.Global.Constants.PLAYER_ACTION_TYPE.GET_NUMBER;
 import static sen.sen.numericonsandroid.Global.Constants.TOTAL_GAME_TIME;
 
-public class MainGameActivity extends AppCompatActivity implements GameListener, backgroundGameView.BackgroundGameViewDelegate{
+public class MainGameActivity extends AppCompatActivity implements GameListener, GameView.GameViewDelegate{
 
   // View widgets
-  //@TODO change backgroundGameView to GameView!
-  backgroundGameView backgroundLayoutView;
+  //@TODO change GameView to GameView!
+  GameView gameView;
   TextView targetNumberTextView;
   TextView totalNumberTextView;
   ProgressBar countDownTimer;
@@ -57,12 +57,13 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main_game);
 
+    /
     gameController = (GameController) getIntent().getSerializableExtra(Constants.GAME_CONTROLLER);
     gameStage = Constants.GAME_STAGE.INIT;
 
     this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    backgroundLayoutView = findViewById(R.id.background);
-    backgroundLayoutView.setDelegate(this);
+    gameView = findViewById(R.id.background);
+    gameView.setDelegate(this);
 
     countDownTimer = findViewById(R.id.countDownTimer);
 
@@ -172,7 +173,7 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
   public void itemDropped(final DroppedItem droppedItem){
     runOnUiThread(new Runnable(){
       public void run(){
-        backgroundLayoutView.addDroppedItem(droppedItem);
+        gameView.addDroppedItem(droppedItem);
         droppedItemList.add(droppedItem);
       }
     });
