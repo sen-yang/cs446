@@ -31,6 +31,7 @@ import static sen.sen.numericonsandroid.Global.Constants.TOTAL_GAME_TIME;
 public class MainGameActivity extends AppCompatActivity implements GameListener, backgroundGameView.BackgroundGameViewDelegate{
 
   // View widgets
+  //@TODO change backgroundGameView to GameView!
   backgroundGameView backgroundLayoutView;
   TextView targetNumberTextView;
   TextView totalNumberTextView;

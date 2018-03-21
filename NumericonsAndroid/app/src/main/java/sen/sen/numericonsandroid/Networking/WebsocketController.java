@@ -39,7 +39,7 @@ import sen.sen.numericonsandroid.Networking.WebsocketModels.PlayerActionMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.WebsocketMessage;
 
 
-public class WebsocketController{
+public class WebsocketController {
   public static final String TAG = "WebsocketController";
   private static WebsocketController staticWebsocketController;
 

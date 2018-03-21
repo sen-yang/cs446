@@ -29,6 +29,7 @@ import sen.sen.numericonsandroid.R;
 
 public class backgroundGameView extends RelativeLayout{
 
+  //@TODO change BackgroundGameViewDelegate to GameViewDelegate
   public interface BackgroundGameViewDelegate{
     void updateScore(int value);
   }

@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
   }
 
   public void onFindGameButtonPressed(View view){
+    //gameInitialized();
     WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.RANKED);
   }
 
