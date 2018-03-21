@@ -13,6 +13,11 @@ public class Constants{
 
   public static final int TOTAL_GAME_TIME = 60 * 1000;
 
+  public static final int INFINITE_LOAD_SIZE = 20;
+
+  public static final int INFINITE_LOAD_TRIIGER_SIZE = 3;
+
+
   public enum MESSAGE_TYPE{
     @SerializedName("0")
     PING(0),
