@@ -114,6 +114,8 @@ public class Constants{
 
   //bluetooth messaging constants
 
+
+
   public static final int MESSAGE_STATE_CHANGE = 1;
   public static final int MESSAGE_READ = 2;
   public static final int MESSAGE_WRITE = 3;
