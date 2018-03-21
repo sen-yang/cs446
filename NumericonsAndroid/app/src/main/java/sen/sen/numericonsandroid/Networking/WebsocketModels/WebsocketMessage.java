@@ -1,9 +1,11 @@
 package sen.sen.numericonsandroid.Networking.WebsocketModels;
 
+import java.io.Serializable;
+
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.User;
 
-public class WebsocketMessage{
+public class WebsocketMessage implements Serializable {
   private Constants.MESSAGE_TYPE type;
 
   public WebsocketMessage(){

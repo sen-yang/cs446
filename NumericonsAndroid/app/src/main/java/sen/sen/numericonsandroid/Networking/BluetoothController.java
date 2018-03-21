@@ -8,6 +8,14 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +29,9 @@ import sen.sen.numericonsandroid.Networking.WebsocketModels.GameDroppedItemMessa
 import sen.sen.numericonsandroid.Networking.WebsocketModels.GameStateMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.PlayerActionMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.WebsocketMessage;
+import org.apache.commons.*;
+import org.apache.commons.lang.SerializationUtils;
+
 
 public class BluetoothController{
   public static final String TAG = "BluetoothController";
@@ -103,19 +114,16 @@ public class BluetoothController{
   }
 
 
-  public void sendPlayerAction(PlayerAction playerAction){
+  public void sendPlayerAction(PlayerAction playerAction) {
     WebsocketMessage websocketMessage = new PlayerActionMessage(playerAction);
-    //todo send msg
-//    webSocketClient.send(gson.toJson(websocketMessage));
+    try {
+      byte[] datatobesend = convertToBytes(websocketMessage);
+      bluetoothChatService.write(datatobesend);
+    }catch(IOException e){
+      Log.e("ERROR","DATA Cannot be send : "+ e);
+    }
   }
 
-  public boolean isConnected(){
-    return isConnected;
-  }
-
-  public GameState getGameState(){
-    return gameState;
-  }
 
   public User getUser(){
     return user;
@@ -150,9 +158,17 @@ public class BluetoothController{
           break;
         case Constants.MESSAGE_READ:
           byte[] readBuf = (byte[]) msg.obj;
+          WebsocketMessage message = null;
           // construct a string from the valid bytes in the buffer
-          String readMessage = new String(readBuf, 0, msg.arg1);
-          BluetoothController.this.handleMessage(readMessage);
+          try {
+            message = convertFromBytes(readBuf);
+          }catch(IOException e){
+            Log.e("ERROR","DATA Cannot be send : "+ e);
+          }catch(ClassNotFoundException ce){
+            Log.e("ERROR","CLASS Cannot be found : "+ ce);
+          }
+          if(message!=null)
+          BluetoothController.this.handleMessage(message);
           break;
         case Constants.MESSAGE_DEVICE_NAME:
           BluetoothDevice otherDevice = msg.getData().getParcelable(Constants.DEVICE);
@@ -173,8 +189,7 @@ public class BluetoothController{
     }
   }
 
-  private void handleMessage(String message){
-    WebsocketMessage websocketMessage = gson.fromJson(message, WebsocketMessage.class);
+  private void handleMessage(WebsocketMessage websocketMessage ){
 
     switch(websocketMessage.getType()){
       case PING:
@@ -224,4 +239,24 @@ public class BluetoothController{
         break;
     }
   }
+
+
+  private byte[] convertToBytes(WebsocketMessage object) throws IOException {
+    byte[] data = SerializationUtils.serialize(object);
+    return data;
+  }
+
+  private WebsocketMessage convertFromBytes(byte[] bytes) throws IOException, ClassNotFoundException {
+    WebsocketMessage yourObject =(WebsocketMessage) SerializationUtils.deserialize(bytes);
+    return yourObject;
+  }
+
+  public boolean isConnected(){
+    return isConnected;
+  }
+
+  public GameState getGameState(){
+    return gameState;
+  }
+
 }

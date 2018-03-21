@@ -1,6 +1,7 @@
 package sen.sen.numericonsandroid.Networking;
 
 
+import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
@@ -10,8 +11,8 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 
 
-public class LocalGameServer{
-    public static final int ADDITION= 1;
+public class LocalGameServer {
+    public static final int ADDITION = 1;
     public static final int SUBTRACTION = 2;
     public static final int MUTLIPLICATION = 3;
     public static final int DIVISION = 4;
@@ -21,47 +22,47 @@ public class LocalGameServer{
 
     BluetoothController BC = new BluetoothController();
     private GameRoom gameroom1;
-    BluetoothSocket bsocket;
+    BluetoothServerSocket bsocket;
 
-    public LocalGameServer(BluetoothSocket bsocket){
-    this.bsocket = bsocket;
+    public LocalGameServer(BluetoothServerSocket bsocket) {
+        this.bsocket = bsocket;
     }
 
-    public DroppedItem[] generatesDroppeditem(int amt){
+    public DroppedItem[] generatesDroppeditem(int amt) {
         //generate the random item. will add generation of what type of item soon with skewed probability
         DroppedItem[] listofItem = null;
         byte[] longseed = null;
         int num;
         float x, yspeed;
-        for(int i = 0; i< 20 ; i++) {
-         longseed[i]  =(byte)System.currentTimeMillis();
+        for (int i = 0; i < 20; i++) {
+            longseed[i] = (byte) System.currentTimeMillis();
         }
         SecureRandom rdm = new SecureRandom(longseed);
-        for(int i = 0; i< amt ; i++){
-        //need to know the range for x and yspeed
-        num = rdm.nextInt(10);
-        x = rdm.nextFloat();
-        yspeed = rdm.nextFloat();
-            listofItem[i] = new DroppedItem(num, x ,yspeed);
+        for (int i = 0; i < amt; i++) {
+            //need to know the range for x and yspeed
+            num = rdm.nextInt(10);
+            x = rdm.nextFloat();
+            yspeed = rdm.nextFloat();
+            listofItem[i] = new DroppedItem(num, x, yspeed);
         }
         return listofItem;
     }
 
-    public int generateGoalNumber(){
+    public int generateGoalNumber() {
         byte[] longseed = null;
-        for(int i = 0; i< 20 ; i++) {
-            longseed[i]  =(byte)System.currentTimeMillis();
+        for (int i = 0; i < 20; i++) {
+            longseed[i] = (byte) System.currentTimeMillis();
         }
         SecureRandom rdm = new SecureRandom(longseed);
         return rdm.nextInt(200);
     }
 
-    public void useItem(int item){
+    public void useItem(int item) {
         //TODO
     }
 
-    public int calculateNextScore(int current, int next, int operation){
-        switch(operation){
+    public int calculateNextScore(int current, int next, int operation) {
+        switch (operation) {
             case ADDITION:
                 return current + next;
             case SUBTRACTION:
@@ -69,7 +70,7 @@ public class LocalGameServer{
             case MUTLIPLICATION:
                 return current * next;
             case DIVISION:
-                if(next==0)
+                if (next == 0)
                     //error ??? send
                     return 11111111;
                 return current / next;
@@ -79,12 +80,12 @@ public class LocalGameServer{
 
     }
 
-    public void initGame(ArrayList<User> userList){
+    public void initGame(ArrayList<User> userList) {
         GameState gs = new GameState();
 
         int goalnumber = generateGoalNumber();
-        ArrayList<Player> players =null;
-        for(int i = 0 ; i< userList.size() ; i++) {
+        ArrayList<Player> players = null;
+        for (int i = 0; i < userList.size(); i++) {
             players.add(new Player(goalnumber, userList.get(i).getUsername()));
         }
         gs.setPlayerList(players);
@@ -95,13 +96,13 @@ public class LocalGameServer{
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        DroppedItem[]  listitem = generatesDroppeditem(4);
+                        DroppedItem[] listitem = generatesDroppeditem(4);
                         //sends to both clients
-                    //sends to client
+                        //sends to client
                     }
                 },
                 2000);
 
 
-
+    }
 }
