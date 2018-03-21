@@ -109,7 +109,10 @@ public class BluetoothController{
 
   public void respondToInvitation(BluetoothDevice device, boolean accepted){
     if(bluetoothChatService.getConnectedDevice() != null){
-      //todo send msg
+      if(accepted){
+//        WebsocketMessage wsm = new ();
+//        bluetoothChatService.write();//send an init game
+      }
     }
   }
 
