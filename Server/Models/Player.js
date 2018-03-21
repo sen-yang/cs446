@@ -7,6 +7,7 @@ module.exports = class Player{
     this.currentOperation = 0;
     this.lost = false;
     this.client = client;
+    this.client.playerInCurrentRoom = this;
   }
 
   doPlayerAction(playerAction){
