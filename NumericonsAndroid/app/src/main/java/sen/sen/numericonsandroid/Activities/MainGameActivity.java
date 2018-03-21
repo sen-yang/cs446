@@ -57,7 +57,7 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main_game);
 
-    /
+    //Setup game properties
     gameController = (GameController) getIntent().getSerializableExtra(Constants.GAME_CONTROLLER);
     gameStage = Constants.GAME_STAGE.INIT;
 
@@ -97,7 +97,7 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     return min + r.nextFloat() * (max - min);
   }
 
-  private void updateFromServer(GameState gameState){
+  private void updateFromServer(GameState gameState) {
     if(this.isFinishing()){
       return;
     }
@@ -111,6 +111,7 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     }
     totalNumberTextView.setText(Integer.toString(currentPlayer.getCurrentNumber()));
     countDownTimer.setProgress((int) (((float) gameState.getTimeRemaining()) / TOTAL_GAME_TIME) * 100);
+
     //todo show other players
 
     if(gameStage == Constants.GAME_STAGE.FINISHED && gameState.getWinner() != null){
