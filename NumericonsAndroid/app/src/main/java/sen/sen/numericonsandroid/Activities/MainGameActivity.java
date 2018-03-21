@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 import sen.sen.numericonsandroid.CustomUI.GameView;
+import sen.sen.numericonsandroid.CustomUI.MultiPlayerMode_PlayerInfoView;
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
@@ -64,10 +66,14 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     gameView = findViewById(R.id.background);
     gameView.setDelegate(this);
-    gameView.setGameState(gameController.getGameState());
+
+    if(gameController.getGameState().getMatchType() == Constants.GAME_TYPE.RANKED) {
+      MultiPlayerMode_PlayerInfoView multiPlayerModePlayerInfoView = new MultiPlayerMode_PlayerInfoView(gameView.getContext(), gameController.getGameState().getPlayerList());
+      multiPlayerModePlayerInfoView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+      gameView.addView(multiPlayerModePlayerInfoView);
+    }
 
     countDownTimer = findViewById(R.id.countDownTimer);
-
     //Setup Buttons References
     addButton = findViewById(R.id.buttonAdd);
     subButton = findViewById(R.id.buttonMinus);

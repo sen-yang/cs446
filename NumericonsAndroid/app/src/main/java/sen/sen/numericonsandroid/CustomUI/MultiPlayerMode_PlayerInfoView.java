@@ -37,7 +37,5 @@ public class MultiPlayerMode_PlayerInfoView extends LinearLayout {
 
   private void init(Context context) {
     //...
-    
-
   }
 }

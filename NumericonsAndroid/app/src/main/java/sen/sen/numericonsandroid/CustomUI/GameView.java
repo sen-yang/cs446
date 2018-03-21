@@ -37,7 +37,6 @@ public class GameView extends RelativeLayout{
   }
 
   ImageView basketImageView;
-  MultiPlayerMode_PlayerInfoView multiPlayerModePlayerInfoView;
   Rect clipBounds;
   Paint textPaint;
   private Basket basketModel;
@@ -48,24 +47,6 @@ public class GameView extends RelativeLayout{
 
   public void setDelegate(GameViewDelegate delegate){
     this.delegate = delegate;
-  }
-
-  public void setGameState(GameState gameState) {
-    this.gameState = gameState;
-    if(gameState.getMatchType() == Constants.GAME_TYPE.RANKED) {
-      Log.i("multiplayer", "setGameState: multiplayer!!!");
-    } else if(gameState.getMatchType() == Constants.GAME_TYPE.SINGLEPLAYER){
-      Log.i("single", "setGameState: single!!!");
-    } else if(gameState.getMatchType() == Constants.GAME_TYPE.SECRET_MODE){
-      Log.i("SECRET_MODE", "setGameState: SECRET_MODE!!!");
-    } else {
-      Log.i("WTF_MODE:", "???: " + gameState.getMatchType());
-    }
-
-    //@TODO: Just for testing, change this later...
-    multiPlayerModePlayerInfoView = new MultiPlayerMode_PlayerInfoView(getContext(), gameState.getPlayerList());
-
-
   }
 
   //@TODO: Remove this later...just for testing
@@ -90,11 +71,6 @@ public class GameView extends RelativeLayout{
     layoutParams.bottomMargin = (int)getResources().getDimension(R.dimen.basket_margin_bottom);
     layoutParams.addRule(ALIGN_PARENT_BOTTOM);
     addView(basketImageView, layoutParams);
-
-    //Check if it is multi-player mode, append multiPlayerModePlayerInfoView
-
-    //multiPlayerModePlayerInfoView = new MultiPlayerMode_PlayerInfoView(getContext());
-
 
     basketImageView.setOnTouchListener(basket_onTouchListener());
     basketModel = new Basket(0, 0);
