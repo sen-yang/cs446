@@ -33,5 +33,6 @@ module.exports.playerActionType = {
   MULTIPLICATION: 2,
   DIVISION: 3,
   GET_NUMBER: 4,
-  USE_POWER_UP: 5
+  USE_ITEM: 5,
+  GET_ITEM: 6
 };

@@ -6,6 +6,7 @@ module.exports = class Player{
     this.currentNumber = 0;
     this.currentOperation = 0;
     this.lost = false;
+    this.itemInInventory = null;
     this.client = client;
     this.client.playerInCurrentRoom = this;
   }
@@ -21,7 +22,11 @@ module.exports = class Player{
       case Constants.playerActionType.GET_NUMBER:
         this.updateCurrentNumber(playerAction.value);
         break;
-      case Constants.playerActionType.USE_POWER_UP:
+      case Constants.playerActionType.USE_ITEM:
+        //todo
+        break;
+      case Constants.playerActionType.GET_ITEM:
+        this.getItem(playerAction.item);
         break;
     }
   }
@@ -45,6 +50,10 @@ module.exports = class Player{
         this.currentNumber /= newNumber;
         break;
     }
+  }
+
+  getItem(item){
+    this.itemInInventory = item;
   }
 
   toJSON(){
