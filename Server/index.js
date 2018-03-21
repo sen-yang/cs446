@@ -65,6 +65,9 @@ function handleMessage(message, client){
     case Constants.messageType.LOGIN:
       loginUser(message, client);
       break;
+    case Constants.messageType.GET_RANKINGS:
+      getRankings(message, client);
+      break;
     case Constants.messageType.FIND_GAME:
       findGame(message, client);
       break;
@@ -85,6 +88,10 @@ function loginUser(message, client){
   websocketMessage.isConfirmed = confirmed;
   websocketMessage.user = client.user;
   client.sendMessage(JSON.stringify(websocketMessage));
+}
+
+function getRankings(message, client){
+  //todo get rankings
 }
 
 function findGame(message, client1){
