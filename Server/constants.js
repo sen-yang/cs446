@@ -18,6 +18,8 @@ module.exports.messageType = {
   GAME_FINISH: 4,
   GAME_STATE_UPDATE: 5,
   GAME_DROPPED_ITEM: 6,
+  GAME_FOUND: 7,
+  GET_RANKINGS: 8,
 
   //client messages
   LOGIN: 100,
