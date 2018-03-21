@@ -27,9 +27,10 @@ import sen.sen.numericonsandroid.R;
  * Created by Jennifer on 2018-02-28.
  */
 
-public class backgroundGameView extends RelativeLayout{
+public class GameView extends RelativeLayout{
 
-  public interface BackgroundGameViewDelegate{
+  //@TODO change BackgroundGameViewDelegate to GameViewDelegate
+  public interface GameViewDelegate{
     void updateScore(int value);
   }
 
@@ -39,9 +40,9 @@ public class backgroundGameView extends RelativeLayout{
   private Basket basketModel;
   private Handler handler;
   private Runnable autoRun;
-  private BackgroundGameViewDelegate delegate;
+  private GameViewDelegate delegate;
 
-  public void setDelegate(BackgroundGameViewDelegate delegate){
+  public void setDelegate(GameViewDelegate delegate){
     this.delegate = delegate;
   }
 
@@ -49,12 +50,12 @@ public class backgroundGameView extends RelativeLayout{
   private float textSize;
   List<DroppedItem> droppedItemList;
 
-  public backgroundGameView(Context context){
+  public GameView(Context context){
     super(context);
     init(context);
   }
 
-  public backgroundGameView(Context context, AttributeSet attrs){
+  public GameView(Context context, AttributeSet attrs){
     super(context, attrs);
     init(context);
   }

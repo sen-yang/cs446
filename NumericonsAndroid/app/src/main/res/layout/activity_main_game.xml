@@ -117,7 +117,7 @@
             app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
-    <sen.sen.numericonsandroid.CustomUI.backgroundGameView
+    <sen.sen.numericonsandroid.CustomUI.GameView
         android:id="@+id/background"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -147,7 +147,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:max="100"
-            android:min="0"/>
-    </sen.sen.numericonsandroid.CustomUI.backgroundGameView>
+            android:min="0"
+            tools:visibility="visible" />
+    </sen.sen.numericonsandroid.CustomUI.GameView>
 
 </android.support.constraint.ConstraintLayout>
