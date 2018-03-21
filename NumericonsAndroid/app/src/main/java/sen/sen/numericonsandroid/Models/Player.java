@@ -8,7 +8,7 @@ public class Player implements Serializable{
 
 
     private int targetNumber;
-  private int currentNumber =0;
+  private int currentNumber;
   private Constants.PLAYER_ACTION_TYPE currentOperation;
   private String username;
   private String imageUrlThumbnail;

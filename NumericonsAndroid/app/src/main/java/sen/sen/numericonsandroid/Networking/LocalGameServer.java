@@ -11,16 +11,15 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 
 
-public class LocalGameServer {
+public class LocalGameServer implements Runnable{
     public static final int ADDITION = 1;
     public static final int SUBTRACTION = 2;
     public static final int MUTLIPLICATION = 3;
     public static final int DIVISION = 4;
-    public static final int GET_NUMBER = 5;
-    public static final int USE_POWERUP = 5;
 
 
-    BluetoothController BC = new BluetoothController();
+
+    private BluetoothServerController BSC = new BluetoothServerController();
     private GameRoom gameroom1;
     BluetoothServerSocket bsocket;
 
@@ -103,6 +102,11 @@ public class LocalGameServer {
                 },
                 2000);
 
+
+    }
+
+
+    public void run(){
 
     }
 }
