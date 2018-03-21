@@ -43,6 +43,7 @@ public class PlayerInfoView extends View{
     playerCurrentNumber = findViewById(R.id.userCurrentNumber);
   }
 
+  //@TODO: might want to remove this one, cuz its redundant..
   public void setPlayer(Player player) {
     update(player);
   }

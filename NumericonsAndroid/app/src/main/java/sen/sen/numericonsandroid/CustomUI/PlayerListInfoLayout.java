@@ -11,11 +11,7 @@ import java.util.List;
 import sen.sen.numericonsandroid.Models.Player;
 import sen.sen.numericonsandroid.R;
 
-/**
- * Created by Jennifer on 2018-03-21.
- */
-
-public class PlayerListInfoLayout extends LinearLayout {
+public class PlayerListInfoLayout extends LinearLayout{
   List<Player> playerList;
   List<PlayerInfoView> playerInfoViewList;
   LinearLayout multiplayerlayout;
@@ -35,27 +31,31 @@ public class PlayerListInfoLayout extends LinearLayout {
     init();
   }
 
-  private void init() {
+  private void init(){
     multiplayerlayout = findViewById(R.id.multiplayerlayout);
     playerInfoViewList = new ArrayList<>();
-    for(Player player: playerList) {
-      PlayerInfoView playerInfoView = new PlayerInfoView(getContext());
-      playerInfoView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, 1f));
-      playerInfoView.setPlayer(player);
-      multiplayerlayout.addView(playerInfoView);
-    }
   }
 
-  public void setPlayerList(List<Player> playerList) {
+  public void setPlayerList(List<Player> playerList){
     this.playerList = playerList;
     updateView();
   }
 
-  private void updateView() {
+  private void updateView(){
     for(int i = 0; i < playerList.size(); i++){
       //TODO CHECK IF i is out of bound!
-      PlayerInfoView playerInfoView = playerInfoViewList.get(i);
-      playerInfoView.update(playerList.get(i));
+      if(playerInfoViewList.get(i) != null){
+        //If this playerInfoView already exist, update it
+        PlayerInfoView playerInfoView = playerInfoViewList.get(i);
+        playerInfoView.update(playerList.get(i));
+      } else{
+        //If not, create a new view and added to playerInfoViewList and multiplayerlayout
+        PlayerInfoView playerInfoView = new PlayerInfoView(getContext());
+        playerInfoView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, 1f));
+        playerInfoView.setPlayer(playerList.get(i));
+        playerInfoViewList.add(playerInfoView);
+        multiplayerlayout.addView(playerInfoView);
+      }
     }
   }
 }

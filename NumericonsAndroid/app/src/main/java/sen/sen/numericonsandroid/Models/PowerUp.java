@@ -1,10 +1,6 @@
 package sen.sen.numericonsandroid.Models;
 
-/**
- * Created by ASUS on 20/3/2018.
- */
-
-public class PowerUP extends DroppedItem{
+public class PowerUp extends DroppedItem{
     private String powerUPName;
 
     public String getPowerUPName() {
@@ -34,7 +30,7 @@ public class PowerUP extends DroppedItem{
     private String Description;
     private int Power;
 
-    public PowerUP(int number, float xPosition, float ySpeed){
+    public PowerUp(int number, float xPosition, float ySpeed){
         super(number, xPosition, ySpeed);
 
     }
