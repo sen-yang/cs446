@@ -175,10 +175,11 @@ public class BluetoothServerController{
             case PLAYER_ACTION:
                 PlayerActionMessage wsm =(PlayerActionMessage) websocketMessage;
                 PA = wsm.getPlayerAction();
+
                 break;
 
 
-//            case USE_POWERUP:
+
             default:
                 break;
         }

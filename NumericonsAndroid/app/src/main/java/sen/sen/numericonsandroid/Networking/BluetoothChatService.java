@@ -367,6 +367,7 @@ public class BluetoothChatService{
           // This is a blocking call and will only return on a
           // successful connection or an exception
           socket = mmServerSocket.accept();
+
         }catch(IOException e){
           Log.e(TAG, "Socket Type: " + mSocketType + "accept() failed", e);
           break;
@@ -416,7 +417,7 @@ public class BluetoothChatService{
    * succeeds or fails.
    */
   private class ConnectThread extends Thread{
-    private final BluetoothSocket mmSocket;
+    private BluetoothSocket mmSocket;
     private final BluetoothDevice mmDevice;
     private String mSocketType;
 
@@ -456,12 +457,16 @@ public class BluetoothChatService{
         // successful connection or an exception
         mmSocket.connect();
       }catch(IOException e){
-        // Close the socket
-        try{
-          mmSocket.close();
-        }catch(IOException e2){
-          Log.e(TAG, "unable to close() " + mSocketType +
-              " socket during connection failure", e2);
+        try {
+          Log.e("","trying fallback...");
+
+          mmSocket =(BluetoothSocket) mmDevice.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(mmDevice,1);
+          mmSocket.connect();
+
+          Log.e("","Connected");
+        }
+        catch (Exception e2) {
+          Log.e("", "Couldn't establish Bluetooth connection!");
         }
         connectionFailed();
         return;

@@ -52,6 +52,7 @@ public class BluetoothController{
   private BluetoothAdapter bluetoothAdapter;
   private boolean isHost;
 
+
   public static BluetoothController getInstance(){
     if(staticBluetoothController == null){
       staticBluetoothController = new BluetoothController();
