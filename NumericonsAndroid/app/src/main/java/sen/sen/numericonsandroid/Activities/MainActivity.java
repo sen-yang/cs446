@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
   protected void onCreate(Bundle savedInstanceState){
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-
     progressBar = findViewById(R.id.progressBar);
   }
 

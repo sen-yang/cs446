@@ -7,9 +7,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.Random;
 
 import sen.sen.numericonsandroid.CustomUI.GameView;
 import sen.sen.numericonsandroid.CustomUI.PlayerListInfoLayout;
+import sen.sen.numericonsandroid.CustomUI.PowerUpListView;
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
@@ -38,6 +41,7 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
   TextView targetNumberTextView;
   TextView totalNumberTextView;
   ProgressBar countDownTimer;
+  PowerUpListView powerUpListView;
 
   //Buttons
   Button addButton;

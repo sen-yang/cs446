@@ -1,14 +1,18 @@
 package sen.sen.numericonsandroid.CustomUI;
 
 import android.content.Context;
+import android.media.Image;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import sen.sen.numericonsandroid.Models.PowerUp;
+import sen.sen.numericonsandroid.R;
 
 public class PowerUpListView extends LinearLayout{
   List<PowerUp> powerUpList;
@@ -32,6 +36,15 @@ public class PowerUpListView extends LinearLayout{
   private void init(){
     powerUpList = new ArrayList<>();
     powerUpInfoViewList = new ArrayList<>();
+
+    //JUST FOR TESTING...
+    for(int i = 0; i < 3; i++) {
+      LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+      PowerUpInfoView powerUpInfoView = new PowerUpInfoView(getContext());
+      addView(powerUpInfoView, layoutParams);
+      //TODO: Set layout param for powerUpInfoView and add to the linear layout
+      powerUpInfoViewList.add(powerUpInfoView);
+    }
   }
 
   public void setPowerUPList(List<PowerUp> powerUpList){

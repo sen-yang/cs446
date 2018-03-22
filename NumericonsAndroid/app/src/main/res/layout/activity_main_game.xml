@@ -149,6 +149,15 @@
             android:max="100"
             android:min="0"
             tools:visibility="visible" />
+
+        <sen.sen.numericonsandroid.CustomUI.PowerUpListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="70dp"
+            android:orientation="vertical">
+        </sen.sen.numericonsandroid.CustomUI.PowerUpListView>
     </sen.sen.numericonsandroid.CustomUI.GameView>
 
 </android.support.constraint.ConstraintLayout>
