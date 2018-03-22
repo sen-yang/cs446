@@ -1,11 +1,17 @@
 package sen.sen.numericonsandroid.Models;
 
+import android.util.Log;
+
 import java.io.Serializable;
 
 import sen.sen.numericonsandroid.Global.Constants;
 
 public class DroppedItem implements Serializable{
+  static final int TIMEROFFSET = 100;
+  static final int SPEEDOFFSET = 2;
+
   private int number;
+  private long startTimer = System.currentTimeMillis();
   private float xPosition;
   private float yPosition;
   private float ySpeed;
@@ -62,7 +68,8 @@ public class DroppedItem implements Serializable{
   }
 
   public void fall(){
-    yPosition += ySpeed / 2;
+    long timePass = System.currentTimeMillis() - startTimer;
+    yPosition = (ySpeed / SPEEDOFFSET) * (timePass / TIMEROFFSET);
   }
 
 }

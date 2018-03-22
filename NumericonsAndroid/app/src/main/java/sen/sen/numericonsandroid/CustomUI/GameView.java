@@ -85,6 +85,7 @@ public class GameView extends RelativeLayout{
     handler = new Handler();
     autoRun = new Runnable(){
       public void run(){
+        //redraw on screen!
         invalidate();
         handler.postDelayed(this, 50);
       }

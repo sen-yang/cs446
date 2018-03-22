@@ -34,9 +34,7 @@ import static sen.sen.numericonsandroid.Global.Constants.PLAYER_ACTION_TYPE.GET_
 import static sen.sen.numericonsandroid.Global.Constants.TOTAL_GAME_TIME;
 
 public class MainGameActivity extends AppCompatActivity implements GameListener, GameView.GameViewDelegate{
-
   // View widgets
-  //@TODO change GameView to GameView!
   GameView gameView;
   TextView targetNumberTextView;
   TextView totalNumberTextView;
@@ -82,9 +80,7 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
       LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
       multiPlayerModePlayerInfoView.setLayoutParams(linearLayoutParams);
       //multiPlayerModePlayerInfoView.setPlayerList(gameController.getGameState().getPlayerList());
-
       wrapperLayout.addView(multiPlayerModePlayerInfoView);
-
       gameView.addView(wrapperLayout);
    // }
 
@@ -111,6 +107,7 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
   }
 
   int randomInt_Range(int min, int max){
+
     return min + (int) (Math.random() * ((max - min) + 1));
   }
 
