@@ -44,6 +44,7 @@ public class PowerUpInfoView extends RelativeLayout{
     powerUPImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
     powerUPImage.setId(R.id.powerUpImageButton);
     powerUPImage.setImageResource(R.drawable.basket2);
+
     powerUpName = new TextView(getContext());
     powerUpName.setText("COOL STUFF!");
 

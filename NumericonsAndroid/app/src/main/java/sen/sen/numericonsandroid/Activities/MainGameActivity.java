@@ -41,7 +41,6 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
   TextView targetNumberTextView;
   TextView totalNumberTextView;
   ProgressBar countDownTimer;
-  PowerUpListView powerUpListView;
 
   //Buttons
   Button addButton;
@@ -72,12 +71,22 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     gameView.setDelegate(this);
 
     //IF game type is multiPlayer, append multiPlayer layoutView
-    if(gameController.getGameState().getMatchType() == Constants.GAME_TYPE.RANKED) {
-      PlayerListInfoLayout multiPlayerModePlayerInfoView = new PlayerListInfoLayout(gameView.getContext());
-      multiPlayerModePlayerInfoView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-      multiPlayerModePlayerInfoView.setPlayerList(gameController.getGameState().getPlayerList());
-      gameView.addView(multiPlayerModePlayerInfoView);
-    }
+    //@TODO: PUT IF AND setPlayerList() BACK LATER! JUST FOR TESTING
+   // if(gameController.getGameState().getMatchType() == Constants.GAME_TYPE.RANKED) {
+      RelativeLayout wrapperLayout = new RelativeLayout(gameView.getContext());
+      RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+      layoutParams.addRule(RelativeLayout.BELOW, R.id.countDownTimer);
+      wrapperLayout.setLayoutParams(layoutParams);
+
+      PlayerListInfoLayout multiPlayerModePlayerInfoView = new PlayerListInfoLayout(wrapperLayout.getContext());
+      LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+      multiPlayerModePlayerInfoView.setLayoutParams(linearLayoutParams);
+      //multiPlayerModePlayerInfoView.setPlayerList(gameController.getGameState().getPlayerList());
+
+      wrapperLayout.addView(multiPlayerModePlayerInfoView);
+
+      gameView.addView(wrapperLayout);
+   // }
 
     countDownTimer = findViewById(R.id.countDownTimer);
     //Setup Buttons References

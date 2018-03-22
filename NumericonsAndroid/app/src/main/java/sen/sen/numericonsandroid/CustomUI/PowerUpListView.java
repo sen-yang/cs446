@@ -37,7 +37,7 @@ public class PowerUpListView extends LinearLayout{
     powerUpList = new ArrayList<>();
     powerUpInfoViewList = new ArrayList<>();
 
-    //JUST FOR TESTING...
+    //TODO: JUST FOR TESTING...Remove this later...
     for(int i = 0; i < 3; i++) {
       LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
       PowerUpInfoView powerUpInfoView = new PowerUpInfoView(getContext());
@@ -62,8 +62,8 @@ public class PowerUpListView extends LinearLayout{
       } else{
         //If not, create a new view and added to powerUpInfoViewList and ...
         PowerUpInfoView powerUpInfoView = new PowerUpInfoView(getContext());
-        //TODO: Set layout param for powerUpInfoView and add to the linear layout
-        //powerUpInfoView.setLayoutParams();
+
+        //TODO: Set layout param for powerUpInfoView and add to the linear layout, Use code in init as example!
         powerUpInfoView.update(powerUpList.get(i));
         powerUpInfoViewList.add(powerUpInfoView);
       }

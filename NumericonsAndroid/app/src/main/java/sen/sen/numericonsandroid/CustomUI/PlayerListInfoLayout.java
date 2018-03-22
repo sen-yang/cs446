@@ -3,6 +3,7 @@ package sen.sen.numericonsandroid.CustomUI;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import sen.sen.numericonsandroid.R;
 public class PlayerListInfoLayout extends LinearLayout{
   List<Player> playerList;
   List<PlayerInfoView> playerInfoViewList;
-  LinearLayout multiplayerlayout;
 
   public PlayerListInfoLayout(Context context){
     super(context);
@@ -32,8 +32,15 @@ public class PlayerListInfoLayout extends LinearLayout{
   }
 
   private void init(){
-    multiplayerlayout = findViewById(R.id.multiplayerlayout);
     playerInfoViewList = new ArrayList<>();
+    //TODO: JUST FOR TESTING...Remove this later...
+    for(int i = 0; i < 3; i++) {
+      LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+      PlayerInfoView playerInfoView = new PlayerInfoView(getContext());
+      addView(playerInfoView, layoutParams);
+      //TODO: Set layout param for playerInfoView and add to the linear layout
+      playerInfoViewList.add(playerInfoView);
+    }
   }
 
   public void setPlayerList(List<Player> playerList){
@@ -54,7 +61,6 @@ public class PlayerListInfoLayout extends LinearLayout{
         playerInfoView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, 1f));
         playerInfoView.setPlayer(playerList.get(i));
         playerInfoViewList.add(playerInfoView);
-        multiplayerlayout.addView(playerInfoView);
       }
     }
   }
