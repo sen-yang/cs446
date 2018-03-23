@@ -53,6 +53,7 @@ public class PowerUpInfoView extends RelativeLayout{
     imageParams.addRule(CENTER_HORIZONTAL);
     nameParams.addRule(RelativeLayout.BELOW, powerUPImage.getId());
     nameParams.addRule(CENTER_HORIZONTAL);
+
     addView(powerUPImage, imageParams);
     addView(powerUpName, nameParams);
   }

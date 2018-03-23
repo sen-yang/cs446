@@ -34,7 +34,7 @@ import static sen.sen.numericonsandroid.Global.Constants.PLAYER_ACTION_TYPE.GET_
 import static sen.sen.numericonsandroid.Global.Constants.TOTAL_GAME_TIME;
 
 public class MainGameActivity extends AppCompatActivity implements GameListener, GameView.GameViewDelegate{
-  // View widgets
+  //View widgets
   GameView gameView;
   TextView targetNumberTextView;
   TextView totalNumberTextView;
@@ -48,7 +48,6 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
 
   //Private GameState Items
   List<DroppedItem> droppedItemList;
-
   private GameController gameController;
   private Player currentPlayer;
   private Constants.GAME_STAGE gameStage;
@@ -71,17 +70,7 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     //IF game type is multiPlayer, append multiPlayer layoutView
     //@TODO: PUT IF AND setPlayerList() BACK LATER! JUST FOR TESTING
    // if(gameController.getGameState().getMatchType() == Constants.GAME_TYPE.RANKED) {
-      RelativeLayout wrapperLayout = new RelativeLayout(gameView.getContext());
-      RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-      layoutParams.addRule(RelativeLayout.BELOW, R.id.countDownTimer);
-      wrapperLayout.setLayoutParams(layoutParams);
-
-      PlayerListInfoLayout multiPlayerModePlayerInfoView = new PlayerListInfoLayout(wrapperLayout.getContext());
-      LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-      multiPlayerModePlayerInfoView.setLayoutParams(linearLayoutParams);
-      //multiPlayerModePlayerInfoView.setPlayerList(gameController.getGameState().getPlayerList());
-      wrapperLayout.addView(multiPlayerModePlayerInfoView);
-      gameView.addView(wrapperLayout);
+        setMultiplayerListView();
    // }
 
     countDownTimer = findViewById(R.id.countDownTimer);
@@ -107,13 +96,26 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
   }
 
   int randomInt_Range(int min, int max){
-
     return min + (int) (Math.random() * ((max - min) + 1));
   }
 
   float randomFloat_Range(float min, float max){
     Random r = new Random();
     return min + r.nextFloat() * (max - min);
+  }
+
+  private void setMultiplayerListView(){
+    RelativeLayout wrapperLayout = new RelativeLayout(gameView.getContext());
+    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+    layoutParams.addRule(RelativeLayout.BELOW, R.id.countDownTimer);
+    wrapperLayout.setLayoutParams(layoutParams);
+
+    PlayerListInfoLayout multiPlayerModePlayerInfoView = new PlayerListInfoLayout(wrapperLayout.getContext());
+    LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+    multiPlayerModePlayerInfoView.setLayoutParams(linearLayoutParams);
+    //multiPlayerModePlayerInfoView.setPlayerList(gameController.getGameState().getPlayerList());
+    wrapperLayout.addView(multiPlayerModePlayerInfoView);
+    gameView.addView(wrapperLayout);
   }
 
   private void updateFromServer(GameState gameState) {
@@ -204,7 +206,6 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     //todo
     switch(operationMode){
       case ADDITION:
-
     }
     playerActionPerformed(GET_NUMBER, value, null);
   }
