@@ -65,6 +65,9 @@ function handleMessage(message, client){
     case Constants.messageType.LOGIN:
       loginUser(message, client);
       break;
+    case Constants.messageType.CREATE_USER:
+      Register(message, client);
+    break;
     case Constants.messageType.GET_RANKINGS:
       getRankings(message, client);
       break;
@@ -75,6 +78,10 @@ function handleMessage(message, client){
       playerAction(message, client);
       break;
   }
+}
+
+function Register(message, client){
+  
 }
 
 function loginUser(message, client){

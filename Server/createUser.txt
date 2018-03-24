@@ -1,4 +1,3 @@
-create database public;
 CREATE TABLE public.users
 (
     UID serial UNIQUE NOT NULL,
@@ -23,31 +22,31 @@ CREATE TABLE public.rankingsdata
 );
 
 INSERT INTO public.users(
- username, hashpassword, email, image)
-	VALUES ( 'user1', 'password', '', 'image1');
+ UID, username, hashpassword, email, image)
+	VALUES ( 1,'user1', 'password', '', 'image1');
 	INSERT INTO public.users(
- username, hashpassword, email, image)
-	VALUES ( 'user2', 'password', '', 'image2');
+ UID, username, hashpassword, email, image)
+	VALUES ( 2,'user2', 'password', '', 'image2');
 	INSERT INTO public.users(
- username, hashpassword, email, image)
-	VALUES ( 'user3', 'password', '', 'image3');
+ UID, username, hashpassword, email, image)
+	VALUES ( 3,'user3', 'password', '', 'image3');
   INSERT INTO public.users(
- username, hashpassword, email, image)
-  VALUES ( 'user4', 'password', '', 'image3');
+ UID, username, hashpassword, email, image)
+  VALUES ( 4,'user4', 'password', '', 'image3');
 
 
   INSERT INTO public.rankingsdata(
-	uid, rank, rating, ratingdev, violatility)
+	uid, rank, rating, ratingdev, volatility)
 	VALUES (1, 1, 1, 1, 1);
 
 	INSERT INTO public.rankingsdata(
-	uid, rank, rating, ratingdev, violatility)
+	uid, rank, rating, ratingdev, volatility)
 	VALUES (2, 2, 1, 1, 1);
 
 	INSERT INTO public.rankingsdata(
-	uid, rank, rating, ratingdev, violatility)
+	uid, rank, rating, ratingdev, volatility)
 	VALUES (3, 3, 1, 1, 1);
 
 	INSERT INTO public.rankingsdata(
-	uid, rank, rating, ratingdev, violatility)
+	uid, rank, rating, ratingdev, volatility)
 	VALUES (4, 4, 1, 1, 1);

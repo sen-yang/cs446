@@ -1,32 +1,35 @@
 const DB = require('./Models/DatabaseConnector');
-
+const eloRank = require('elo-rank');
+var elo = new eloRank();
 db = new DB();
 
-function Login(username, hashpassword){
-  userData = {
+module.exports = class ConnectionController{
+    constructor(){
+    }
+
+
+ Login(username, hashpassword, callback, failcallback){
+  var userData = {
   "username": username,
    "hashpassword" : hashpassword
     }
     db.Login(userData)
     .then(data => {
       //emit ranking information back to client
-      if( JSON.stringify(data)=="[]"){
-        console.log("not logged in");
-        //emit not logged in. username/password wrong
-      }
-      else console.log("logged in" + data);
-      //emit logged in and pass the data back
-
+      if(JSON.stringify(data)=="[]")
+      callback(false);
+      else
+      callback(true);//this function must check if the data is set.
     })
     .catch(error => {
-        console.log('ERROR:', error); // print the error;
+        console.log('ERROR:'+ error); // print the error;
     })
 
   }
 
 
-function selectRankings(init, offset){
-  userData = {
+ selectRankings(init, offset, callback){
+  var userData = {
   "start": init,
    "end" : offset
     }
@@ -35,61 +38,120 @@ function selectRankings(init, offset){
       .then(data => {
         //emit ranking information back to client
         console.log("ranking" + data);
-
+        callback(data);
       })
       .catch(error => {
-          console.log('ERROR:', error); // print the error;
+          console.log('ERROR:'+ error); // print the error;
       })
 
 
     }
 
 
-function registerwithCheckUser(username, hashpassword, email){
-  userData = {
-  "username": username,
+
+ Register(username, hashpassword, email, callback,errorcallback){
+   var userData = {
+   "username": username,
    "hashpassword" : hashpassword,
    "email" : email
-    }
+     }
 
 db.CheckUser(userData)
     .then(data => {
-      if(data[0]!=undefined){
-        console.log("there exist a user, please choose another username");
-        //emit username exists, choosen another
-      }else{
-        createUser(userData);
-      }
+      if(JSON.stringify(data)=="[]")
+      this.createUser(username, hashpassword, email,  callback,errorcallback);
+      else callback(false);
     })
     .catch(error => {
-        console.log('ERROR:', error); // print the error;
     })
+    console.log('ERROR:'+ error); // print the error;
 
   }
 
-function createUser(UserData){
+
+ createUser(username, hashpassword, email, callback,errorcallback){
+   var userData = {
+   "username": username,
+   "hashpassword" : hashpassword,
+   "email" : email
+     }
   db.registerUser(userData)
       .then(data => {
           console.log("user have been registered");
+          callback(true);//send data to user about a successful registration
           //emit data to user client
           //if successful, emit registration sucessfull
 
       })
-      .catch(error => {
-          console.log('ERROR:', error); // print the error;
+      .catch(errorcallback, error => {
+          console.log('ERROR:'+ error); // print the error;
+          errorcallback(error);
       })
 
 
 }
 
 
-function updateRanking(){
+ calculateUpdateRanking(Winnername, Losername, callback){
   //TODO
-}
+  db.getRating(Winnername, Losername)
+        .then(data => {
+          var user1 = Object.values(data[0]);
+          var user2 = Object.values(data[1]);
+          var winnerrating, loserrating;
+          var winner,loser;
+          if(user1[0]==Winnername){
+            winner = user1[0];
+          winnerrating = user1[1];
+          loserrating = user2[1];
+          loser = user2[0];
+        }else{
+          winner = user2[0];
+          winnerrating = user2[1];
+          loserrating = user1[1];
+          loser = user1[0];
+        }
+        console.log("loser:" + loser);
+        var expectedScoreA = elo.getExpected(winnerrating, loserrating);
+        var expectedScoreB = elo.getExpected(loserrating, winnerrating);
 
-function checkANDChangePassword(username, oldpassword ,updatePassword){
+          //update score, 1 if won 0 if lost
+          var playerA = elo.updateRating(expectedScoreA, 1, winnerrating);
+          var playerB = elo.updateRating(expectedScoreB, 0, loserrating);
+
+          this.updateRating(winner,winnerrating, loser, loserrating,callback);
+      })
+      .catch(error => {
+          console.log('ERROR:'+ error); // print the error;
+      })
+
+
+}
+  updateRating(winneruser, winnerScore, loseruser, loserScore, callback){
+    db.updateRatingAndRank(winneruser,winnerScore)
+    .then(data => {
+    console.log(winneruser + "\'s score is  updated")
+  })
+  .catch(error => {
+      console.log('ERROR:'+ error); // print the error;
+  });
+
+
+    db.updateRatingAndRank(loseruser, loserScore)
+    .then(data => {
+      console.log("Test");
+    console.log(loseruser + "\'s score is  updated")
+  })
+  .catch(error => {
+      console.log('ERROR:'+ error); // print the error;
+  });
+  }
+
+
+
+ checkANDChangePassword(username, oldpassword ,updatePassword,  callback, errorcallback){
   //hash password please
-  userData = {
+  var userData = {
   "username": username,
   "hashpassword" : updatePassword,
   "oldpassword": oldpassword
@@ -98,21 +160,28 @@ function checkANDChangePassword(username, oldpassword ,updatePassword){
 
     db.CheckOldPassword(userData)
     .then(data => {
+        if(JSON.stringify(data) != "[]"){
+          console.log(data)
+          this.changePass(userData, callback,errorcallback);
+
+        }else
+        callback(false);
 
         //emit data to user client
         //if successful, emit registration sucessfull
-        changePass(userData);
     })
     .catch(error => {
         console.log('ERROR:', error); // print the error;
+        errorcallback(error);
     })
 
 }
-function changePass(userData){
-      console.log("TES"+userData);
+
+
+ changePass(userData, callback, errorcallback){
   db.updateUser(userData)
   .then(data => {
-      console.log("user have changed his password");
+      callback(true);
       //emit data to user client
       //if successful, emit registration sucessfull
 
@@ -123,10 +192,4 @@ function changePass(userData){
 
 }
 
-//Login("user1","notreallyhashed");
-//selectTop10Rank();
-//db.selectALL();
-//registerwithCheckUser("12z2z","notreallyhashed","emailtest");
-checkANDChangePassword("12z2z","oldpassword", "notreallyhashed2");
-//Login("122zz","notreallyhashed","emailtest");
-//selectRankings(1,3);
+}

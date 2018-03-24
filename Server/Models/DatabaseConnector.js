@@ -56,15 +56,11 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
   Login(userData){
     return  db.any('select username from users where username=$1 AND hashpassword=$2', [userData.username, userData.hashpassword])
     }
+
     updateUser(userData){
       return db.any('update users set hashpassword=$2  where username=$1', [userData.username, userData.hashpassword])
     }
 
-
-    selectMyRank(userData){
-      return db.any('select rank from rankingsdata where username=$1', [userData.username])
-
-    }
 
     registerUser(userData){
       return db.any('insert into users(username, hashpassword, email) values($1,$2,$3)', [userData.username, userData.hashpassword, userData.email])
@@ -81,6 +77,13 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
 
     updateRanking(userData){
       return db.any('', [userData.username]);
+    }
+
+    getRating(winner,loser){
+      return db.any('select username,rating from users,rankingsdata where users.UID=rankingsdata.UID and (username=$1 OR username=$2)',[winner,loser] );
+    }
+    updateRatingAndRank(user, userscore){
+      return db.any('update rankingsdata set rating=$1 from users where users.UID=rankingsdata.UID and users.username=$2',[userscore, user]);
     }
 };
 /////////////////////////////////////////////database interface/

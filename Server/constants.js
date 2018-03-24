@@ -24,7 +24,8 @@ module.exports.messageType = {
   //client messages
   LOGIN: 100,
   FIND_GAME: 101,
-  PLAYER_ACTION: 102
+  PLAYER_ACTION: 102,
+  CREATE_USER:103
 };
 
 module.exports.playerActionType = {
