@@ -25,8 +25,13 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onFindGameButtonPressed"
-            android:text="Online Match"/>
+            android:onClick="onRankedGameButtonPressed"
+            android:text="1v1 Ranked"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onGroupGameButtonPressed"
+            android:text="Group Game"/>
 
         <Button
             android:layout_width="match_parent"

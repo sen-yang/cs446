@@ -38,15 +38,18 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
     }
   }
 
-  public void onFindGameButtonPressed(View view){
-    //gameInitialized();
+  public void onRankedGameButtonPressed(View view){
     WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.RANKED);
+  }
+
+  public void onGroupGameButtonPressed(View view){
+    WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.GROUP_GAME);
   }
 
 
   public void onSinglePlayerButtonPressed(View view){
-    //todo
-    Log.i("Single Player", "onSinglePlayerButtonPressed: ");
+    //todo switch to local
+    WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.SINGLEPLAYER);
   }
 
   public void onBluetoothButtonPressed(View view){
