@@ -1,4 +1,4 @@
-const Constants = require('../constants');
+const Constants = require('../Constants');
 
 module.exports = class Player{
   constructor(targetNumber, client){
@@ -12,7 +12,7 @@ module.exports = class Player{
   }
 
   doPlayerAction(playerAction){
-    switch(+playerAction.commandType){
+    switch(playerAction.commandType){
       case Constants.playerActionType.ADDITION:
       case Constants.playerActionType.SUBTRACTION:
       case Constants.playerActionType.MULTIPLICATION:

@@ -1,6 +1,6 @@
 const genUUID = require('uuid/v1');
 const GameManager = require('./GameManager');
-const Constants = require('../constants');
+const Constants = require('../Constants');
 const Helpers = require('../Helpers');
 const WebsocketMessage = require('./WebsocketMessage');
 
@@ -21,7 +21,6 @@ module.exports = class GameRoom{
     websocketMessage.gameState = this.gameManager.gameState;
     let messageString = JSON.stringify(websocketMessage);
     this.clientList.forEach((client)=>{
-      console.log("asdf", client.user.username, messageString);
       client.sendMessage(messageString);
     });
 

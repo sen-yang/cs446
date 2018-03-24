@@ -2,7 +2,7 @@ const Player = require('./Player');
 const DroppedItem = require('./DroppedItem');
 const GameRoom = require('./GameRoom');
 const GameState = require('./GameState');
-const Constants = require('../constants');
+const Constants = require('../Constants');
 const Helpers = require('../Helpers');
 
 module.exports = class GameManager{
@@ -93,7 +93,7 @@ module.exports = class GameManager{
 
   clientLeft(client){
     this.gameState.isComplete = true;
-    this.gameState.loser = client.getPlayerInCurrentRoom();
+    this.gameState.loser = client.playerInCurrentRoom;
     //todo maybe shouldn't wait till next tick
   }
 };

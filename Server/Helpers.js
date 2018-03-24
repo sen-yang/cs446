@@ -1,6 +1,6 @@
 module.exports = {};
 
-module.exports.randomFloat = (seed)=>{
+module.exports.randomFloat = (seed) =>{
   //todo implement seed
   return Math.random();
 };
@@ -15,3 +15,7 @@ module.exports.randomNumberInRange = (min, max, shouldRound = true, seed = null)
     return number;
   }
 };
+
+module.exports.hasDuplicates = (array) =>{
+  return (new Set(array)).size !== array.length;
+}

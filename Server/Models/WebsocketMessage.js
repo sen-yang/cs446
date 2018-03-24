@@ -1,4 +1,4 @@
-const Constants = require('../constants');
+const Constants = require('../Constants');
 
 module.exports = class WebsocketMessage{
   constructor(type){

@@ -1,4 +1,5 @@
-const Constants = require('./constants');
+const Constants = require('./Constants');
+const Helpers = require('./Helpers');
 const WebSocketServer = require('ws').Server;
 const genUUID = require('uuid/v1');
 const WebsocketClient = require('./Models/WebsocketClient');
@@ -18,32 +19,27 @@ const server = new WebSocketServer(config, function(){
 let connectedClients = [];
 let usernamesSet = new Set();
 let gameRooms = {};
-let clientsSearchingForGame = [];
+let clientsSearchingForRanked = [];
+let clientsSearchingForGroup = [];
 
 server.on('connection', function(ws){
   console.log('connected');
   let client = new WebsocketClient(ws);
   connectedClients[client.id] = client;
 
-  ws.on('message', function(message){
+  ws.on('message', (message) =>{
     console.log('received: ', message);
     handleMessage(JSON.parse(message), client);
   });
 
-  ws.on('close', function(){
+  ws.on('close', () =>{
     console.log('connection is closed');
-    delete connectedClients[client.id];
+    clientDisconnected(client);
+  });
 
-    for(var i = clientsSearchingForGame.length; i >= 0; i--){
-      if(clientsSearchingForGame[i] == client){
-        clientsSearchingForGame.splice(i, 1);
-        break;
-      }
-    }
-
-    if(client.user != null){
-      usernamesSet.delete(client.user.username);
-    }
+  ws.on('error', () =>{
+    console.log('connection error');
+    clientDisconnected(client);
   });
 });
 
@@ -53,11 +49,31 @@ function verifyClient(info){
   return true;
 }
 
+function clientDisconnected(client){
+  delete connectedClients[client.id];
+
+  for(var i = clientsSearchingForRanked.length; i >= 0; i--){
+    if(clientsSearchingForRanked[i] == client){
+      clientsSearchingForRanked.splice(i, 1);
+      break;
+    }
+  }
+  for(var i = clientsSearchingForGroup.length; i >= 0; i--){
+    if(clientsSearchingForGroup[i] == client){
+      clientsSearchingForGroup.splice(i, 1);
+      break;
+    }
+  }
+
+  if(client.user != null){
+    usernamesSet.delete(client.user.username);
+  }
+}
 
 // client message handlers
 
 function handleMessage(message, client){
-  switch(+message.type){
+  switch(message.type){
     case Constants.messageType.PING:
       break;
 
@@ -67,7 +83,7 @@ function handleMessage(message, client){
       break;
     case Constants.messageType.CREATE_USER:
       Register(message, client);
-    break;
+      break;
     case Constants.messageType.GET_RANKINGS:
       getRankings(message, client);
       break;
@@ -81,7 +97,7 @@ function handleMessage(message, client){
 }
 
 function Register(message, client){
-  
+
 }
 
 function loginUser(message, client){
@@ -101,22 +117,54 @@ function getRankings(message, client){
   //todo get rankings
 }
 
-function findGame(message, client1){
-  createSinglePlayerGame(client1);
-  // if(client1.currentRoom != null){
-  //   //already in room
-  // }
-  // else if(clientsSearchingForGame.length > 0){
-  //   client2 = clientsSearchingForGame[0];
-  //
-  //   if(client1.id != client2.id){
-  //     clientsSearchingForGame.splice(0, 1);
-  //     createGame(client1, client2);
-  //   }
-  // }
-  // else{
-  //   clientsSearchingForGame.push(client1);
-  // }
+function findGame(message, client){
+  switch(message.gameType){
+    case Constants.gampeType.SINGLEPLAYER:
+      createSinglePlayerGame(client);
+      break;
+    case Constants.gampeType.RANKED:
+      searchForRanked(client);
+      break;
+    case Constants.gampeType.GROUP_GAME:
+      createGroupGame(client);
+      break;
+  }
+}
+
+function searchForRanked(client1){
+  if(client1.currentRoom != null){
+    //already in room
+  }
+  else if(clientsSearchingForRanked.length > 0){
+    let client2 = clientsSearchingForRanked[0];
+
+    if(client1.id != client2.id){
+      clientsSearchingForRanked.splice(0, 1);
+      createRankedGame(client1, client2);
+    }
+  }
+  else{
+    clientsSearchingForRanked.push(client1);
+  }
+}
+
+function searchForGroup(client1){
+  let clientList = [client1];
+  if(client1.currentRoom != null){
+    //already in room
+  }
+  else if(clientsSearchingForRanked.length > 1){
+    clientList.push(clientsSearchingForRanked[0]);
+    clientList.push(clientsSearchingForRanked[1]);
+
+    if(!Helpers.hasDuplicates(clientList)){
+      clientsSearchingForGroup.splice(0, 2);
+      createGroupGame(clientList);
+    }
+  }
+  else{
+    clientsSearchingForRanked.push(client1);
+  }
 }
 
 function playerAction(message, client){
@@ -129,8 +177,17 @@ function playerAction(message, client){
 }
 
 function createSinglePlayerGame(client1){
+  let gameRoom = new GameRoom(0, [client1], (gameRoom) =>{
+    gameFinished(gameRoom);
+  });
+  gameRoom.initGame();
+  gameRooms[gameRoom.id] = gameRoom;
+}
+
+function createRankedGame(client1, client2){
   let clientList = [];
   clientList.push(client1);
+  clientList.push(client2);
   let gameRoom = new GameRoom(0, clientList, (gameRoom) =>{
     gameFinished(gameRoom);
   });
@@ -138,12 +195,8 @@ function createSinglePlayerGame(client1){
   gameRooms[gameRoom.id] = gameRoom;
 }
 
-function createGame(client1, client2){
-  //todo game types not implemented
-  let clientList = [];
-  clientList.push(client1);
-  clientList.push(client2);
-  let gameRoom = new GameRoom(0, clientList, (gameRoom) =>{
+function createGroupGame(newClientList){
+  let gameRoom = new GameRoom(0, newClientList, (gameRoom) =>{
     gameFinished(gameRoom);
   });
   gameRoom.initGame();
