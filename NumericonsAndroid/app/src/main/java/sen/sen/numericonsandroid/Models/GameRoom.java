@@ -3,10 +3,6 @@ package sen.sen.numericonsandroid.Models;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by ASUS on 20/3/2018.
- */
-
 public class GameRoom implements Serializable{
     private GameState gs;
     private ArrayList<User> userList;

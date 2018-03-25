@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
 
   @Override
   public void gameInitialized(final GameState gameState){
-    Log.d("asdf", "gameInitialized1");
     runOnUiThread(new Runnable(){
       @Override
       public void run(){

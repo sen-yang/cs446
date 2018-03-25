@@ -59,7 +59,7 @@ public class BluetoothConnectionActivity extends AppCompatActivity implements Bl
   @Override
   protected void onResume(){
     super.onResume();
-    BluetoothController.getInstance().listenForInvites(true);
+//    BluetoothController.getInstance().listenForInvites(true);
   }
 
   @Override

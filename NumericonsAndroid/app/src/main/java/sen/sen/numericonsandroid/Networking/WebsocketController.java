@@ -131,8 +131,7 @@ public class WebsocketController {
         .registerTypeSelector(WebsocketMessage.class, new TypeSelector<WebsocketMessage>(){
           @Override
           public Class<? extends WebsocketMessage> getClassForElement(JsonElement readElement){
-            int type = readElement.getAsJsonObject().get("type").getAsInt();
-            Constants.MESSAGE_TYPE messageType = Constants.MESSAGE_TYPE.valueOf(type);
+            Constants.MESSAGE_TYPE messageType = Constants.MESSAGE_TYPE.valueOf(readElement.getAsJsonObject().get("type").getAsString());
             switch(messageType){
               case PING:
                 return WebsocketMessage.class;
@@ -156,17 +155,7 @@ public class WebsocketController {
           }
         });
 
-    gson = builder.createGsonBuilder().registerTypeAdapter(Constants.MESSAGE_TYPE.class, new JsonDeserializer<Constants.MESSAGE_TYPE>(){
-      @Override
-      public Constants.MESSAGE_TYPE deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException{
-        return Constants.MESSAGE_TYPE.valueOf(json.getAsInt());
-      }
-    }).registerTypeAdapter(Constants.PLAYER_ACTION_TYPE.class, new JsonDeserializer<Constants.PLAYER_ACTION_TYPE>(){
-      @Override
-      public Constants.PLAYER_ACTION_TYPE deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException{
-        return Constants.PLAYER_ACTION_TYPE.valueOf(json.getAsInt());
-      }
-    }).create();
+    gson = builder.createGsonBuilder().create();
     websocketListenerList = new ArrayList<>();
     gameListenerList = new ArrayList<>();
 

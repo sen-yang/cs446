@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,6 @@ import sen.sen.numericonsandroid.Networking.WebsocketModels.GameDroppedItemMessa
 import sen.sen.numericonsandroid.Networking.WebsocketModels.GameStateMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.PlayerActionMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.WebsocketMessage;
-import org.apache.commons.lang.SerializationUtils;
 
 
 public class BluetoothController{
@@ -95,20 +93,15 @@ public class BluetoothController{
   }
 
   public void inviteDeviceToGame(BluetoothDevice device){
-    bluetoothChatService.connect(device, false);
+    bluetoothChatService.connect(device, true);
   }
 
 
   public void respondToInvitation(BluetoothDevice device, boolean accepted){
     if(bluetoothChatService.getConnectedDevice() != null){
       if(accepted){
-        WebsocketMessage wsm = new WebsocketMessage(Constants.MESSAGE_TYPE.GAME_INIT);
-        try {
-          byte[] datatobesend = convertToBytes(wsm);
-          bluetoothChatService.write(datatobesend);
-        }catch(IOException e){
-          Log.e("ERROR","DATA Cannot be send : "+ e);
-        }
+        WebsocketMessage websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.GAME_INIT);
+        bluetoothChatService.write(gson.toJson(websocketMessage).getBytes());
       //start own game too.
       }
     }
@@ -116,12 +109,11 @@ public class BluetoothController{
 
 
   public void sendPlayerAction(PlayerAction playerAction) {
-    WebsocketMessage websocketMessage = new PlayerActionMessage(playerAction);
-    try {
-      byte[] datatobesend = convertToBytes(websocketMessage);
-      bluetoothChatService.write(datatobesend);
-    }catch(IOException e){
-      Log.e("ERROR","DATA Cannot be send : "+ e);
+    if(isHost){
+      //todo
+    }
+    else{
+      bluetoothChatService.write(convertToBytes(new PlayerActionMessage(playerAction)));
     }
   }
 
@@ -139,6 +131,7 @@ public class BluetoothController{
   private class IncomingBluetoothMessageHandler extends Handler{
     @Override
     public void handleMessage(Message msg){
+      Log.d("asdf", msg.toString());
       switch(msg.what){
         case Constants.MESSAGE_STATE_CHANGE:
           switch(msg.arg1){
@@ -161,13 +154,13 @@ public class BluetoothController{
           byte[] readBuf = (byte[]) msg.obj;
           WebsocketMessage message = null;
           // construct a string from the valid bytes in the buffer
-          try {
-            message = convertFromBytes(readBuf);
-          }catch(IOException e){
-            Log.e("ERROR","DATA Cannot be send : "+ e);
-          }catch(ClassNotFoundException ce){
-            Log.e("ERROR","CLASS Cannot be found : "+ ce);
-          }
+//          try {
+//            message = convertFromBytes(readBuf);
+//          }catch(IOException e){
+//            Log.e("ERROR","DATA Cannot be send : "+ e);
+//          }catch(ClassNotFoundException ce){
+//            Log.e("ERROR","CLASS Cannot be found : "+ ce);
+//          }
           if(message!=null)
           BluetoothController.this.handleMessage(message);
           break;
@@ -243,14 +236,9 @@ public class BluetoothController{
   }
 
 
-  private byte[] convertToBytes(WebsocketMessage object) throws IOException {
-    byte[] data = SerializationUtils.serialize(object);
+  private byte[] convertToBytes(WebsocketMessage object){
+    byte[] data = gson.toJson(object).getBytes();
     return data;
-  }
-
-  private WebsocketMessage convertFromBytes(byte[] bytes) throws IOException, ClassNotFoundException {
-    WebsocketMessage yourObject =(WebsocketMessage) SerializationUtils.deserialize(bytes);
-    return yourObject;
   }
 
   public boolean isConnected(){
