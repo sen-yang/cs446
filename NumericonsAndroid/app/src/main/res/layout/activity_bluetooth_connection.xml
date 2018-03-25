@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="refresh"/>
+        android:text="refresh"
+        android:onClick="refreshButtonPressed"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"

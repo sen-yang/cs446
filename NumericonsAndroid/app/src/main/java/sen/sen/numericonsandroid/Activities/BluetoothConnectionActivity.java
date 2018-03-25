@@ -54,12 +54,13 @@ public class BluetoothConnectionActivity extends AppCompatActivity implements Bl
     if(initBluetooth()){
       startBluetooth();
     }
+    BluetoothController.getInstance().addBluetoothListener(this);
   }
 
   @Override
   protected void onResume(){
     super.onResume();
-//    BluetoothController.getInstance().listenForInvites(true);
+    BluetoothController.getInstance().listenForInvites(true);
   }
 
   @Override

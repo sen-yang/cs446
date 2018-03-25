@@ -7,18 +7,24 @@ import android.os.Message;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.gsonfire.GsonFireBuilder;
+import io.gsonfire.TypeSelector;
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.PlayerAction;
 import sen.sen.numericonsandroid.Models.User;
+import sen.sen.numericonsandroid.Networking.WebsocketModels.ConfirmationMessage;
+import sen.sen.numericonsandroid.Networking.WebsocketModels.FindGameMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.GameDroppedItemMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.GameStateMessage;
+import sen.sen.numericonsandroid.Networking.WebsocketModels.LoginMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.PlayerActionMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.WebsocketMessage;
 
@@ -126,6 +132,35 @@ public class BluetoothController{
     bluetoothChatService = new BluetoothChatService(new IncomingBluetoothMessageHandler());
     bluetoothListenerList = new ArrayList<>();
     gameListenerList = new ArrayList<>();
+
+    GsonFireBuilder builder = new GsonFireBuilder()
+        .registerTypeSelector(WebsocketMessage.class, new TypeSelector<WebsocketMessage>(){
+          @Override
+          public Class<? extends WebsocketMessage> getClassForElement(JsonElement readElement){
+            Constants.MESSAGE_TYPE messageType = Constants.MESSAGE_TYPE.valueOf(readElement.getAsJsonObject().get("type").getAsString());
+            switch(messageType){
+              case PING:
+                return WebsocketMessage.class;
+              case LOGIN_CONFIRMATION:
+                return ConfirmationMessage.class;
+              case GAME_INIT:
+              case GAME_START:
+              case GAME_FINISH:
+              case GAME_STATE_UPDATE:
+                return GameStateMessage.class;
+              case GAME_DROPPED_ITEM:
+                return GameDroppedItemMessage.class;
+              case LOGIN:
+                return LoginMessage.class;
+              case FIND_GAME:
+                return FindGameMessage.class;
+              case PLAYER_ACTION:
+                return PlayerActionMessage.class;
+            }
+            return null;
+          }
+        });
+    gson = builder.createGsonBuilder().create();
   }
 
   private class IncomingBluetoothMessageHandler extends Handler{
@@ -167,6 +202,7 @@ public class BluetoothController{
         case Constants.MESSAGE_DEVICE_NAME:
           BluetoothDevice otherDevice = msg.getData().getParcelable(Constants.DEVICE);
           boolean isAccepting = msg.getData().getBoolean(Constants.IS_ACCEPTING);
+          Log.d("asdf", isAccepting + " ");
 
           if(isAccepting){
             for(WeakReference<BluetoothListener> listenerWeakReference : bluetoothListenerList){
