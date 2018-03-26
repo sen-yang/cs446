@@ -17,7 +17,7 @@ module.exports = class GameRoom{
   }
 
   initGame(){
-    let websocketMessage = new WebsocketMessage(Constants.messageType.GAME_INIT);
+    let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.GAME_INIT);
     websocketMessage.gameState = this.gameManager.gameState;
     let messageString = JSON.stringify(websocketMessage);
     this.clientList.forEach((client)=>{
@@ -34,8 +34,8 @@ module.exports = class GameRoom{
   gameStateUpdated(reason){
     let websocketMessage;
     switch(reason){
-      case Constants.messageType.GAME_STATE_UPDATE:
-        websocketMessage = new WebsocketMessage(Constants.messageType.GAME_STATE_UPDATE);
+      case Constants.MESSAGE_TYPE.GAME_STATE_UPDATE:
+        websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.GAME_STATE_UPDATE);
         websocketMessage.gameState = this.gameManager.gameState;
         this.clientList.forEach((client)=>{
           if(!client.sendMessage(JSON.stringify(websocketMessage))){
@@ -43,8 +43,8 @@ module.exports = class GameRoom{
           }
         });
         break;
-      case Constants.messageType.GAME_FINISH:
-        websocketMessage = new WebsocketMessage(Constants.messageType.GAME_FINISH);
+      case Constants.MESSAGE_TYPE.GAME_FINISH:
+        websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.GAME_FINISH);
         websocketMessage.gameState = this.gameManager.gameState;
         this.clientList.forEach((client)=>{
           if(!client.sendMessage(JSON.stringify(websocketMessage))){
@@ -53,29 +53,14 @@ module.exports = class GameRoom{
         });
         this.clearRoom();
         break;
-      case Constants.messageType.GAME_DROPPED_ITEM:
-        websocketMessage = new WebsocketMessage(Constants.messageType.GAME_STATE_UPDATE);
-        websocketMessage.gameState = this.gameManager.gameState;
-        this.clientList.forEach((client)=>{
-          if(!client.sendMessage(JSON.stringify(websocketMessage))){
-            this.clientDropped(client);
-          }
-        });
-
-        websocketMessage = new WebsocketMessage(Constants.messageType.GAME_DROPPED_ITEM);
-        websocketMessage.droppedItem = this.gameManager.generateDrop();
-        this.clientList.forEach((client)=>{
-          if(!client.sendMessage(JSON.stringify(websocketMessage))){
-            this.clientDropped(client);
-          }
-        });
-        break;
     }
   }
 
   clientDropped(client){
-    //todo implement client droppped
-    this.gameManager.clientLeft(client);
+    //todo check if need 2 do more :)))
+    if(client.user != null){
+      this.gameManager.userLeft(client.user.username);
+    }
   }
 
   clearRoom(){

@@ -1,23 +1,26 @@
 module.exports = {
   PORT_NUMBER: 6969,
-  TICK_TIME: 1000 / 10, // (1s in ms) / fps
+  TICK_TIME: 1000 / 5, // (1s in ms) / fps
   GAME_READY_TIME: 5000,
   MIN_TARGET: -99,
-  MAX_TARGET: 100,
+  MAX_TARGET: 99,
   MIN_DROP: -9,
-  MAX_DROP: 10
+  MAX_DROP: 10,
+  MIN_DROP_SPEED: 0.005,
+  MAX_DROP_SPEED: 0.02,
+  DROP_RATE: 250,
+  GAME_START_DELAY: 5000
 };
 
-module.exports.messageType = {
+module.exports.MESSAGE_TYPE = {
   PING: "PING",
 
   //server messages
-  LOGIN_CONFIRMATION: "LOGIN_CONFIRMATION",
+  CONFIRMATION: "CONFIRMATION",
   GAME_INIT: "GAME_INIT",
   GAME_START: "GAME_START",
   GAME_FINISH: "GAME_FINISH",
   GAME_STATE_UPDATE: "GAME_STATE_UPDATE",
-  GAME_DROPPED_ITEM: "GAME_DROPPED_ITEM",
   GAME_FOUND: "GAME_FOUND",
   GET_RANKINGS: "GET_RANKINGS",
 
@@ -28,7 +31,7 @@ module.exports.messageType = {
   CREATE_USER: "CREATE_USER"
 };
 
-module.exports.playerActionType = {
+module.exports.PLAYER_ACTION_TYPE = {
   ADDITION: "ADDITION",
   SUBTRACTION: "SUBTRACTION",
   MULTIPLICATION: "MULTIPLICATION",
@@ -38,9 +41,15 @@ module.exports.playerActionType = {
   GET_ITEM: "GET_ITEM"
 };
 
-module.exports.gampeType = {
+module.exports.GAME_TYPE = {
   SINGLEPLAYER: "SINGLEPLAYER",
   RANKED: "RANKED",
   GROUP_GAME: "GROUP_GAME",
   SECRET_MODE: "SECRET_MODE"
+};
+
+
+module.exports.CONFIRMATION_TYPE = {
+  BLUETOOTH_ACCEPT_GAME: "BLUETOOTH_ACCEPT_GAME",
+  USER_CONFIRMATION: "USER_CONFIRMATION"
 };

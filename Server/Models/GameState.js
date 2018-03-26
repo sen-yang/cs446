@@ -8,7 +8,7 @@ module.exports = class GameState{
   constructor(seedString, playerList){
     //todo generate from seed
     this.seed = seedString;
-    this.targetNumber = Math.round(Math.random() * 200) - 100;
+    this.targetNumber = Helpers.randomNumberInRange(Constants.MIN_TARGET, Constants.MAX_TARGET, true, this.seed);
     this.isComplete = false;
     this.winner = null;
     this.loser = null;
@@ -17,12 +17,13 @@ module.exports = class GameState{
     this.delta = 0;
     this.startTime = 0;
     this.playerList = playerList;
+    this.droppedItemList = [];
   }
 
-  toJSON(){
+  getWinner(){
     let winner = this.winner;
 
-    if(winner == null && this.isComplete){
+    if((winner == null) && this.isComplete && (this.playerListlength != null) && (this.playerListlength > 1)){
       this.playerList.every((player) =>{
         if(player != this.loser){
           winner = player;
@@ -31,10 +32,17 @@ module.exports = class GameState{
         return true;
       });
     }
-    return {targetNumber: this.targetNumber,
-            playerList: this.playerList,
-            isComplete: this.isComplete,
-            winner: winner,
-            timeRemaining: this.timeRemaining};
+    return winner;
+  }
+
+  toJSON(){
+    return {
+      targetNumber: this.targetNumber,
+      playerList: this.playerList,
+      isComplete: this.isComplete,
+      winner: this.getWinner(),
+      timeRemaining: this.timeRemaining,
+      droppedItemList: this.droppedItemList
+    };
   }
 };
