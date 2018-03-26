@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/mainactivitybackgound"
     tools:context="sen.sen.numericonsandroid.Activities.MainActivity">
 
     <LinearLayout
@@ -20,36 +21,38 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.655">
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onRankedGameButtonPressed"
-            android:text="1v1 Ranked"/>
+            android:text="1v1 Ranked" />
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onGroupGameButtonPressed"
-            android:text="Group Game"/>
+            android:text="Group Game" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onSinglePlayerButtonPressed"
-            android:text="Singleplayer"/>
+            android:text="Singleplayer" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onBluetoothButtonPressed"
-            android:text="Bluetooth"/>
+            android:text="Bluetooth" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="changeNameButtonPressed"
-            android:text="Change Name"/>
+            android:text="Change Name" />
     </LinearLayout>
 
     <ProgressBar
