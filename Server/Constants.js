@@ -49,6 +49,11 @@ module.exports.GAME_TYPE = {
   CANCEL: "CANCEL"
 };
 
+module.exports.CHARACTER_SPRITE = {
+  BIRD_1: "BIRD_1",
+  BIRD_2: "BIRD_2",
+  BIRD_3: "BIRD_3"
+};
 
 module.exports.CONFIRMATION_TYPE = {
   BLUETOOTH_ACCEPT_GAME: "BLUETOOTH_ACCEPT_GAME",
