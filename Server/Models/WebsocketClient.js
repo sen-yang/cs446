@@ -7,6 +7,7 @@ module.exports = class WebsocketClient{
     this.user = new User(genUUID());
     this.ws = ws;
     this.currentRoom = null;
+    this.isSearchingForMatch = false;
   }
 
 //returns false if failed

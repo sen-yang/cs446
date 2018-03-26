@@ -129,6 +129,9 @@ function findGame(message, client){
     case Constants.GAME_TYPE.GROUP_GAME:
       createGroupGame(client);
       break;
+    case Constants.GAME_TYPE.CANCEL:
+      clearSearchingClient(client);
+      break;
   }
 }
 
@@ -142,10 +145,13 @@ function searchForRanked(client1){
     if(client1.id != client2.id){
       clientsSearchingForRanked.splice(0, 1);
       createRankedGame(client1, client2);
+      client1.isSearchingForMatch = false;
+      client2.isSearchingForMatch = false;
     }
   }
   else{
     clientsSearchingForRanked.push(client1);
+    client1.isSearchingForMatch = true;
   }
 }
 
@@ -159,12 +165,16 @@ function searchForGroup(client1){
     clientList.push(clientsSearchingForRanked[1]);
 
     if(!Helpers.hasDuplicates(clientList)){
+      clientList.forEach((client) =>{
+        client.isSearchingForMatch = false;
+      });
       clientsSearchingForGroup.splice(0, 2);
       createGroupGame(clientList);
     }
   }
   else{
     clientsSearchingForRanked.push(client1);
+    client1.isSearchingForMatch = true;
   }
 }
 
@@ -203,4 +213,9 @@ function createGroupGame(newClientList){
 
 function gameFinished(gameRoom){
   delete gameRooms[gameRoom.id];
+}
+
+function clearSearchingClient(client){
+  Helpers.removeValueFromArray(clientsSearchingForRanked, client);
+  Helpers.removeValueFromArray(clientsSearchingForGroup, client);
 }
