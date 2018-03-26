@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mainactivitybackgound"
+    android:background="@drawable/main_activity_backgound"
     tools:context="sen.sen.numericonsandroid.Activities.MainActivity">
 
     <LinearLayout
@@ -22,7 +22,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.655">
+        app:layout_constraintVertical_bias="0.729">
 
         <Button
             android:layout_width="match_parent"
@@ -67,4 +67,23 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="293dp"
+        android:layout_height="106dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="52dp"
+        android:text="Rise Of The Numericon"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Subtitle"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
