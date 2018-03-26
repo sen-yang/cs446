@@ -26,7 +26,6 @@ import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Networking.BluetoothController;
 import sen.sen.numericonsandroid.Networking.GameController;
-import sen.sen.numericonsandroid.Networking.WebsocketController;
 import sen.sen.numericonsandroid.R;
 
 public class BluetoothConnectionActivity extends AppCompatActivity implements BluetoothDevicesRecyclerViewAdaptor.AdaptorDelegate, BluetoothController.BluetoothListener{
@@ -54,19 +53,20 @@ public class BluetoothConnectionActivity extends AppCompatActivity implements Bl
     if(initBluetooth()){
       startBluetooth();
     }
-    BluetoothController.getInstance().addBluetoothListener(this);
   }
 
   @Override
   protected void onResume(){
     super.onResume();
     BluetoothController.getInstance().listenForInvites(true);
+    BluetoothController.getInstance().addBluetoothListener(this);
   }
 
   @Override
   protected void onPause(){
     super.onPause();
     BluetoothController.getInstance().listenForInvites(false);
+    BluetoothController.getInstance().removeBluetoothListener(this);
   }
 
   @Override

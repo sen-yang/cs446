@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import sen.sen.numericonsandroid.Global.Constants;
@@ -30,7 +31,7 @@ import sen.sen.numericonsandroid.Networking.WebsocketModels.PlayerActionMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.WebsocketMessage;
 
 
-public class WebsocketController {
+public class WebsocketController{
   public static final String TAG = "WebsocketController";
   private static WebsocketController staticWebsocketController;
 
@@ -71,6 +72,30 @@ public class WebsocketController {
     }
   }
 
+  public void removeWebsocketListener(WebsocketListener websocketListener){
+    ListIterator<WeakReference<WebsocketListener>> iterator = websocketListenerList.listIterator();
+    while(iterator.hasNext()){
+      WebsocketListener listener = iterator.next().get();
+
+      if(listener.equals(websocketListener)){
+        iterator.remove();
+        break;
+      }
+    }
+  }
+
+  public void removeGameListener(GameListener gameListener){
+    ListIterator<WeakReference<GameListener>> iterator = gameListenerList.listIterator();
+    while(iterator.hasNext()){
+      GameListener listener = iterator.next().get();
+
+      if(listener.equals(gameListener)){
+        iterator.remove();
+        break;
+      }
+    }
+  }
+
 
   public void addGameListener(GameListener gameListener){
     boolean existsInList = false;
@@ -87,7 +112,9 @@ public class WebsocketController {
   //temporary??
   public void login(String username){
     WebsocketMessage websocketMessage = new LoginMessage(username);
-    webSocketClient.send(gson.toJson(websocketMessage));
+    if(webSocketClient.isOpen()){
+      webSocketClient.send(gson.toJson(websocketMessage));
+    }
   }
 
   public void getRankings(int limit, int offset){
@@ -96,12 +123,16 @@ public class WebsocketController {
 
   public void lookForMatch(Constants.GAME_TYPE gameType){
     WebsocketMessage websocketMessage = new FindGameMessage(gameType);
-    webSocketClient.send(gson.toJson(websocketMessage));
+    if(webSocketClient.isOpen()){
+      webSocketClient.send(gson.toJson(websocketMessage));
+    }
   }
 
   public void sendPlayerAction(PlayerAction playerAction){
     WebsocketMessage websocketMessage = new PlayerActionMessage(playerAction);
-    webSocketClient.send(gson.toJson(websocketMessage));
+    if(webSocketClient.isOpen()){
+      webSocketClient.send(gson.toJson(websocketMessage));
+    }
   }
 
   public boolean isConnected(){
@@ -120,7 +151,7 @@ public class WebsocketController {
     URI uri;
     try{
       uri = new URI(Constants.SERVER_URL);
-    }catch(URISyntaxException e){
+    } catch(URISyntaxException e){
       e.printStackTrace();
       return;
     }

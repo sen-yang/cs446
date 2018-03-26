@@ -1,6 +1,5 @@
 const Player = require('./Player');
 const DroppedItem = require('./DroppedItem');
-const GameRoom = require('./GameRoom');
 const GameState = require('./GameState');
 const Constants = require('../Constants');
 const Helpers = require('../Helpers');
@@ -14,9 +13,12 @@ module.exports = class GameManager{
     this.updateCallback = null;
     let playerList = [];
     this.gameState = new GameState(seedString, playerList);
-    clientList.forEach((client) =>{
-      playerList.push(new Player(this.gameState.targetNumber, client));
-    });
+
+    if(clientList != null){
+      clientList.forEach((client) =>{
+        playerList.push(new Player(this.gameState.targetNumber, client));
+      });
+    }
   }
 
   initGame(){
@@ -45,7 +47,6 @@ module.exports = class GameManager{
     this.gameState.delta = now - this.gameState.previousTickTime;
     this.gameState.previousTickTime = now;
     this.gameState.timeRemaining -= this.gameState.delta;
-    this.gameState.droppedItemList = [];
 
     this.gameState.playerList.every((player) =>{
       if(player.currentNumber == this.gameState.targetNumber){
@@ -83,8 +84,9 @@ module.exports = class GameManager{
     if(this.gameState.isComplete){
       return Constants.MESSAGE_TYPE.GAME_FINISH;
     }
+    this.gameState.droppedItemList = [];
     if(Helpers.randomFloat(this.seed) * Constants.DROP_RATE > this.gameState.delta){
-      droppedItemList.push(this.generateDrop());
+      this.gameState.droppedItemList.push(this.generateDrop());
     }
     return Constants.MESSAGE_TYPE.GAME_STATE_UPDATE;
   }
