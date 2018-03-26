@@ -19,6 +19,7 @@ import sen.sen.numericonsandroid.R;
 
 public class MainActivity extends AppCompatActivity implements WebsocketController.WebsocketListener{
   private ProgressBar progressBar;
+  private AlertDialog alertDialog;
 
   @Override
   protected void onCreate(Bundle savedInstanceState){
@@ -54,16 +55,16 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
   }
 
   private void showSearching(){
-    new AlertDialog.Builder(this)
-        .setTitle("Searching...")
-        .setPositiveButton("Cancel", new DialogInterface.OnClickListener(){
-          @Override
-          public void onClick(DialogInterface dialogInterface, int i){
-            cancelSearch();
-            dialogInterface.dismiss();
-          }
-        })
-        .show();
+    alertDialog = new AlertDialog.Builder(this)
+            .setTitle("Searching...")
+            .setPositiveButton("Cancel", new DialogInterface.OnClickListener(){
+              @Override
+              public void onClick(DialogInterface dialogInterface, int i){
+                cancelSearch();
+                dialogInterface.dismiss();
+              }
+            })
+            .show();
   }
 
   private void cancelSearch(){
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
       public void onClick(DialogInterface dialog, int whichButton){
       }
     });
-    alert.show();
+    alertDialog = alert.show();
   }
   @Override
   public void onConnected(){
@@ -123,6 +124,10 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
         Intent intent = new Intent(MainActivity.this, MainGameActivity.class);
         intent.putExtra(Constants.GAME_CONTROLLER, gameController);
         startActivity(intent);
+
+        if((alertDialog != null) && (alertDialog.isShowing())){
+          alertDialog.dismiss();
+        }
       }
     });
   }
