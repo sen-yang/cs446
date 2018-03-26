@@ -147,10 +147,10 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
       }
     }
     totalNumberTextView.setText(Integer.toString(currentPlayer.getCurrentNumber()));
-    countDownTimer.setProgress((int) (((float) gameState.getTimeRemaining()) / TOTAL_GAME_TIME) * 100);
+    //TOTAL_GAME_TIME
+    countDownTimer.setProgress((int)((((float) gameState.getTimeRemaining()) / TOTAL_GAME_TIME) * 100));
 
     //todo show other players
-
     if(gameStage == Constants.GAME_STAGE.FINISHED){
       AlertDialog.Builder builder;
       builder = new AlertDialog.Builder(this);
