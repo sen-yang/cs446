@@ -27,7 +27,7 @@ public class Constants{
   public static final int MAX_DROP = 10;
   public static final float MIN_DROP_SPEED = 0.005f;
   public static final float MAX_DROP_SPEED = 0.02f;
-  public static final float DROP_RATE = 250;
+  public static final float DROP_RATE = 150;
   public static final long GAME_START_DELAY = 5000;
 
   public enum MESSAGE_TYPE{
