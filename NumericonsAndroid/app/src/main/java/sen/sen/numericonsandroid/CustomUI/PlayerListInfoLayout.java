@@ -36,6 +36,9 @@ public class PlayerListInfoLayout extends LinearLayout{
     //TODO: JUST FOR TESTING...Remove this later...
     for(int i = 0; i < 3; i++) {
       LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+      //if(i < 2) {
+        layoutParams.setMargins(0,0,20,0);
+      //}
       PlayerInfoView playerInfoView = new PlayerInfoView(getContext());
       addView(playerInfoView, layoutParams);
       //TODO: Set layout param for playerInfoView and add to the linear layout

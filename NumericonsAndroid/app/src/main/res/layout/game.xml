@@ -163,6 +163,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="70dp"
-            android:orientation="vertical"></sen.sen.numericonsandroid.CustomUI.PowerUpListView>
+            android:orientation="vertical"
+            android:id="@+id/powerUpListView"></sen.sen.numericonsandroid.CustomUI.PowerUpListView>
+
     </sen.sen.numericonsandroid.CustomUI.GameView>
 </RelativeLayout>

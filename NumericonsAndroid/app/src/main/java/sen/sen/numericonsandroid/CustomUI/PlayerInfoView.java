@@ -1,16 +1,14 @@
 package sen.sen.numericonsandroid.CustomUI;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import sen.sen.numericonsandroid.Models.Player;
 import sen.sen.numericonsandroid.R;
@@ -21,7 +19,7 @@ import sen.sen.numericonsandroid.R;
 
 public class PlayerInfoView extends RelativeLayout{
   Player player;
-  ImageButton playerIconButton;
+  ImageView playerImageView;
   TextView playerName;
   TextView playerCurrentNumber;
 
@@ -42,17 +40,22 @@ public class PlayerInfoView extends RelativeLayout{
 
   private void init(){
     //@TODO: JUST for testing, Make the UI for PlayerInfoView!
-    playerIconButton = new ImageButton(getContext());
-    playerIconButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
-    playerIconButton.setId(R.id.multiPlayerImageButton);
-    playerIconButton.setImageResource(R.drawable.happy);
+    playerImageView = new ImageView(getContext());
+    playerImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+    playerImageView.setId(R.id.multiPlayerImageButton);
+    playerImageView.setImageResource(R.drawable.bird2);
 
+    //@TODO: change these later!
     playerName = new TextView(getContext());
     playerName.setText("Cool Name");
     playerName.setId(R.id.multiPlayerName);
+    playerName.setTextSize(15);
+    playerName.setTextColor(Color.WHITE);
 
     playerCurrentNumber = new TextView(getContext());
     playerCurrentNumber.setText("73");
+    playerCurrentNumber.setTextColor(Color.WHITE);
+    playerCurrentNumber.setTextSize(15);
     playerCurrentNumber.setId(R.id.multiPlayerCurrentNumber);
 
     RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(100, 100);
@@ -61,13 +64,13 @@ public class PlayerInfoView extends RelativeLayout{
 
     imageParams.addRule(CENTER_HORIZONTAL);
 
-    nameParams.addRule(RelativeLayout.BELOW, playerIconButton.getId());
+    nameParams.addRule(RelativeLayout.BELOW, playerImageView.getId());
     nameParams.addRule(CENTER_HORIZONTAL);
 
     numberParams.addRule(RelativeLayout.BELOW, playerName.getId());
     numberParams.addRule(CENTER_HORIZONTAL);
 
-    addView(playerIconButton, imageParams);
+    addView(playerImageView, imageParams);
     addView(playerName, nameParams);
     addView(playerCurrentNumber, numberParams);
   }

@@ -9,6 +9,7 @@
     <dimen name="dropTextSize">20sp</dimen>
     <dimen name="buttonUnselectedSize">48dip</dimen>
     <dimen name="buttonSelectedSize">55dip</dimen>
+    <dimen name="playerInfoTextSize">10</dimen>
 
     <dimen name="margin">8dp</dimen>
     <dimen name="marginDouble">16dp</dimen>

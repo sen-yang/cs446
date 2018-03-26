@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -111,12 +112,14 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
 
   private void setMultiplayerListView(){
     RelativeLayout wrapperLayout = new RelativeLayout(gameView.getContext());
-    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
     layoutParams.addRule(RelativeLayout.BELOW, R.id.countDownTimer);
+    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
     wrapperLayout.setLayoutParams(layoutParams);
 
     PlayerListInfoLayout multiPlayerModePlayerInfoView = new PlayerListInfoLayout(wrapperLayout.getContext());
-    LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+    LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+    multiPlayerModePlayerInfoView.setGravity(Gravity.END);
     multiPlayerModePlayerInfoView.setLayoutParams(linearLayoutParams);
     //multiPlayerModePlayerInfoView.setPlayerList(gameController.getGameState().getPlayerList());
     wrapperLayout.addView(multiPlayerModePlayerInfoView);

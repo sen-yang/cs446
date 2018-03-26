@@ -11,8 +11,8 @@ import sen.sen.numericonsandroid.Global.Constants;
 public class DroppedItem implements Serializable{
   static final int TIMEROFFSET = 100;
   static final int SPEEDOFFSET = 2;
-  static final int WIDTH = 90;
-  static final int HEIGHT = 100;
+  static final int WIDTH = 100;
+  static final int HEIGHT = 110;
 
   private int number;
   private long startTimer = System.currentTimeMillis();
