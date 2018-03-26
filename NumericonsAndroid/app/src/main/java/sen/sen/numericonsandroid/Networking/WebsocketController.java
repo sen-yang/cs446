@@ -19,7 +19,6 @@ import java.util.Map;
 
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Global.SharedPreferencesHelper;
-import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.PlayerAction;
 import sen.sen.numericonsandroid.Models.User;
@@ -40,7 +39,7 @@ public class WebsocketController{
 
     void onClose(int code, String reason, boolean remote);
 
-    void loginConfirmed(boolean isConfirmed, User user);
+    void userConfirmed(boolean isConfirmed, User user);
 
     void gameInitialized(GameState gameState);
   }
@@ -257,7 +256,7 @@ public class WebsocketController{
 
       for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
         if(listenerWeakReference.get() != null){
-          listenerWeakReference.get().loginConfirmed(confirmationMessage.isConfirmed(), SharedPreferencesHelper.getSavedUser());
+          listenerWeakReference.get().userConfirmed(confirmationMessage.isConfirmed(), SharedPreferencesHelper.getSavedUser());
         }
       }
     }

@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
   }
 
   @Override
-  public void loginConfirmed(boolean isConfirmed, User user){
+  public void userConfirmed(boolean isConfirmed, User user){
     if(isConfirmed){
       //todo login confirmed
     }

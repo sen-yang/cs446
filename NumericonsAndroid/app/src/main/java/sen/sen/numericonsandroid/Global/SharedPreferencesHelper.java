@@ -1,7 +1,5 @@
 package sen.sen.numericonsandroid.Global;
 
-import android.app.Application;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -12,8 +10,10 @@ import java.util.UUID;
 import sen.sen.numericonsandroid.Models.User;
 
 public class SharedPreferencesHelper{
-  public static final String USER = "USER";
+  private static final String USER = "USER";
+  private static final String IS_SOUND_ENABLED = "IS_SOUND_ENABLED";
   private static User inMemoryUser;
+  private static Boolean isSoundEnabled;
 
   public static User getSavedUser(){
     if(inMemoryUser != null){
@@ -28,7 +28,7 @@ public class SharedPreferencesHelper{
       return inMemoryUser;
     }
     else{
-      User user = new User(UUID.randomUUID().toString(), Constants.USER_CHARACTER.BIRD_1);
+      User user = new User(UUID.randomUUID().toString(), Constants.CHARACTER_SPRITE.BIRD_1);
       saveUser(user);
       return user;
     }
@@ -41,6 +41,23 @@ public class SharedPreferencesHelper{
     Gson gson = new Gson();
     String json = gson.toJson(user);
     editor.putString(USER, json);
+    editor.apply();
+  }
+
+  public static boolean GetSoundEnabled(){
+    if(isSoundEnabled != null){
+      return isSoundEnabled;
+    }
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getAppContext());
+    isSoundEnabled = sharedPreferences.getBoolean(IS_SOUND_ENABLED, true);
+    return isSoundEnabled;
+  }
+
+  public static void setSoundEnabled(boolean isSoundEnabled){
+    SharedPreferencesHelper.isSoundEnabled = isSoundEnabled;
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getAppContext());
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+    editor.putBoolean(IS_SOUND_ENABLED, isSoundEnabled);
     editor.apply();
   }
 

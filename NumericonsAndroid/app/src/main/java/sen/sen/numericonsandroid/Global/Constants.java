@@ -71,10 +71,10 @@ public class Constants{
     USER_CONFIRMATION
   }
 
-  public enum USER_CHARACTER{
+  public enum CHARACTER_SPRITE{
     BIRD_1,
     BIRD_2,
-    BIRD_3,
+    BIRD_3
   }
 
   public enum BIRD_DIRECTION{

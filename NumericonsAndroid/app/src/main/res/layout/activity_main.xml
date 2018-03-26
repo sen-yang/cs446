@@ -75,7 +75,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="52dp"
-        android:text="Rise Of The Numericon"
+        android:text="COOL BIRDS"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Subtitle"

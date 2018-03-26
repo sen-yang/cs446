@@ -6,11 +6,11 @@ import sen.sen.numericonsandroid.Global.Constants;
 
 public class User implements Serializable{
   private String username;
-  private Constants.USER_CHARACTER userCharacter;
+  private Constants.CHARACTER_SPRITE characterSprite;
 
-  public User(String username, Constants.USER_CHARACTER userCharacter){
+  public User(String username, Constants.CHARACTER_SPRITE characterSprite){
     this.username = username;
-    this.userCharacter = userCharacter;
+    this.characterSprite = characterSprite;
   }
 
   public String getUsername(){
@@ -21,7 +21,11 @@ public class User implements Serializable{
     this.username = username;
   }
 
-  public Constants.USER_CHARACTER getUserCharacter(){
-    return userCharacter;
+  public Constants.CHARACTER_SPRITE getCharacterSprite(){
+    return characterSprite;
+  }
+
+  public void setCharacterSprite(Constants.CHARACTER_SPRITE characterSprite){
+    this.characterSprite = characterSprite;
   }
 }
