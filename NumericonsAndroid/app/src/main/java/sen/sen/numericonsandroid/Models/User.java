@@ -20,4 +20,8 @@ public class User implements Serializable{
   public void setUsername(String username){
     this.username = username;
   }
+
+  public Constants.USER_CHARACTER getUserCharacter(){
+    return userCharacter;
+  }
 }

@@ -1,140 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#bce2f1"
+    android:clipChildren="false"
     tools:context="sen.sen.numericonsandroid.Activities.MainGameActivity">
 
-    <GridLayout
-        android:id="@+id/gridLayout"
-        android:layout_width="0dp"
-        android:layout_height="251dp"
-        android:columnCount="2"
-        android:rowCount="2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/buttonAdd"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:background="@color/colorAccent"
-            android:text="+"
-            android:textColor="@color/white"
-            android:textSize="@android:dimen/app_icon_size" />
-
-        <Button
-            android:id="@+id/buttonMinus"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:background="@android:color/holo_blue_bright"
-            android:text="-"
-            android:textColor="@color/black"
-            android:textSize="@android:dimen/app_icon_size" />
-
-        <Button
-            android:id="@+id/buttonTimes"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:background="#c17ddb5e"
-            android:text="*"
-            android:textColor="@color/black"
-            android:textSize="@android:dimen/app_icon_size" />
-
-        <Button
-            android:id="@+id/buttonDiv"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:background="#c0edbf4b"
-            android:text="/"
-            android:textColor="@color/black"
-            android:textSize="@android:dimen/app_icon_size" />
-    </GridLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="189dp"
-        android:layout_height="110dp"
-        android:background="#afc2fd"
-        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
-        app:layout_constraintEnd_toStartOf="@+id/background"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
-
-        <TextView
-            android:id="@+id/currentNumberTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="27dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:text="0"
-            android:textAlignment="textStart"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView3"
-            app:layout_constraintTop_toBottomOf="@+id/targetNumberTextView"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="27dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="Current:"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:text="Target:"
-            android:textSize="22sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/targetNumberTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="20dp"
-            android:text="77"
-            android:textAlignment="textStart"
-            android:textSize="22sp"
-            app:layout_constraintStart_toEndOf="@+id/textView4"
-            app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
 
     <sen.sen.numericonsandroid.CustomUI.GameView
-        android:id="@+id/background"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/sky"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/gridLayout"
-        app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/gameView"
+        android:layout_toRightOf="@+id/sideBarLayout"
+        android:layout_width="match_parent"
+        android:background="@drawable/gameview"
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/ground"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@drawable/ground" />
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/ground"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:background="@drawable/ground" />-->
 
         <ProgressBar
             android:id="@+id/countDownTimer"
@@ -159,5 +47,124 @@
             android:orientation="vertical">
         </sen.sen.numericonsandroid.CustomUI.PowerUpListView>
     </sen.sen.numericonsandroid.CustomUI.GameView>
+    <LinearLayout
+        android:id="@+id/sideBarLayout"
+        android:layout_width="90dp"
+        android:layout_height="match_parent"
+        android:background="@color/darkBrown"
+        android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+        <RelativeLayout
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:background="@drawable/wood_banner">
+
+            <ImageView
+                android:id="@+id/targetImageView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/marginDouble"
+                android:src="@drawable/add" />
+
+            <TextView
+                android:id="@+id/targetNumberTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/marginTriple"
+                android:layout_toRightOf="@+id/targetImageView"
+                android:gravity="right|center_vertical"
+                android:text="-123"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:background="@drawable/wood_banner">
+
+            <ImageView
+                android:id="@+id/currentNumberImageView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/marginDouble"
+                android:src="@drawable/add" />
+
+            <TextView
+                android:id="@+id/currentNumberTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/marginTriple"
+                android:layout_toRightOf="@+id/currentNumberImageView"
+                android:gravity="right|center_vertical"
+                android:text="-123"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/margin"
+            android:layout_marginTop="@dimen/margin"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/white" />
+
+            <ImageView
+                android:id="@+id/addButton"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/add" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/white" />
+
+            <ImageView
+                android:id="@+id/minusButton"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/minus" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/white" />
+            <ImageView
+                android:id="@+id/multiplyButton"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/times" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/white" />
+
+            <ImageView
+                android:id="@+id/divideButton"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/divides" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

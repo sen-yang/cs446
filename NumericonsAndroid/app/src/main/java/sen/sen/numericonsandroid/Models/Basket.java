@@ -31,12 +31,4 @@ public class Basket implements Serializable{
   public void setyPosition(float yPosition){
     this.yPosition = yPosition;
   }
-
-  public boolean checkCollision() {
-    //@TODO: Change this later...
-    //https://code.tutsplus.com/tutorials/develop-your-first-game-in-canvas-from-start-to-finish--pre-39198
-    return true;
-  }
-
-
 }

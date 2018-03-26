@@ -3,12 +3,15 @@ package sen.sen.numericonsandroid.Activities;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -42,10 +45,10 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
   ProgressBar countDownTimer;
 
   //Buttons
-  Button addButton;
-  Button subButton;
-  Button multiplyButton;
-  Button divideButton;
+  ImageView addButton;
+  ImageView subButton;
+  ImageView multiplyButton;
+  ImageView divideButton;
 
   //Private GameState Items
   List<DroppedItem> droppedItemList;
@@ -66,8 +69,9 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     gameStage = Constants.GAME_STAGE.INIT;
 
     this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    gameView = findViewById(R.id.background);
+    gameView = findViewById(R.id.gameView);
     gameView.setDelegate(this);
+
 
     //IF game type is multiPlayer, append multiPlayer layoutView
     //@TODO: PUT IF AND setPlayerList() BACK LATER! JUST FOR TESTING
@@ -77,10 +81,12 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
 
     countDownTimer = findViewById(R.id.countDownTimer);
     //Setup Buttons References
-    addButton = findViewById(R.id.buttonAdd);
-    subButton = findViewById(R.id.buttonMinus);
-    multiplyButton = findViewById(R.id.buttonTimes);
-    divideButton = findViewById(R.id.buttonDiv);
+    //Assume add is the default
+    addButton = findViewById(R.id.addButton);
+    addButton.setBackgroundColor(getResources().getColor(R.color.brightGreen));
+    subButton = findViewById(R.id.minusButton);
+    multiplyButton = findViewById(R.id.multiplyButton);
+    divideButton = findViewById(R.id.divideButton);
 
     //Setup Event Listener
     addButton.setOnClickListener(addHandler);
@@ -133,6 +139,7 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     for(Player player : gameState.getPlayerList()){
       if(player.getUsername().equals(SharedPreferencesHelper.getUsername())){
         currentPlayer = player;
+        //gameView.setCurrentPlayer(this.currentPlayer);
         break;
       }
     }
@@ -224,7 +231,7 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
   View.OnClickListener addHandler = new View.OnClickListener(){
     public void onClick(View v){
       operationMode = Constants.PLAYER_ACTION_TYPE.ADDITION;
-      playerActionPerformed(operationMode, 0, (Button) v);
+      playerActionPerformed(operationMode, 0, (ImageView) v);
     }
   };
 
@@ -232,31 +239,32 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
   View.OnClickListener subHandler = new View.OnClickListener(){
     public void onClick(View v){
       operationMode = Constants.PLAYER_ACTION_TYPE.SUBTRACTION;
-      playerActionPerformed(operationMode, 0, (Button) v);
+      playerActionPerformed(operationMode, 0, (ImageView) v);
     }
   };
 
   View.OnClickListener multHandler = new View.OnClickListener(){
     public void onClick(View v){
       operationMode = Constants.PLAYER_ACTION_TYPE.MULTIPLICATION;
-      playerActionPerformed(operationMode, 0, (Button) v);
+      playerActionPerformed(operationMode, 0, (ImageView) v);
     }
   };
 
   View.OnClickListener divideHandler = new View.OnClickListener(){
     public void onClick(View v){
       operationMode = Constants.PLAYER_ACTION_TYPE.DIVISION;
-      playerActionPerformed(operationMode, 0, (Button) v);
+      playerActionPerformed(operationMode, 0, (ImageView) v);
     }
   };
 
-  private void playerActionPerformed(Constants.PLAYER_ACTION_TYPE operationMode, int value, Button selectedButton){
+  private void playerActionPerformed(Constants.PLAYER_ACTION_TYPE operationMode, int value, ImageView selectedButton){
     if(selectedButton != null){
-      addButton.setTextColor(Color.DKGRAY);
-      subButton.setTextColor(Color.DKGRAY);
-      multiplyButton.setTextColor(Color.DKGRAY);
-      divideButton.setTextColor(Color.DKGRAY);
-      selectedButton.setTextColor(getResources().getColor(R.color.white));
+      int darkBrown = getResources().getColor(R.color.darkBrown);
+      addButton.setBackgroundColor(darkBrown);
+      subButton.setBackgroundColor(darkBrown);
+      multiplyButton.setBackgroundColor(darkBrown);
+      divideButton.setBackgroundColor(darkBrown);
+      selectedButton.setBackgroundColor(getResources().getColor(R.color.brightGreen));
     }
     gameController.sendPlayerAction(new PlayerAction(operationMode, value));
   }

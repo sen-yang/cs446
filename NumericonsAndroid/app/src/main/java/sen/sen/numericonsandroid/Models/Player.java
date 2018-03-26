@@ -18,10 +18,12 @@ public class Player implements Serializable{
   private String imageUrlThumbnail;
   private DroppedItem itemInInventory;
   private boolean lost;
+  private Constants.USER_CHARACTER userCharacter;
 
   public Player(int targetNumber, User user){
     this.targetNumber = targetNumber;
     this.username = user.getUsername();
+    this.userCharacter = user.getUserCharacter();
     currentOperation = Constants.PLAYER_ACTION_TYPE.ADDITION;
     currentNumber = 0;
     lost = false;

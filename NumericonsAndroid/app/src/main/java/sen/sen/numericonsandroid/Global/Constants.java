@@ -77,6 +77,11 @@ public class Constants{
     BIRD_3,
   }
 
+  public enum BIRD_DIRECTION{
+    LEFT,
+    RIGHT
+  }
+
   public enum GAME_STAGE{
     INIT,
     RUNNING,
