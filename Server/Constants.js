@@ -8,7 +8,7 @@ module.exports = {
   MAX_DROP: 10,
   MIN_DROP_SPEED: 0.005,
   MAX_DROP_SPEED: 0.02,
-  DROP_RATE: 150,
+  DROP_RATE: 225,
   GAME_START_DELAY: 5000
 };
 

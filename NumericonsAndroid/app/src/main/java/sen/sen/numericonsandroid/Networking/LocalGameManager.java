@@ -1,7 +1,6 @@
 package sen.sen.numericonsandroid.Networking;
 
-import android.util.Log;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import sen.sen.numericonsandroid.Models.Player;
 import sen.sen.numericonsandroid.Models.PlayerAction;
 import sen.sen.numericonsandroid.Models.User;
 
-public class LocalGameManager{
+public class LocalGameManager implements Serializable{
   private String seed;
   private GameState gameState;
   private Thread gameLoop;
@@ -35,6 +34,10 @@ public class LocalGameManager{
     gameState.setStartTime(System.currentTimeMillis());
     gameState.setPreviousTickTime(gameState.getStartTime());
     startTick();
+  }
+
+  public boolean isRunning(){
+    return (gameLoop != null) && (gameLoop.isAlive());
   }
 
   public void playerLeft(Player player){

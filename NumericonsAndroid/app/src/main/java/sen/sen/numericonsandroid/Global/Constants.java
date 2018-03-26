@@ -1,13 +1,7 @@
 package sen.sen.numericonsandroid.Global;
 
-
-import com.google.gson.annotations.SerializedName;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class Constants{
-    public static final String SERVER_URL = "ws://sen.ddns.net";
+  public static final String SERVER_URL = "ws://sen.ddns.net";
 //  public static final String SERVER_URL = "ws://192.168.1.30:6969";
 
   public static final String GAME_CONTROLLER = "GAME_CONTROLLER";
@@ -27,7 +21,7 @@ public class Constants{
   public static final int MAX_DROP = 10;
   public static final float MIN_DROP_SPEED = 0.005f;
   public static final float MAX_DROP_SPEED = 0.02f;
-  public static final float DROP_RATE = 150;
+  public static final float DROP_RATE = 225;
   public static final long GAME_START_DELAY = 5000;
 
   public enum MESSAGE_TYPE{

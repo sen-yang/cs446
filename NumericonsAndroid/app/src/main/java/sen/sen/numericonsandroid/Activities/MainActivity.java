@@ -14,6 +14,7 @@ import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.User;
 import sen.sen.numericonsandroid.Networking.GameController;
+import sen.sen.numericonsandroid.Networking.LocalGameManager;
 import sen.sen.numericonsandroid.Networking.WebsocketController;
 import sen.sen.numericonsandroid.R;
 
@@ -56,8 +57,14 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
 
 
   public void onSinglePlayerButtonPressed(View view){
-    //todo switch to local
-    WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.SINGLEPLAYER);
+    GameController gameController = new GameController(LocalGameManager.class);
+    Intent intent = new Intent(MainActivity.this, MainGameActivity.class);
+    intent.putExtra(Constants.GAME_CONTROLLER, gameController);
+    startActivity(intent);
+
+    if((alertDialog != null) && (alertDialog.isShowing())){
+      alertDialog.dismiss();
+    }
   }
 
   private void showSearching(){

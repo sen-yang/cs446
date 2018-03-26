@@ -8,6 +8,7 @@ module.exports = class Player{
     this.lost = false;
     this.itemInInventory = null;
     this.username = client.user.username;
+    this.characterSprite = client.user.characterSprite;
   }
 
   doPlayerAction(playerAction){
@@ -56,7 +57,10 @@ module.exports = class Player{
   }
 
   toJSON(){
-    return {currentNumber: this.currentNumber,
-            username: this.username};
+    return {
+      currentNumber: this.currentNumber,
+      username: this.username,
+      characterSprite: this.characterSprite
+    };
   }
 };
