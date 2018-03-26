@@ -1,4 +1,4 @@
-const DB = require('./Models/DatabaseConnector');
+const DB = require('./Database/DatabaseConnector');
 const eloRank = require('elo-rank');
 var elo = new eloRank();
 db = new DB();
@@ -7,6 +7,21 @@ module.exports = class ConnectionController{
     constructor(){
     }
 
+updateImage(username, newimageLink, callback){
+  var userData = {
+  "username": username,
+   "image" : newimageLink
+    }
+    db.updateImage(userData)
+    .then(data => {
+      callback(true);
+    })
+    .catch(error => {
+        console.log('ERROR:'+ error); // print the error;
+    })
+
+
+}
 
  Login(username, hashpassword, callback, failcallback){
   var userData = {
