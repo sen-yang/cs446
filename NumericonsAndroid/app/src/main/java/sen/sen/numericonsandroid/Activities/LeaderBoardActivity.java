@@ -50,7 +50,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
       @Override
       public void onScrolled(RecyclerView recyclerView, int dx, int dy){
         super.onScrolled(recyclerView, dx, dy);
-        if(((linearLayoutManager.findLastVisibleItemPosition() + Constants.INFINITE_LOAD_TRIIGER_SIZE) >= userList.size()) && isMoreDataAvailable && !isLoading) {
+        if(((linearLayoutManager.findLastVisibleItemPosition() + Constants.INFINITE_LOAD_TRIGGER_SIZE) >= userList.size()) && isMoreDataAvailable && !isLoading) {
           loadMore();
         }
 

@@ -160,13 +160,13 @@ public class BluetoothConnectionActivity extends AppCompatActivity implements Bl
     AlertDialog.Builder builder;
     builder = new AlertDialog.Builder(this);
     builder.setTitle("Bluetooth not enabled :(")
-        .setPositiveButton("Back", new DialogInterface.OnClickListener(){
-          public void onClick(DialogInterface dialog, int which){
-            finish();
-          }
-        })
-        .setIcon(android.R.drawable.ic_dialog_alert)
-        .show();
+           .setPositiveButton("Back", new DialogInterface.OnClickListener(){
+             public void onClick(DialogInterface dialog, int which){
+               finish();
+             }
+           })
+           .setIcon(android.R.drawable.ic_dialog_alert)
+           .show();
   }
 
   @Override
@@ -189,24 +189,28 @@ public class BluetoothConnectionActivity extends AppCompatActivity implements Bl
     AlertDialog.Builder builder;
     builder = new AlertDialog.Builder(this);
     builder.setTitle(device.getName() + " invited you to a match!")
-        .setPositiveButton("Accept", new DialogInterface.OnClickListener(){
-          public void onClick(DialogInterface dialog, int which){
-            BluetoothController.getInstance().respondToInvitation(device, true);
-          }
-        })
-        .setNegativeButton("Decline", new DialogInterface.OnClickListener(){
-          @Override
-          public void onClick(DialogInterface dialogInterface, int i){
-            BluetoothController.getInstance().respondToInvitation(device, false);
-          }
-        })
-        .show();
+           .setPositiveButton("Accept", new DialogInterface.OnClickListener(){
+             public void onClick(DialogInterface dialog, int which){
+               BluetoothController.getInstance().respondToInvitation(device, true);
+             }
+           })
+           .setNegativeButton("Decline", new DialogInterface.OnClickListener(){
+             @Override
+             public void onClick(DialogInterface dialogInterface, int i){
+               BluetoothController.getInstance().respondToInvitation(device, false);
+             }
+           })
+           .show();
   }
 
   @Override
-  public void matchConfirmed(BluetoothDevice device){
-    Toast.makeText(this, "Match confirmed!",
-        Toast.LENGTH_LONG).show();
+  public void matchConfirmed(BluetoothDevice device, boolean isConfirmed){
+    if(isConfirmed){
+      Toast.makeText(this, device.getName() + " has accepted your match request ", Toast.LENGTH_LONG).show();
+    }
+    else{
+      Toast.makeText(this, device.getName() + " has declined your match request :(", Toast.LENGTH_LONG).show();
+    }
   }
 
   @Override

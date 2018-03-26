@@ -22,6 +22,7 @@ import sen.sen.numericonsandroid.CustomUI.GameView;
 import sen.sen.numericonsandroid.CustomUI.PlayerListInfoLayout;
 import sen.sen.numericonsandroid.CustomUI.PowerUpListView;
 import sen.sen.numericonsandroid.Global.Constants;
+import sen.sen.numericonsandroid.Global.SharedPreferencesHelper;
 import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.Player;
@@ -51,6 +52,7 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
   private GameController gameController;
   private Player currentPlayer;
   private Constants.GAME_STAGE gameStage;
+  private boolean finished;
 
   Constants.PLAYER_ACTION_TYPE operationMode = Constants.PLAYER_ACTION_TYPE.ADDITION;
 
@@ -69,9 +71,9 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
 
     //IF game type is multiPlayer, append multiPlayer layoutView
     //@TODO: PUT IF AND setPlayerList() BACK LATER! JUST FOR TESTING
-   // if(gameController.getGameState().getMatchType() == Constants.GAME_TYPE.RANKED) {
-        setMultiplayerListView();
-   // }
+    // if(gameController.getGameState().getMatchType() == Constants.GAME_TYPE.RANKED) {
+    setMultiplayerListView();
+    // }
 
     countDownTimer = findViewById(R.id.countDownTimer);
     //Setup Buttons References
@@ -118,14 +120,21 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     gameView.addView(wrapperLayout);
   }
 
-  private void updateFromServer(GameState gameState) {
+  private void updateFromServer(GameState gameState){
     if(this.isFinishing()){
       return;
+    }
+
+    if(gameState.getDroppedItemList() != null){
+      for(DroppedItem droppedItem : gameState.getDroppedItemList()){
+        gameView.addDroppedItem(droppedItem);
+        droppedItemList.add(droppedItem);
+      }
     }
     targetNumberTextView.setText(Integer.toString(gameState.getTargetNumber()));
 
     for(Player player : gameState.getPlayerList()){
-      if(player.getUsername().equals(gameController.getUser().getUsername())){
+      if(player.getUsername().equals(SharedPreferencesHelper.getUsername())){
         currentPlayer = player;
         break;
       }
@@ -135,28 +144,43 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
 
     //todo show other players
 
-    if(gameStage == Constants.GAME_STAGE.FINISHED && gameState.getWinner() != null){
+    if(gameStage == Constants.GAME_STAGE.FINISHED){
       AlertDialog.Builder builder;
       builder = new AlertDialog.Builder(this);
       String title = "You lose:(";
 
-      if(gameState.getWinner().getUsername().equals(gameController.getUser().getUsername())){
+      if((gameState.getWinner() != null) && gameState.getWinner().getUsername().equals(SharedPreferencesHelper.getUsername())){
         title = "You Win!";
       }
       builder.setTitle(title)
-          .setPositiveButton("Back", new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int which){
-              finish();
-            }
-          })
-          .setIcon(android.R.drawable.ic_dialog_alert)
-          .show();
+             .setPositiveButton("Back", new DialogInterface.OnClickListener(){
+               public void onClick(DialogInterface dialog, int which){
+                 finish();
+               }
+             })
+             .setIcon(android.R.drawable.ic_dialog_alert)
+             .show();
     }
   }
 
   @Override
   public void disconnected(){
-
+    runOnUiThread(new Runnable(){
+      @Override
+      public void run(){
+        if(gameStage != Constants.GAME_STAGE.FINISHED){
+          new AlertDialog.Builder(MainGameActivity.this)
+              .setTitle("You have been disconnected :(")
+              .setPositiveButton("Back", new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i){
+                  finish();
+                }
+              })
+              .show();
+        }
+      }
+    });
   }
 
   @Override
@@ -187,16 +211,6 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
       @Override
       public void run(){
         updateFromServer(gameState);
-      }
-    });
-  }
-
-  @Override
-  public void itemDropped(final DroppedItem droppedItem){
-    runOnUiThread(new Runnable(){
-      public void run(){
-        gameView.addDroppedItem(droppedItem);
-        droppedItemList.add(droppedItem);
       }
     });
   }

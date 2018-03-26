@@ -19,7 +19,6 @@ import sen.sen.numericonsandroid.R;
 
 public class MainActivity extends AppCompatActivity implements WebsocketController.WebsocketListener{
   private ProgressBar progressBar;
-  private User user;
 
   @Override
   protected void onCreate(Bundle savedInstanceState){
@@ -92,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
   @Override
   public void loginConfirmed(boolean isConfirmed, User user){
     if(isConfirmed){
-      MainActivity.this.user = user;
+      //todo login confirmed
     }
   }
 
