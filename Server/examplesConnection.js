@@ -7,6 +7,12 @@ const CC = new ConnectionController();
 //Examples for using ConnectionController
 
 
+function UpdateImage(){
+  CC.updateImage("user1","google.com",function(data){
+    console.log(data);
+  });
+}
+
 ////////////Register////////////////////
 function register(){//username, password, //email
   //hashing should be done on the client side.
@@ -66,14 +72,14 @@ console.log(data);
 
 }
 /////////////////////////////////update rank
-CC.calculateUpdateRanking("user1","user2", function(){
+CC.calculateUpdateRanking("user2","user3", function(){
 
 });
 //
 // function updateRanks(Winner, score1,  Loser,score2){
 //
 // }
-
+UpdateImage();
 
 
 //////////////////////////////////////////////////////////

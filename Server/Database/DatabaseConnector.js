@@ -56,6 +56,10 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
   Login(userData){
     return  db.any('select username from users where username=$1 AND hashpassword=$2', [userData.username, userData.hashpassword])
     }
+  updateImage(userData){
+    return  db.any('update users set image=$2  where username=$1', [userData.username, userData.image])
+
+  }
 
     updateUser(userData){
       return db.any('update users set hashpassword=$2  where username=$1', [userData.username, userData.hashpassword])
