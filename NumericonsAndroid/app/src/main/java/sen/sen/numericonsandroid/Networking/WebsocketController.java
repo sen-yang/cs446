@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import sen.sen.numericonsandroid.Global.Constants;
@@ -30,7 +31,7 @@ import sen.sen.numericonsandroid.Networking.WebsocketModels.PlayerActionMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.WebsocketMessage;
 
 
-public class WebsocketController {
+public class WebsocketController{
   public static final String TAG = "WebsocketController";
   private static WebsocketController staticWebsocketController;
 
@@ -68,6 +69,30 @@ public class WebsocketController {
     }
     if(existsInList == false){
       websocketListenerList.add(new WeakReference<WebsocketListener>(websocketListener));
+    }
+  }
+
+  public void removeWebsocketListener(WebsocketListener websocketListener){
+    ListIterator<WeakReference<WebsocketListener>> iterator = websocketListenerList.listIterator();
+    while(iterator.hasNext()){
+      WebsocketListener listener = iterator.next().get();
+
+      if(listener.equals(websocketListener)){
+        iterator.remove();
+        break;
+      }
+    }
+  }
+
+  public void removeGameListener(GameListener gameListener){
+    ListIterator<WeakReference<GameListener>> iterator = gameListenerList.listIterator();
+    while(iterator.hasNext()){
+      GameListener listener = iterator.next().get();
+
+      if(listener.equals(gameListener)){
+        iterator.remove();
+        break;
+      }
     }
   }
 
@@ -126,7 +151,7 @@ public class WebsocketController {
     URI uri;
     try{
       uri = new URI(Constants.SERVER_URL);
-    }catch(URISyntaxException e){
+    } catch(URISyntaxException e){
       e.printStackTrace();
       return;
     }

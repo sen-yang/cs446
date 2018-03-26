@@ -97,13 +97,10 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     updateFromServer(gameController.getGameState());
   }
 
-  int randomInt_Range(int min, int max){
-    return min + (int) (Math.random() * ((max - min) + 1));
-  }
-
-  float randomFloat_Range(float min, float max){
-    Random r = new Random();
-    return min + r.nextFloat() * (max - min);
+  @Override
+  protected void onStop(){
+    super.onStop();
+    gameController.removeGameListener(this);
   }
 
   private void setMultiplayerListView(){

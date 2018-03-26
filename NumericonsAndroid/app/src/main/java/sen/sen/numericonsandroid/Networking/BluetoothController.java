@@ -11,6 +11,7 @@ import com.google.gson.JsonSyntaxException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.UUID;
 
 import sen.sen.numericonsandroid.Global.Constants;
@@ -83,6 +84,30 @@ public class BluetoothController{
     }
     if(existsInList == false){
       gameListenerList.add(new WeakReference<GameListener>(gameListener));
+    }
+  }
+
+  public void removeBluetoothListener(BluetoothListener bluetoothListener){
+    ListIterator<WeakReference<BluetoothListener>> iterator = bluetoothListenerList.listIterator();
+    while(iterator.hasNext()){
+      BluetoothListener listener = iterator.next().get();
+
+      if(listener.equals(bluetoothListener)){
+        iterator.remove();
+        break;
+      }
+    }
+  }
+
+  public void removeGameListener(GameListener gameListener){
+    ListIterator<WeakReference<GameListener>> iterator = gameListenerList.listIterator();
+    while(iterator.hasNext()){
+      GameListener listener = iterator.next().get();
+
+      if(listener.equals(gameListener)){
+        iterator.remove();
+        break;
+      }
     }
   }
 
@@ -199,8 +224,7 @@ public class BluetoothController{
     WebsocketMessage websocketMessage = null;
     try{
       websocketMessage = gson.fromJson(message, WebsocketMessage.class);
-    }
-    catch(JsonSyntaxException e){
+    } catch(JsonSyntaxException e){
       e.printStackTrace();
     }
     if(websocketMessage == null){

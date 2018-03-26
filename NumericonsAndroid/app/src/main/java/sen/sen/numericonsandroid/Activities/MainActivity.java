@@ -38,6 +38,12 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
     }
   }
 
+  @Override
+  protected void onPause(){
+    super.onPause();
+    WebsocketController.getInstance().removeWebsocketListener(this);
+  }
+
   public void onRankedGameButtonPressed(View view){
     WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.RANKED);
     showSearching();

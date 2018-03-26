@@ -13,12 +13,21 @@ public class GameController implements Serializable{
     this.serverType = serverType;
   }
 
-    public void addGameListener(GameListener gameListener){
+  public void addGameListener(GameListener gameListener){
     if(serverType == WebsocketController.class){
       WebsocketController.getInstance().addGameListener(gameListener);
     }
     else if(serverType == BluetoothController.class){
       BluetoothController.getInstance().addGameListener(gameListener);
+    }
+  }
+
+  public void removeGameListener(GameListener gameListener){
+    if(serverType == WebsocketController.class){
+      WebsocketController.getInstance().removeGameListener(gameListener);
+    }
+    else if(serverType == BluetoothController.class){
+      BluetoothController.getInstance().removeGameListener(gameListener);
     }
   }
 
@@ -41,7 +50,7 @@ public class GameController implements Serializable{
     return false;
   }
 
-  public GameState getGameState() {
+  public GameState getGameState(){
     if(serverType == WebsocketController.class){
       return WebsocketController.getInstance().getGameState();
     }
