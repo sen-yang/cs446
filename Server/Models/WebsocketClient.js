@@ -7,15 +7,6 @@ module.exports = class WebsocketClient{
     this.user = new User(genUUID());
     this.ws = ws;
     this.currentRoom = null;
-    this._playerInCurrentRoom = null;
-  }
-
-  get playerInCurrentRoom(){
-    return this._playerInCurrentRoom;
-  }
-
-  set playerInCurrentRoom(value){
-    this._playerInCurrentRoom = value;
   }
 
 //returns false if failed
@@ -31,6 +22,5 @@ module.exports = class WebsocketClient{
 
   leaveRoom(){
     this.currentRoom = null;
-    this._playerInCurrentRoom = null;
   }
 };

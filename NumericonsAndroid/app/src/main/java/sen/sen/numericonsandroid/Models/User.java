@@ -2,11 +2,16 @@ package sen.sen.numericonsandroid.Models;
 
 import java.io.Serializable;
 
+import sen.sen.numericonsandroid.Global.Constants;
+
 public class User implements Serializable{
   private String username;
-  private String imageUrl;
-  private String imageUrlThumbnail;
-  private String id;
+  private Constants.USER_CHARACTER userCharacter;
+
+  public User(String username, Constants.USER_CHARACTER userCharacter){
+    this.username = username;
+    this.userCharacter = userCharacter;
+  }
 
   public String getUsername(){
     return username;

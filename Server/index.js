@@ -74,23 +74,23 @@ function clientDisconnected(client){
 
 function handleMessage(message, client){
   switch(message.type){
-    case Constants.messageType.PING:
+    case Constants.MESSAGE_TYPE.PING:
       break;
 
     //client messages
-    case Constants.messageType.LOGIN:
+    case Constants.MESSAGE_TYPE.LOGIN:
       loginUser(message, client);
       break;
-    case Constants.messageType.CREATE_USER:
+    case Constants.MESSAGE_TYPE.CREATE_USER:
       Register(message, client);
       break;
-    case Constants.messageType.GET_RANKINGS:
+    case Constants.MESSAGE_TYPE.GET_RANKINGS:
       getRankings(message, client);
       break;
-    case Constants.messageType.FIND_GAME:
+    case Constants.MESSAGE_TYPE.FIND_GAME:
       findGame(message, client);
       break;
-    case Constants.messageType.PLAYER_ACTION:
+    case Constants.MESSAGE_TYPE.PLAYER_ACTION:
       playerAction(message, client);
       break;
   }
@@ -107,7 +107,8 @@ function loginUser(message, client){
     client.user = new User("", message.username);
     confirmed = true;
   }
-  let websocketMessage = new WebsocketMessage(Constants.messageType.LOGIN_CONFIRMATION);
+  let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
+  websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
   websocketMessage.isConfirmed = confirmed;
   websocketMessage.user = client.user;
   client.sendMessage(JSON.stringify(websocketMessage));
@@ -119,13 +120,13 @@ function getRankings(message, client){
 
 function findGame(message, client){
   switch(message.gameType){
-    case Constants.gampeType.SINGLEPLAYER:
+    case Constants.GAME_TYPE.SINGLEPLAYER:
       createSinglePlayerGame(client);
       break;
-    case Constants.gampeType.RANKED:
+    case Constants.GAME_TYPE.RANKED:
       searchForRanked(client);
       break;
-    case Constants.gampeType.GROUP_GAME:
+    case Constants.GAME_TYPE.GROUP_GAME:
       createGroupGame(client);
       break;
   }
@@ -168,12 +169,9 @@ function searchForGroup(client1){
 }
 
 function playerAction(message, client){
-  let player = client.playerInCurrentRoom;
-
-  if(player != null){
-    player.doPlayerAction(message.playerAction);
+  if((client.user != null) && (client.currentRoom != null) && (message.playerAction != null)){
+    client.currentRoom.gameManager.playerActionPerformed(client.user.username, message.playerAction);
   }
-
 }
 
 function createSinglePlayerGame(client1){

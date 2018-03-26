@@ -31,7 +31,7 @@ module.exports = class GameManager{
   }
 
   tick(){
-    this.gameLoop = setTimeout(()=>{
+    this.gameLoop = setTimeout(() =>{
       this.updateCallback(this.updateGame());
 
       if(!this.gameState.isComplete){
@@ -45,6 +45,7 @@ module.exports = class GameManager{
     this.gameState.delta = now - this.gameState.previousTickTime;
     this.gameState.previousTickTime = now;
     this.gameState.timeRemaining -= this.gameState.delta;
+    this.gameState.droppedItemList = [];
 
     this.gameState.playerList.every((player) =>{
       if(player.currentNumber == this.gameState.targetNumber){
@@ -65,35 +66,50 @@ module.exports = class GameManager{
 
       let minDifference = Number.MAX_VALUE;
       let minPlayer = null;
-      this.gameState.playerList.forEach((player)=>{
-        let difference = Math.abs(this.gameState.targetNumber - player.currentNumber);
 
-        if(difference < minDifference){
-          minDifference = difference;
-          minPlayer = player;
-        }
-      });
+      if(this.gameState.playerList.length > 1){
+        this.gameState.playerList.forEach((player) =>{
+          let difference = Math.abs(this.gameState.targetNumber - player.currentNumber);
+
+          if(difference < minDifference){
+            minDifference = difference;
+            minPlayer = player;
+          }
+        });
+      }
       this.gameState.winner = minPlayer;
     }
 
     if(this.gameState.isComplete){
-      return Constants.messageType.GAME_FINISH;
+      return Constants.MESSAGE_TYPE.GAME_FINISH;
     }
-    if(Math.random() < (this.gameState.delta / 1500)){
-      return Constants.messageType.GAME_DROPPED_ITEM;
+    if(Helpers.randomFloat(this.seed) * Constants.DROP_RATE > this.gameState.delta){
+      droppedItemList.push(this.generateDrop());
     }
-    else{
-      return Constants.messageType.GAME_STATE_UPDATE;
-    }
+    return Constants.MESSAGE_TYPE.GAME_STATE_UPDATE;
   }
 
   generateDrop(){
-    return new DroppedItem(Helpers.randomNumberInRange(Constants.MIN_DROP, Constants.MAX_DROP, true, this.seed), Helpers.randomFloat(this.seed));
+    return new DroppedItem(Helpers.randomNumberInRange(Constants.MIN_DROP, Constants.MAX_DROP, true, this.seed), Helpers.randomFloat(this.seed), Helpers.randomNumberInRange(Constants.MIN_DROP_SPEED, Constants.MAX_DROP_SPEED, false));
   }
 
-  clientLeft(client){
+  userLeft(username){
     this.gameState.isComplete = true;
-    this.gameState.loser = client.playerInCurrentRoom;
+    this.gameState.loser = this.findPlayerByUsername(username);
     //todo maybe shouldn't wait till next tick
+  }
+
+  playerActionPerformed(username, playerAction){
+    this.findPlayerByUsername(username).doPlayerAction(playerAction);
+  }
+
+  findPlayerByUsername(username){
+    for(let index = 0; index < this.gameState.playerList.length; index++){
+      let player = this.gameState.playerList[index];
+
+      if(player.username === username){
+        return player;
+      }
+    }
   }
 };

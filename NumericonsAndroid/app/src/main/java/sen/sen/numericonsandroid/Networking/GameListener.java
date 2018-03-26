@@ -1,6 +1,5 @@
 package sen.sen.numericonsandroid.Networking;
 
-import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
 
 public interface GameListener{
@@ -8,5 +7,4 @@ public interface GameListener{
   void gameStarted(GameState gameState);
   void gameFinished(GameState gameState);
   void gameStateUpdated(GameState gameState);
-  void itemDropped(DroppedItem droppedItem);
 }

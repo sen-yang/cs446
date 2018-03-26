@@ -3,36 +3,27 @@ package sen.sen.numericonsandroid.Networking;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 
-import org.java_websocket.WebSocketListener;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import io.gsonfire.GsonFireBuilder;
-import io.gsonfire.TypeSelector;
 import sen.sen.numericonsandroid.Global.Constants;
+import sen.sen.numericonsandroid.Global.SharedPreferencesHelper;
 import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.PlayerAction;
 import sen.sen.numericonsandroid.Models.User;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.ConfirmationMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.FindGameMessage;
-import sen.sen.numericonsandroid.Networking.WebsocketModels.GameDroppedItemMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.GameStateMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.LoginMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.PlayerActionMessage;
@@ -58,7 +49,6 @@ public class WebsocketController {
   private List<WeakReference<GameListener>> gameListenerList;
   private WebSocketClient webSocketClient;
   private boolean isConnected;
-  private User user;
   private GameState gameState;
 
   public static WebsocketController getInstance(){
@@ -122,40 +112,8 @@ public class WebsocketController {
     return gameState;
   }
 
-  public User getUser(){
-    return user;
-  }
-
   private void initialize(){
-    GsonFireBuilder builder = new GsonFireBuilder()
-        .registerTypeSelector(WebsocketMessage.class, new TypeSelector<WebsocketMessage>(){
-          @Override
-          public Class<? extends WebsocketMessage> getClassForElement(JsonElement readElement){
-            Constants.MESSAGE_TYPE messageType = Constants.MESSAGE_TYPE.valueOf(readElement.getAsJsonObject().get("type").getAsString());
-            switch(messageType){
-              case PING:
-                return WebsocketMessage.class;
-              case LOGIN_CONFIRMATION:
-                return ConfirmationMessage.class;
-              case GAME_INIT:
-              case GAME_START:
-              case GAME_FINISH:
-              case GAME_STATE_UPDATE:
-                return GameStateMessage.class;
-              case GAME_DROPPED_ITEM:
-                return GameDroppedItemMessage.class;
-              case LOGIN:
-                return LoginMessage.class;
-              case FIND_GAME:
-                return FindGameMessage.class;
-              case PLAYER_ACTION:
-                return PlayerActionMessage.class;
-            }
-            return null;
-          }
-        });
-
-    gson = builder.createGsonBuilder().create();
+    gson = CustomGson.getGson();
     websocketListenerList = new ArrayList<>();
     gameListenerList = new ArrayList<>();
 
@@ -219,13 +177,8 @@ public class WebsocketController {
     switch(websocketMessage.getType()){
       case PING:
         break;
-      case LOGIN_CONFIRMATION:
-        user = ((ConfirmationMessage) websocketMessage).getUser();
-        for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
-          if(listenerWeakReference.get() != null){
-            listenerWeakReference.get().loginConfirmed(((ConfirmationMessage) websocketMessage).isConfirmed(), ((ConfirmationMessage) websocketMessage).getUser());
-          }
-        }
+      case CONFIRMATION:
+        handleConfirmationMessage((ConfirmationMessage) websocketMessage);
         break;
       case GAME_INIT:
         gameState = ((GameStateMessage) websocketMessage).getGameState();
@@ -260,16 +213,22 @@ public class WebsocketController {
           }
         }
         break;
-      case GAME_DROPPED_ITEM:
-        DroppedItem droppedItem = ((GameDroppedItemMessage) websocketMessage).getDroppedItem();
-        for(WeakReference<GameListener> listenerWeakReference : gameListenerList){
-          if(listenerWeakReference.get() != null){
-            listenerWeakReference.get().itemDropped(droppedItem);
-          }
-        }
-        break;
+      case GET_RANKINGS:
+        //todo
       default:
         break;
+    }
+  }
+
+  private void handleConfirmationMessage(ConfirmationMessage confirmationMessage){
+    if(confirmationMessage.getConfirmationType() == Constants.CONFIRMATION_TYPE.USER_CONFIRMATION){
+      SharedPreferencesHelper.saveUser(confirmationMessage.getUser());
+
+      for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
+        if(listenerWeakReference.get() != null){
+          listenerWeakReference.get().loginConfirmed(confirmationMessage.isConfirmed(), SharedPreferencesHelper.getSavedUser());
+        }
+      }
     }
   }
 }

@@ -50,14 +50,4 @@ public class GameController implements Serializable{
     }
     return null;
   }
-
-  public User getUser(){
-    if(serverType == WebsocketController.class){
-      return WebsocketController.getInstance().getUser();
-    }
-    else if(serverType == BluetoothController.class){
-      return BluetoothController.getInstance().getUser();
-    }
-    return null;
-  }
 }

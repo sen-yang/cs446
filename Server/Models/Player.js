@@ -4,28 +4,27 @@ module.exports = class Player{
   constructor(targetNumber, client){
     this.targetNumber = targetNumber;
     this.currentNumber = 0;
-    this.currentOperation = 0;
+    this.currentOperation = Constants.PLAYER_ACTION_TYPE.ADDITION;
     this.lost = false;
     this.itemInInventory = null;
-    this.client = client;
-    this.client.playerInCurrentRoom = this;
+    this.username = client.user.username;
   }
 
   doPlayerAction(playerAction){
     switch(playerAction.commandType){
-      case Constants.playerActionType.ADDITION:
-      case Constants.playerActionType.SUBTRACTION:
-      case Constants.playerActionType.MULTIPLICATION:
-      case Constants.playerActionType.DIVISION:
-        this.currentOperation = +playerAction.commandType;
+      case Constants.PLAYER_ACTION_TYPE.ADDITION:
+      case Constants.PLAYER_ACTION_TYPE.SUBTRACTION:
+      case Constants.PLAYER_ACTION_TYPE.MULTIPLICATION:
+      case Constants.PLAYER_ACTION_TYPE.DIVISION:
+        this.currentOperation = playerAction.commandType;
         break;
-      case Constants.playerActionType.GET_NUMBER:
+      case Constants.PLAYER_ACTION_TYPE.GET_NUMBER:
         this.updateCurrentNumber(playerAction.value);
         break;
-      case Constants.playerActionType.USE_ITEM:
+      case Constants.PLAYER_ACTION_TYPE.USE_ITEM:
         //todo
         break;
-      case Constants.playerActionType.GET_ITEM:
+      case Constants.PLAYER_ACTION_TYPE.GET_ITEM:
         this.getItem(playerAction.item);
         break;
     }
@@ -33,16 +32,16 @@ module.exports = class Player{
 
   updateCurrentNumber(newNumber){
     switch(this.currentOperation){
-      case Constants.playerActionType.ADDITION:
+      case Constants.PLAYER_ACTION_TYPE.ADDITION:
         this.currentNumber += newNumber;
         break;
-      case Constants.playerActionType.SUBTRACTION:
+      case Constants.PLAYER_ACTION_TYPE.SUBTRACTION:
         this.currentNumber -= newNumber;
         break;
-      case Constants.playerActionType.MULTIPLICATION:
+      case Constants.PLAYER_ACTION_TYPE.MULTIPLICATION:
         this.currentNumber *= newNumber;
         break;
-      case Constants.playerActionType.DIVISION:
+      case Constants.PLAYER_ACTION_TYPE.DIVISION:
         if(newNumber == 0){
           this.lost = true;
           return;
@@ -58,6 +57,6 @@ module.exports = class Player{
 
   toJSON(){
     return {currentNumber: this.currentNumber,
-            username: this.client.user.username};
+            username: this.username};
   }
 };
