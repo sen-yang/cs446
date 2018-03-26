@@ -127,7 +127,7 @@ function findGame(message, client){
       searchForRanked(client);
       break;
     case Constants.GAME_TYPE.GROUP_GAME:
-      createGroupGame(client);
+      searchForGroup(client);
       break;
     case Constants.GAME_TYPE.CANCEL:
       clearSearchingClient(client);
