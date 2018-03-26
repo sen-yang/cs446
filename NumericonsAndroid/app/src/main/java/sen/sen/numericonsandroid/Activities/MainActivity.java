@@ -39,16 +39,35 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
 
   public void onRankedGameButtonPressed(View view){
     WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.RANKED);
+    showSearching();
   }
 
   public void onGroupGameButtonPressed(View view){
     WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.GROUP_GAME);
+    showSearching();
   }
 
 
   public void onSinglePlayerButtonPressed(View view){
     //todo switch to local
     WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.SINGLEPLAYER);
+  }
+
+  private void showSearching(){
+    new AlertDialog.Builder(this)
+        .setTitle("Searching...")
+        .setPositiveButton("Cancel", new DialogInterface.OnClickListener(){
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i){
+            cancelSearch();
+            dialogInterface.dismiss();
+          }
+        })
+        .show();
+  }
+
+  private void cancelSearch(){
+    WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.CANCEL);
   }
 
   public void onBluetoothButtonPressed(View view){

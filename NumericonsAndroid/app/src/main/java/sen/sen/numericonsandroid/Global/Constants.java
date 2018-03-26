@@ -54,7 +54,8 @@ public class Constants{
     SINGLEPLAYER,
     RANKED,
     GROUP_GAME,
-    SECRET_MODE
+    SECRET_MODE,
+    CANCEL
   }
 
   public enum PLAYER_ACTION_TYPE{

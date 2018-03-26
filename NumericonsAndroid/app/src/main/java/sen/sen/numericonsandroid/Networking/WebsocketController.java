@@ -87,7 +87,9 @@ public class WebsocketController {
   //temporary??
   public void login(String username){
     WebsocketMessage websocketMessage = new LoginMessage(username);
-    webSocketClient.send(gson.toJson(websocketMessage));
+    if(webSocketClient.isOpen()){
+      webSocketClient.send(gson.toJson(websocketMessage));
+    }
   }
 
   public void getRankings(int limit, int offset){
@@ -96,12 +98,16 @@ public class WebsocketController {
 
   public void lookForMatch(Constants.GAME_TYPE gameType){
     WebsocketMessage websocketMessage = new FindGameMessage(gameType);
-    webSocketClient.send(gson.toJson(websocketMessage));
+    if(webSocketClient.isOpen()){
+      webSocketClient.send(gson.toJson(websocketMessage));
+    }
   }
 
   public void sendPlayerAction(PlayerAction playerAction){
     WebsocketMessage websocketMessage = new PlayerActionMessage(playerAction);
-    webSocketClient.send(gson.toJson(websocketMessage));
+    if(webSocketClient.isOpen()){
+      webSocketClient.send(gson.toJson(websocketMessage));
+    }
   }
 
   public boolean isConnected(){
