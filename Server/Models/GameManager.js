@@ -1,6 +1,5 @@
 const Player = require('./Player');
 const DroppedItem = require('./DroppedItem');
-const GameRoom = require('./GameRoom');
 const GameState = require('./GameState');
 const Constants = require('../Constants');
 const Helpers = require('../Helpers');
@@ -14,9 +13,12 @@ module.exports = class GameManager{
     this.updateCallback = null;
     let playerList = [];
     this.gameState = new GameState(seedString, playerList);
-    clientList.forEach((client) =>{
-      playerList.push(new Player(this.gameState.targetNumber, client));
-    });
+
+    if(clientList != null){
+      clientList.forEach((client) =>{
+        playerList.push(new Player(this.gameState.targetNumber, client));
+      });
+    }
   }
 
   initGame(){
