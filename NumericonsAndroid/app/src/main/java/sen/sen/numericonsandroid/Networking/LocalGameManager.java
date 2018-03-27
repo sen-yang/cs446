@@ -30,10 +30,12 @@ public class LocalGameManager implements Serializable{
   }
 
   public void startGame(GameListener gameListener){
-    this.gameListener = gameListener;
-    gameState.setStartTime(System.currentTimeMillis());
-    gameState.setPreviousTickTime(gameState.getStartTime());
-    startTick();
+    if(gameState != null){
+      this.gameListener = gameListener;
+      gameState.setStartTime(System.currentTimeMillis());
+      gameState.setPreviousTickTime(gameState.getStartTime());
+      startTick();
+    }
   }
 
   public boolean isRunning(){
@@ -71,7 +73,9 @@ public class LocalGameManager implements Serializable{
   }
 
   public void stopAndClean(){
-    gameLoop.interrupt();
+    if((gameLoop != null) && gameLoop.isAlive()){
+      gameLoop.interrupt();
+    }
     gameLoop = null;
     gameListener = null;
     gameState = null;

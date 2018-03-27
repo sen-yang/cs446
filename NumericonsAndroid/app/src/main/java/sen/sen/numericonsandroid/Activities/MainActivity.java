@@ -17,6 +17,9 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import java.util.List;
 
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.GameState;
@@ -101,8 +104,8 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
 
   private void showSearching(){
     alertDialog = new AlertDialog.Builder(this)
-            .setTitle("Searching...")
-            .setPositiveButton("Cancel", new DialogInterface.OnClickListener(){
+            .setTitle(R.string.searching)
+            .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener(){
               @Override
               public void onClick(DialogInterface dialogInterface, int i){
                 cancelSearch();
@@ -121,22 +124,9 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
     startActivity(intent);
   }
 
-  public void changeNameButtonPressed(View view){
-    AlertDialog.Builder alert = new AlertDialog.Builder(this);
-    alert.setTitle("Set Name");
-    final EditText input = new EditText(this);
-    alert.setView(input);
-
-    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
-      public void onClick(DialogInterface dialog, int whichButton){
-        WebsocketController.getInstance().login(input.getText().toString());
-      }
-    });
-    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-      public void onClick(DialogInterface dialog, int whichButton){
-      }
-    });
-    alertDialog = alert.show();
+  public void settingsButtonPressed(View view){
+    Intent intent = new Intent(this, SettingsActivity.class);
+    startActivity(intent);
   }
 
   public void onMainActivityButtonPressed(View view){
@@ -160,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
   public void onLeaderBoardButtonPressed(View view){
 
   }
+
   @Override
   public void onConnected(){
     runOnUiThread(new Runnable(){
@@ -172,11 +163,16 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
 
   @Override
   public void onClose(int code, String reason, boolean remote){
-
+    runOnUiThread(new Runnable(){
+      @Override
+      public void run(){
+        Toast.makeText(MainActivity.this, R.string.server_connection_closed, Toast.LENGTH_LONG).show();
+      }
+    });
   }
 
   @Override
-  public void userConfirmed(boolean isConfirmed, User user){
+  public void userConfirmed(boolean isConfirmed, User user, String errorMessage){
     if(isConfirmed){
       //todo login confirmed
     }
@@ -197,5 +193,10 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
         }
       }
     });
+  }
+
+  @Override
+  public void newUserList(List<User> newUserList, boolean isError){
+
   }
 }

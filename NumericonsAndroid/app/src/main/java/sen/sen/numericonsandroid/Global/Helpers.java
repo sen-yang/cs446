@@ -58,10 +58,23 @@ public class Helpers{
       md.update(textBytes, 0, textBytes.length);
       byte[] sha1hash = md.digest();
       return convertToHex(sha1hash);
-    } catch(Exception e){
+    }
+    catch(Exception e){
       e.printStackTrace();
       return text;
     }
+  }
+
+  public static boolean isValidPassword(String password){
+    return password.length() >= 8;
+  }
+
+  public static boolean isValidUsername(String username){
+    return username.length() >= 3;
+  }
+
+  public static boolean isNonEmptyString(String value){
+    return (value != null) && (value.length() > 0);
   }
 
   public static int getResId(String resName, Class<?> c){

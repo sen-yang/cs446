@@ -6,23 +6,41 @@
     android:layout_height="match_parent"
     android:background="@drawable/main_activity_backgound"
     android:orientation="vertical"
-    tools:context="sen.sen.numericonsandroid.Activities.SettingsActivity">
+    android:id="@+id/settingsLayout"
+    tools:context="sen.sen.numericonsandroid.Activities.SettingsActivity"
+    android:animateLayoutChanges="true">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin"
+
+        android:layout_marginTop="@dimen/marginDouble"
         android:gravity="center"
         android:text="SETTINGS"
         android:textColor="@color/white"
         android:textSize="40sp"
         android:textStyle="bold"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/marginDouble"
+        android:paddingRight="@dimen/marginDouble"
+        android:paddingTop="@dimen/margin"
+        android:paddingBottom="@dimen/margin"
+        android:textColor="#bb2222"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:id="@+id/errorTextView"
+        android:visibility="gone"
+        android:lines="1"
+        android:gravity="center"
+        android:background="@color/transparentBlack"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin"
-        android:background="#80000000"
+        android:background="@color/transparentBlack"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -37,20 +55,26 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin"/>
+            android:id="@+id/usernameTextView"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:textSize="20sp"/>
 
         <Button
             android:id="@+id/loginButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="loginButtonPressed"/>
+            android:onClick="loginButtonPressed"
+            android:text="Login"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginRight="@dimen/marginDouble"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin"
-        android:background="#80000000"
+        android:background="@color/transparentBlack"
         android:orientation="vertical">
 
         <TextView
@@ -100,7 +124,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin"
-        android:background="#80000000"
+        android:background="@color/transparentBlack"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 

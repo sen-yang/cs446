@@ -6,20 +6,23 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import sen.sen.numericonsandroid.CustomUI.LeaderBoardRecyclerViewAdaptor;
 import sen.sen.numericonsandroid.Global.Constants;
+import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.User;
+import sen.sen.numericonsandroid.Networking.WebsocketController;
 import sen.sen.numericonsandroid.R;
 
 /**
  * Created by Jennifer on 2018-03-20.
  */
 
-public class LeaderBoardActivity extends AppCompatActivity {
+public class LeaderBoardActivity extends AppCompatActivity implements WebsocketController.WebsocketListener{
   private RecyclerView recyclerView;
   private LeaderBoardRecyclerViewAdaptor adaptor;
   private LinearLayoutManager linearLayoutManager;
@@ -64,18 +67,51 @@ public class LeaderBoardActivity extends AppCompatActivity {
     //@TODO: Load more users from server... loadMore(userList.size(),Constants.INFINITE_LOAD_SIZE);
   }
 
-  public void appendNewUsers(List<User> newUserList){
-    userList.addAll(newUserList);
-    setLoading(false);
-
-    if(newUserList.size() < Constants.INFINITE_LOAD_SIZE){
-      isMoreDataAvailable = false;
-    }
-  }
-
   private void setLoading(boolean loading){
     isLoading = loading;
     adaptor.setLoading(loading);
     adaptor.notifyDataSetChanged();
+  }
+
+  @Override
+  public void onConnected(){
+
+  }
+
+  @Override
+  public void onClose(int code, String reason, boolean remote){
+    runOnUiThread(new Runnable(){
+      @Override
+      public void run(){
+        Toast.makeText(LeaderBoardActivity.this, R.string.server_connection_closed, Toast.LENGTH_LONG).show();
+      }
+    });
+  }
+
+  @Override
+  public void userConfirmed(boolean isConfirmed, User user, String errorMessage){
+
+  }
+
+  @Override
+  public void gameInitialized(GameState gameState){
+
+  }
+
+  @Override
+  public void newUserList(List<User> newUserList, boolean isError){
+    if(isError){
+      setLoading(false);
+      isMoreDataAvailable = false;
+      Toast.makeText(this, R.string.cannot_retrieve_users, Toast.LENGTH_LONG).show();
+    }
+    else{
+      userList.addAll(newUserList);
+      setLoading(false);
+
+      if(newUserList.size() < Constants.INFINITE_LOAD_SIZE){
+        isMoreDataAvailable = false;
+      }
+    }
   }
 }

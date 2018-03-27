@@ -16,8 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.UUID;
 
 import sen.sen.numericonsandroid.Global.Constants;
+import sen.sen.numericonsandroid.Global.Helpers;
 import sen.sen.numericonsandroid.Global.SharedPreferencesHelper;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.PlayerAction;
@@ -25,8 +27,11 @@ import sen.sen.numericonsandroid.Models.User;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.ConfirmationMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.FindGameMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.GameStateMessage;
+import sen.sen.numericonsandroid.Networking.WebsocketModels.GetRankingsMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.LoginMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.PlayerActionMessage;
+import sen.sen.numericonsandroid.Networking.WebsocketModels.RankingsMessage;
+import sen.sen.numericonsandroid.Networking.WebsocketModels.UserMessage;
 import sen.sen.numericonsandroid.Networking.WebsocketModels.WebsocketMessage;
 
 
@@ -39,9 +44,11 @@ public class WebsocketController{
 
     void onClose(int code, String reason, boolean remote);
 
-    void userConfirmed(boolean isConfirmed, User user);
+    void userConfirmed(boolean isConfirmed, User user, String errorMessage);
 
     void gameInitialized(GameState gameState);
+
+    void newUserList(List<User> newUserList, boolean isError);
   }
 
   private Gson gson;
@@ -108,16 +115,40 @@ public class WebsocketController{
     }
   }
 
-  //temporary??
-  public void login(String username){
-    WebsocketMessage websocketMessage = new LoginMessage(username);
+  public void register(String username, String password){
+    LoginMessage loginMessage = new LoginMessage(Constants.MESSAGE_TYPE.REGISTER);
+    loginMessage.setUsername(username);
+    loginMessage.setPassword(Helpers.fingerprintPassword(password));
+
+    if(webSocketClient.isOpen()){
+      webSocketClient.send(gson.toJson(loginMessage));
+    }
+  }
+
+  public void login(String username, String password){
+    LoginMessage loginMessage = new LoginMessage(Constants.MESSAGE_TYPE.LOGIN);
+    loginMessage.setUsername(username);
+    loginMessage.setPassword(Helpers.fingerprintPassword(password));
+
+    if(webSocketClient.isOpen()){
+      webSocketClient.send(gson.toJson(loginMessage));
+    }
+  }
+
+  public void updateUser(User user){
+    WebsocketMessage websocketMessage = new UserMessage(user);
+
     if(webSocketClient.isOpen()){
       webSocketClient.send(gson.toJson(websocketMessage));
     }
   }
 
   public void getRankings(int limit, int offset){
-    //todo get rankings
+    WebsocketMessage websocketMessage = new GetRankingsMessage(limit, offset);
+
+    if(webSocketClient.isOpen()){
+      webSocketClient.send(gson.toJson(websocketMessage));
+    }
   }
 
   public void lookForMatch(Constants.GAME_TYPE gameType){
@@ -160,7 +191,7 @@ public class WebsocketController{
       @Override
       public void onOpen(ServerHandshake handshakedata){
         Log.d(TAG, "onOpen");
-        login(android.os.Build.MODEL);
+        loginWithSessionOrTemporaryUser();
 
         for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
           if(listenerWeakReference.get() != null){
@@ -202,6 +233,7 @@ public class WebsocketController{
   }
 
   private void handleMessage(String message){
+    Log.d(TAG, "Message recieved: " + message);
     WebsocketMessage websocketMessage = gson.fromJson(message, WebsocketMessage.class);
 
     switch(websocketMessage.getType()){
@@ -244,7 +276,14 @@ public class WebsocketController{
         }
         break;
       case GET_RANKINGS:
-        //todo
+        List<User> userList = ((RankingsMessage) websocketMessage).getUserList();
+        boolean isError = ((RankingsMessage) websocketMessage).isError();
+
+        for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().newUserList(userList, isError);
+          }
+        }
       default:
         break;
     }
@@ -254,11 +293,30 @@ public class WebsocketController{
     if(confirmationMessage.getConfirmationType() == Constants.CONFIRMATION_TYPE.USER_CONFIRMATION){
       SharedPreferencesHelper.saveUser(confirmationMessage.getUser());
 
+      if(Helpers.isNonEmptyString(confirmationMessage.getSessionID())){
+        SharedPreferencesHelper.saveSessionID(confirmationMessage.getSessionID());
+      }
+
       for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
         if(listenerWeakReference.get() != null){
-          listenerWeakReference.get().userConfirmed(confirmationMessage.isConfirmed(), SharedPreferencesHelper.getSavedUser());
+          listenerWeakReference.get().userConfirmed(confirmationMessage.isConfirmed(), SharedPreferencesHelper.getSavedUser(), confirmationMessage.getErrorMessage());
         }
       }
+    }
+  }
+
+  private void loginWithSessionOrTemporaryUser(){
+    LoginMessage loginMessage = new LoginMessage(Constants.MESSAGE_TYPE.LOGIN);
+    String sessionID = SharedPreferencesHelper.getSavedSessionID();
+
+    if(Helpers.isNonEmptyString(sessionID)){
+      loginMessage.setSessionID(sessionID);
+    }
+    else{
+      loginMessage.setUsername(android.os.Build.MODEL + UUID.randomUUID().toString());
+    }
+    if(webSocketClient.isOpen()){
+      webSocketClient.send(gson.toJson(loginMessage));
     }
   }
 }

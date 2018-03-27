@@ -1,8 +1,8 @@
 package sen.sen.numericonsandroid.Global;
 
 public class Constants{
-  public static final String SERVER_URL = "ws://sen.ddns.net";
-//  public static final String SERVER_URL = "ws://192.168.1.30:6969";
+//  public static final String SERVER_URL = "ws://sen.ddns.net";
+  public static final String SERVER_URL = "ws://192.168.1.30:6969";
 
   public static final String GAME_CONTROLLER = "GAME_CONTROLLER";
 
@@ -19,8 +19,8 @@ public class Constants{
   public static final int MAX_TARGET = 99;
   public static final int MIN_DROP = -9;
   public static final int MAX_DROP = 9;
-  public static final float MIN_DROP_SPEED = 0.005f;
-  public static final float MAX_DROP_SPEED = 0.02f;
+  public static final float MIN_DROP_SPEED = 0.01f;
+  public static final float MAX_DROP_SPEED = 0.05f;
   public static final float DROP_RATE = 225;
   public static final long GAME_START_DELAY = 5000;
 
@@ -38,8 +38,10 @@ public class Constants{
 
     //client messages
     LOGIN,
+    REGISTER,
+    UPDATE_USER,
     FIND_GAME,
-    PLAYER_ACTION;
+    PLAYER_ACTION
   }
 
   public enum GAME_TYPE{
