@@ -82,7 +82,7 @@ module.exports = class GameRoom{
   updateUserRankings(){
     if((this.gameType == Constants.GAME_TYPE.RANKED) && !this.hasTemporaryUser){
       this.gameManager.getRankedResults((winner, loser) =>{
-        dbController.calculateUpdateRanking(winner.username, loser.username, () =>{
+        dbController.updateRating(winner.username, loser.username, (hey) =>{
           //todo ? wat i get
         });
       });

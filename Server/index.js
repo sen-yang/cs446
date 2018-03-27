@@ -327,7 +327,7 @@ function playerAction(message, client){
 }
 
 function createSinglePlayerGame(client1){
-  let gameRoom = new GameRoom(0, [client1], (gameRoom) =>{
+  let gameRoom = new GameRoom(Constants.GAME_TYPE.SINGLEPLAYER, [client1], (gameRoom) =>{
     gameFinished(gameRoom);
   });
   gameRoom.initGame();
@@ -338,7 +338,7 @@ function createRankedGame(client1, client2){
   let clientList = [];
   clientList.push(client1);
   clientList.push(client2);
-  let gameRoom = new GameRoom(0, clientList, (gameRoom) =>{
+  let gameRoom = new GameRoom(Constants.GAME_TYPE.RANKED, clientList, (gameRoom) =>{
     gameFinished(gameRoom);
   });
   gameRoom.initGame();
@@ -346,7 +346,7 @@ function createRankedGame(client1, client2){
 }
 
 function createGroupGame(newClientList){
-  let gameRoom = new GameRoom(0, newClientList, (gameRoom) =>{
+  let gameRoom = new GameRoom(Constants.GAME_TYPE.GROUP_GAME, newClientList, (gameRoom) =>{
     gameFinished(gameRoom);
   });
   gameRoom.initGame();
