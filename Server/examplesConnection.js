@@ -5,7 +5,7 @@ const CC = new ConnectionController();
 
 
 //Examples for using ConnectionController
-//CC.updateRating("user1", "user2")
+CC.updateRating("user1", "user2")
 
 function UpdateImage(){
   CC.updateCharSprite("user1","google.com",function(data){
@@ -95,7 +95,7 @@ function LoginSessionID(){
 //
 // }
 //SelectImage();
-Register();
+//Register();
 //SelectRanks();
 // InsertSessionID();
 // LoginSessionID();

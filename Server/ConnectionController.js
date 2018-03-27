@@ -2,7 +2,6 @@ const DB = require('./Database/DatabaseConnector');
 const Constants = require('./Constants');
 const eloRank = require('elo-rank');
 var elo = new eloRank();
-var Constants = require('./Constants');
 var settings = {
   // tau : "Reasonable choices are between 0.3 and 1.2, though the system should
   //      be tested to decide which value results in greatest predictive accuracy."
