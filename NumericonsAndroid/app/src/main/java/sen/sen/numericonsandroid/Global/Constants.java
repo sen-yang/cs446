@@ -28,7 +28,7 @@ public class Constants{
   public static long FRAME_TIME = 1000 / 60; // (1s in ms) / fps
 
   public static long GLOBAL_ITEM_EFFECT_DURATION = 5000;
-  public static float EFFECT_ITEM_DROP_CHANCE = 0.5f;
+  public static float EFFECT_ITEM_DROP_CHANCE = 0.05f;
 
   public enum MESSAGE_TYPE{
     PING,
