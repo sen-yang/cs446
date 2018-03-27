@@ -235,7 +235,6 @@ function updateUser(message, client){
         websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
         websocketMessage.isConfirmed = true;
         websocketMessage.user = client.user;
-        console.log("asdf", user);
         websocketMessage.sessionID = user.sessionID;
         client.sendMessage(JSON.stringify(websocketMessage));
       }, (error) =>{

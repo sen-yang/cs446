@@ -23,7 +23,7 @@ module.exports = class GameState{
   }
 
   setGlobalEffect(itemEffect){
-    this.globalEffectTimeRemaining = Constants.ITEM_TYPE.GLOBAL_ITEM_EFFECT_DURATION;
+    this.globalEffectTimeRemaining = Constants.GLOBAL_ITEM_EFFECT_DURATION;
     this.globalEffect = itemEffect;
   }
 
