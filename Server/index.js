@@ -38,8 +38,8 @@ server.on('connection', function(ws){
     clientDisconnected(client);
   });
 
-  ws.on('error', () =>{
-    console.log('connection error');
+  ws.on('error', (error) =>{
+    console.log('connection error: ' + error);
     clientDisconnected(client);
   });
 });
@@ -114,10 +114,23 @@ function registerUser(message, client){
   }
   else if(Helpers.isNonEmptyString(message.username) && Helpers.isNonEmptyString(message.password)){
     dbController.Register(message.username, message.password, "", (user) =>{
-      client.user = user;
-      websocketMessage.user = user;
-      websocketMessage.isConfirmed = true;
-      client.sendMessage(JSON.stringify(websocketMessage));
+      let newSessionID = genUUID();
+      dbController.UpdateSessionID(user.username, newSessionID, (user)=>{
+        //login success
+        let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
+        websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
+        websocketMessage.isConfirmed = true;
+        websocketMessage.sessionID = newSessionID;
+        client.user = user;
+        websocketMessage.user = user;
+        client.sendMessage(JSON.stringify(websocketMessage));
+      },(error)=>{//session id create error
+        let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
+        websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
+        websocketMessage.isConfirmed = false;
+        websocketMessage.errorMessage = "Server error";
+        client.sendMessage(JSON.stringify(websocketMessage));
+      });
     }, (error) =>{
       websocketMessage.errorMessage = error;
       client.sendMessage(JSON.stringify(websocketMessage));
@@ -139,6 +152,7 @@ function loginUser(message, client){
       websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
       websocketMessage.isConfirmed = true;
       client.user = user;
+      websocketMessage.sessionID = user.sessionID;
       websocketMessage.user = user;
       client.sendMessage(JSON.stringify(websocketMessage));
     },(error)=>{
@@ -146,14 +160,13 @@ function loginUser(message, client){
       let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
       websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
       websocketMessage.isConfirmed = false;
-      websocketMessage.errorMessage = "Bad session id";
+      websocketMessage.errorMessage = "Invalid sessionID";
       client.sendMessage(JSON.stringify(websocketMessage));
     });
   }
   else if(Helpers.isNonEmptyString(message.username) && Helpers.isNonEmptyString(message.password)){
     //sign in with username and password
     dbController.Login(message.username, message.password, (user)=>{
-      console.log("asdf", user);
       client.user = user;
       let newSessionID = genUUID();
       dbController.UpdateSessionID(user.username, newSessionID, (user)=>{
@@ -213,15 +226,20 @@ function getRankings(message, client){
 
 function updateUser(message, client){
   if((client.user != null) && (message.user != null) && (client.user.characterSprite != message.user.characterSprite)){
-    if(client.user.isTemporary){
+    if(!client.user.isTemporary){
+      //is valid user
       dbController.updateCharSprite(client.user.username, message.user.characterSprite, (user) =>{
         client.user = user;
+        //update success
         let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
         websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
         websocketMessage.isConfirmed = true;
         websocketMessage.user = client.user;
+        console.log("asdf", user);
+        websocketMessage.sessionID = user.sessionID;
         client.sendMessage(JSON.stringify(websocketMessage));
       }, (error) =>{
+        //update failed
         let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
         websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
         websocketMessage.isConfirmed = false;
@@ -230,6 +248,7 @@ function updateUser(message, client){
       });
     }
     else{
+      //is temporary user
       client.user.characterSprite = message.user.characterSprite;
 
       let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);

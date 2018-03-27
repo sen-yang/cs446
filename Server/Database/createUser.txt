@@ -8,8 +8,8 @@ Drop table users;
       username character varying(12) NOT NULL,
       hashpassword character varying(64) NOT NULL,
       email character varying(50) NOT NULL,
-      characterSprite character varying(60),
-      SessionID character varying(60) UNIQUE,
+      "characterSprite" character varying(60),
+      "sessionID" character varying(60) UNIQUE,
       PRIMARY KEY (UID, username)
   );
 
@@ -28,16 +28,16 @@ Drop table users;
   );
 
   INSERT INTO public.users(
-    username, hashpassword, email, characterSprite)
+    username, hashpassword, email, "characterSprite")
   	VALUES ( 'user1', 'password', '', 'characterSprite1');
    INSERT INTO public.users(
-   username, hashpassword, email, characterSprite)
+   username, hashpassword, email, "characterSprite")
   	VALUES ( 'user2', 'password', '', 'characterSprite2');
   	INSERT INTO public.users(
-   username, hashpassword, email, characterSprite)
+   username, hashpassword, email, "characterSprite")
   	VALUES ( 'user3', 'password', '', 'characterSprite3');
     INSERT INTO public.users(
-    username, hashpassword, email, characterSprite)
+    username, hashpassword, email, "characterSprite")
     VALUES ( 'user4', 'password', '', 'characterSprite3');
 
 
@@ -57,4 +57,4 @@ Drop table users;
   	UID, tau, rating, ratingdev, volatility)
     VALUES (4,0.5, 1500, 200, 0.06);
 
-    create view seeRanks AS (select username,rating as rankRating, rank() over(order by rating desc) as rank from users u1,rankingsdata rd1 where u1.UID=rd1.UID);
+    create view seeRanks AS (select username,rating as "rankRating", rank() over(order by rating desc) as rank from users u1,rankingsdata rd1 where u1.UID=rd1.UID);
