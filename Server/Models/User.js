@@ -16,7 +16,8 @@ module.exports = class User{
         username: this.username,
         characterSprite: this.characterSprite,
         isTemporary: this.isTemporary,
-        rankNumber: this.rank.rankno
+        rankNumber: this.rank.rankno,
+        rankRating: this.rank.rating
       };
     }
     else{

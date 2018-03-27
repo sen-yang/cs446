@@ -1,4 +1,5 @@
 const DB = require('./Database/DatabaseConnector');
+const Constants = require('./Constants');
 const eloRank = require('elo-rank');
 var elo = new eloRank();
 var Constants = require('./Constants');

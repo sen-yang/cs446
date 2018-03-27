@@ -116,7 +116,7 @@ public class GameView extends RelativeLayout{
       public void run(){
         //redraw on screen!
         invalidate();
-        handler.postDelayed(this, 50);
+        handler.postDelayed(this, Constants.FRAME_TIME);
       }
     };
     handler.removeCallbacks(autoRun);

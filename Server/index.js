@@ -130,29 +130,73 @@ function registerUser(message, client){
 }
 
 function loginUser(message, client){
-  let confirmed = false;
-
   if(Helpers.isNonEmptyString(message.sessionID)){//sign in with session id
-    //todo sign in through database
-  }
-  else if(Helpers.isNonEmptyString(message.username) && Helpers.isNonEmptyString(message.password)){//sign in with username and password
-    //todo sign in through database
-    dbController.Login(message.username, message.password, ()=>{
-
+    dbController.LoginViaSessionID(message.sessionID, (user)=>{
+      //login success
+      let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
+      websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
+      websocketMessage.isConfirmed = true;
+      client.user = user;
+      websocketMessage.user = user;
+      client.sendMessage(JSON.stringify(websocketMessage));
+    },(error)=>{
+      //login error
+      let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
+      websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
+      websocketMessage.isConfirmed = false;
+      websocketMessage.errorMessage = "Bad session id";
+      client.sendMessage(JSON.stringify(websocketMessage));
     });
-    client.user = new User(message.username);
-    confirmed = true;
   }
-  else if(Helpers.isNonEmptyString(message.username)){//create temporary user
+  else if(Helpers.isNonEmptyString(message.username) && Helpers.isNonEmptyString(message.password)){
+    //sign in with username and password
+    dbController.Login(message.username, message.password, (user)=>{
+      console.log("asdf", user);
+      client.user = user;
+      let newSessionID = genUUID();
+      dbController.UpdateSessionID(user.username, newSessionID, (user)=>{
+        //login success
+        let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
+        websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
+        websocketMessage.isConfirmed = true;
+        websocketMessage.sessionID = newSessionID;
+        client.user = user;
+        websocketMessage.user = user;
+        client.sendMessage(JSON.stringify(websocketMessage));
+      },(error)=>{//session id create error
+        let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
+        websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
+        websocketMessage.isConfirmed = false;
+        websocketMessage.errorMessage = "Server error";
+        client.sendMessage(JSON.stringify(websocketMessage));
+      });
+    },(error)=>{
+      //user login error
+      let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
+      websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
+      websocketMessage.isConfirmed = false;
+      websocketMessage.errorMessage = "Wrong username or password";
+      client.sendMessage(JSON.stringify(websocketMessage));
+    });
+  }
+  else if(Helpers.isNonEmptyString(message.username)){
+    //create temporary user
     client.user = new User(message.username);
     client.user.isTemporary = true;
-    confirmed = true;
+    let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
+    websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
+    websocketMessage.isConfirmed = true;
+    websocketMessage.user = client.user;
+    client.sendMessage(JSON.stringify(websocketMessage));
   }
-  let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
-  websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
-  websocketMessage.isConfirmed = confirmed;
-  websocketMessage.user = client.user;
-  client.sendMessage(JSON.stringify(websocketMessage));
+  else{
+    //login error
+    let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
+    websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
+    websocketMessage.isConfirmed = false;
+    websocketMessage.errorMessage = "Bad credentials";
+    client.sendMessage(JSON.stringify(websocketMessage));
+  }
 }
 
 function getRankings(message, client){
@@ -169,7 +213,6 @@ function updateUser(message, client){
   if((client.user != null) && (message.user != null) && (client.user.characterSprite != message.user.characterSprite)){
     if(client.user.isTemporary){
       dbController.updateImage(client.user.username, message.user.characterSprite, (user) =>{
-        //todo make sure its returning user
         client.user = user;
         let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
         websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;

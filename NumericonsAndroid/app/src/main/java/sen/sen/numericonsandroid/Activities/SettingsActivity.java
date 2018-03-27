@@ -75,7 +75,7 @@ public class SettingsActivity extends AppCompatActivity implements WebsocketCont
   @Override
   protected void onResume(){
     super.onResume();
-    WebsocketController.getInstance().removeWebsocketListener(this);
+    WebsocketController.getInstance().addWebsocketListener(this);
     setUser(SharedPreferencesHelper.getSavedUser());
     soundToggleButton.setChecked(SharedPreferencesHelper.GetSoundEnabled());
   }
@@ -152,6 +152,7 @@ public class SettingsActivity extends AppCompatActivity implements WebsocketCont
   }
 
   private void selectSprite(Constants.CHARACTER_SPRITE newSelectedSprite, boolean sendToServer){
+    setErrorMessage("");
     for(ImageView imageView : spriteSelectImageViewList){
       if(imageView.getTag() == newSelectedSprite){
         imageView.setBackgroundColor(getResources().getColor(R.color.selectedGreen));

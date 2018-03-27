@@ -8,6 +8,7 @@ public class User implements Serializable{
   private String username;
   private Constants.CHARACTER_SPRITE characterSprite;
   private int rankNumber;
+  private int rankRating;
   private boolean isTemporary;
 
   public User(String username, Constants.CHARACTER_SPRITE characterSprite){
@@ -34,6 +35,10 @@ public class User implements Serializable{
 
   public int getRankNumber(){
     return rankNumber;
+  }
+
+  public int getRankRating(){
+    return rankRating;
   }
 
   public boolean isTemporary(){
