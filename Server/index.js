@@ -214,7 +214,7 @@ function getRankings(message, client){
 function updateUser(message, client){
   if((client.user != null) && (message.user != null) && (client.user.characterSprite != message.user.characterSprite)){
     if(client.user.isTemporary){
-      dbController.updateImage(client.user.username, message.user.characterSprite, (user) =>{
+      dbController.updateCharSprite(client.user.username, message.user.characterSprite, (user) =>{
         client.user = user;
         let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
         websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;

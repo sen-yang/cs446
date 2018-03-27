@@ -1,5 +1,6 @@
 const DB = require('./Database/DatabaseConnector');
 const Constants = require('./Constants');
+const User = require('./Models/User');
 var glicko2 = require('glicko2');
 
 var settings = {
@@ -43,7 +44,7 @@ selectUser(username,  callback, failcallback){
     }
     db.SelectUser(userData)
     .then(data => {
-      callback(data[0]);
+      callback(Object.assign(new User(), data[0]));
     })
     .catch(error => {
         console.log('ERROR:'+ error); // print the error;
@@ -75,7 +76,7 @@ SelectCharSprite(username, callback,failcallback){
      db.LoginViaSessionID(userData)
      .then(data => {
        if(JSON.stringify(data)!="[]")
-       callback(data[0]);
+         callback(Object.assign(new User(), data[0]));
        else {
          failcallback("Please Login again");
        }
@@ -111,7 +112,7 @@ SelectCharSprite(username, callback,failcallback){
     .then(data => {
       //emit ranking information back to client
       if(JSON.stringify(data)!="[]")
-      callback(data[0]);//this function must check if the data is set.
+        callback(Object.assign(new User(), data[0]));//this function must check if the data is set.
       else {
         failcallback("Username or password is wrong, please try again");
       }
