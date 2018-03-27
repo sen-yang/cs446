@@ -101,6 +101,6 @@ public class PlayerInfoView extends RelativeLayout{
     }
     playerImageView.setImageResource(bird_rid);
     playerName.setText(player.getUsername());
-    //playerCurrentNumber.setText(player.getCurrentNumber());
+    playerCurrentNumber.setText(player.getCurrentNumber());
   }
 }
