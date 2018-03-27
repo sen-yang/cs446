@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import sen.sen.numericonsandroid.Global.SharedPreferencesHelper;
 import sen.sen.numericonsandroid.Models.Player;
 import sen.sen.numericonsandroid.R;
 
@@ -33,37 +34,34 @@ public class PlayerListInfoLayout extends LinearLayout{
 
   private void init(){
     playerInfoViewList = new ArrayList<>();
-    //TODO: JUST FOR TESTING...Remove this later...
-    for(int i = 0; i < 3; i++) {
-      LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-      //if(i < 2) {
-        layoutParams.setMargins(0,0,20,0);
-      //}
-      PlayerInfoView playerInfoView = new PlayerInfoView(getContext());
-      addView(playerInfoView, layoutParams);
-      //TODO: Set layout param for playerInfoView and add to the linear layout
-      playerInfoViewList.add(playerInfoView);
-    }
+    playerList = new ArrayList<>();
   }
 
   public void setPlayerList(List<Player> playerList){
-    this.playerList = playerList;
-    updateView();
+    for(int i = 0; i < playerList.size(); i++){
+      Player player = playerList.get(i);
+      if(!player.getUsername().equals(SharedPreferencesHelper.getUsername())) {
+        //TODO CHECK IF i is out of bound!
+        this.playerList.add(player);
+        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+        layoutParams.setMargins(0,0,20,0);
+        PlayerInfoView playerInfoView = new PlayerInfoView(getContext());
+        addView(playerInfoView, layoutParams);
+        playerInfoView.setPlayer(playerList.get(i));
+        playerInfoViewList.add(playerInfoView);
+      }
+    }
   }
 
   private void updateView(){
     for(int i = 0; i < playerList.size(); i++){
       //TODO CHECK IF i is out of bound!
-      if(playerInfoViewList.get(i) != null){
-        //If this playerInfoView already exist, update it
-        PlayerInfoView playerInfoView = playerInfoViewList.get(i);
-        playerInfoView.update(playerList.get(i));
-      } else{
-        //If not, create a new view and added to playerInfoViewList and multiplayerlayout
-        PlayerInfoView playerInfoView = new PlayerInfoView(getContext());
-        playerInfoView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, 1f));
-        playerInfoView.setPlayer(playerList.get(i));
-        playerInfoViewList.add(playerInfoView);
+      if(i < playerInfoViewList.size()) {
+        if(playerInfoViewList.get(i) != null){
+          //If this playerInfoView already exist, update it
+          PlayerInfoView playerInfoView = playerInfoViewList.get(i);
+          playerInfoView.update(playerList.get(i));
+        }
       }
     }
   }

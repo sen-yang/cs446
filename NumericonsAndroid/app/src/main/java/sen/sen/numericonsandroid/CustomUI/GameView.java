@@ -8,6 +8,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.constraint.solver.widgets.Rectangle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -18,9 +19,12 @@ import android.widget.RelativeLayout;
 import android.os.Handler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import sen.sen.numericonsandroid.Global.Constants;
+import sen.sen.numericonsandroid.Global.Helpers;
 import sen.sen.numericonsandroid.Models.Basket;
 import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
@@ -39,13 +43,22 @@ public class GameView extends RelativeLayout{
 
   ImageView birdImageView;
   Rect clipBounds;
+  Rect itemRect;
   Paint textPaint;
-  private Player currentPlayer;
   private Basket birdModel;
   private Handler handler;
   private Runnable autoRun;
   private GameViewDelegate delegate;
   private GameState gameState;
+  private Constants.CHARACTER_SPRITE characterSprite;
+  private Map<Integer, Drawable> numberDrawableMap;
+
+  private int bird_animation_running_rid;
+  private int bird_animation_eating_rid;
+  private int bird_static_standing_rid;
+  private int itemWidth;
+  private int itemHeight;
+
 
   boolean runAnimating = false;
   Constants.BIRD_DIRECTION birdDirection = Constants.BIRD_DIRECTION.RIGHT;
@@ -70,7 +83,6 @@ public class GameView extends RelativeLayout{
 
   private void init(Context context){
     birdImageView = new ImageView(getContext());
-    birdImageView.setImageResource(R.drawable.b1_run_r);
 
     LayoutParams layoutParams = new LayoutParams((int) getResources().getDimension(R.dimen.basket_width), (int) getResources().getDimension(R.dimen.basket_height));
     layoutParams.bottomMargin = (int) getResources().getDimension(R.dimen.marginTriple);
@@ -87,6 +99,16 @@ public class GameView extends RelativeLayout{
     textPaint.setTextSize(textSize);
 
     clipBounds = new Rect();
+    itemRect = new Rect();
+    itemWidth = (int) getResources().getDimension(R.dimen.droppedItemWidth);
+    itemHeight = (int) getResources().getDimension(R.dimen.droppedItemHeight);
+    numberDrawableMap = new HashMap<>();
+    for(int i = 9; i > 0; i--){
+      numberDrawableMap.put(-i, getResources().getDrawable(Helpers.getResId("neg_" + i, R.drawable.class)));
+    }
+    for(int i = 0; i <= 9; i++){
+      numberDrawableMap.put(i, getResources().getDrawable(Helpers.getResId("pos_" + i, R.drawable.class)));
+    }
     handler = new Handler();
     autoRun = new Runnable(){
       public void run(){
@@ -99,9 +121,26 @@ public class GameView extends RelativeLayout{
     handler.post(autoRun);
   }
 
-  public void setCurrentPlayer(Player currentPlayer) {
-    Log.d("setCurrentPlayer", "currentPlayer" + currentPlayer.getUsername());
-   this.currentPlayer =  currentPlayer;
+  public void setCharacterSprite(Constants.CHARACTER_SPRITE characterSprite){
+    this.characterSprite = characterSprite;
+    switch(characterSprite){
+      case BIRD_1:
+        bird_animation_running_rid = R.drawable.b1_animation_run_right;
+        bird_animation_eating_rid = R.drawable.b1_animation_eat_right;
+        bird_static_standing_rid = R.drawable.b1_stand_r;
+        break;
+      case BIRD_2:
+        bird_animation_running_rid = R.drawable.b2_animation_run_right;
+        bird_animation_eating_rid = R.drawable.b2_animation_eat_right;
+        bird_static_standing_rid = R.drawable.b2_stand_r;
+        break;
+      case BIRD_3:
+        bird_animation_running_rid = R.drawable.b3_animation_run_right;
+        bird_animation_eating_rid = R.drawable.b3_animation_eat_right;
+        bird_static_standing_rid = R.drawable.b3_stand_r;
+        break;
+    }
+    birdImageView.setImageResource(bird_static_standing_rid);
   }
 
   @Override
@@ -113,8 +152,6 @@ public class GameView extends RelativeLayout{
   public void addDroppedItem(DroppedItem item){
     Log.d("Add item", "addDroppedItem: " + item.getxPosition() + ", " + item.getyPosition());
     item.setAlive(true);
-    item.setNumberDrawable(getNumberDrawable(item.getNumber()));
-    item.setNumberBound((int) ratioToPixel_Width(item.getxPosition()),(int) ratioToPixel_Height(item.getyPosition()));
     droppedItemList.add(item);
   }
 
@@ -135,14 +172,16 @@ public class GameView extends RelativeLayout{
     for(DroppedItem item : droppedItemList){
       if(item.isAlive()){
         item.fall();
-        int itemBoundLeft = (int) ratioToPixel_Width(item.getxPosition());
-        int itemBoundTop = (int) ratioToPixel_Height(item.getyPosition());
-        item.setNumberBound(itemBoundLeft,itemBoundTop);
+        int left = (int) ratioToPixel_Width(item.getxPosition());
+        int top = (int) ratioToPixel_Height(item.getyPosition());
+        itemRect.set(left, top, left + itemWidth, top + itemHeight);
 
-        if(itemBoundTop - birdModel.getyPosition() <= 10) {
-          checkCollision(item, canvas);
+        if(itemRect.top - birdModel.getyPosition() <= 10){
+          checkCollision(item, itemRect);
         }
-        Drawable itemDrawable = item.getNumberDrawable();
+
+        Drawable itemDrawable = numberDrawableMap.get(item.getNumber());
+        itemDrawable.setBounds(itemRect);
         itemDrawable.draw(canvas);
       }
     }
@@ -156,8 +195,8 @@ public class GameView extends RelativeLayout{
     }
   }
 
-  void checkCollision(DroppedItem item, Canvas canvas) {
-    if(item.getNumberBound().intersect((int) birdModel.getxPosition(),
+  void checkCollision(DroppedItem item, Rect itemBounds){
+    if(itemBounds.intersect((int) birdModel.getxPosition(),
                                        (int) birdModel.getyPosition(),
                                        (int) birdModel.getxPosition() + birdImageView.getWidth(),
                                        (int) birdModel.getyPosition() + birdImageView.getHeight())){
@@ -173,6 +212,7 @@ public class GameView extends RelativeLayout{
     return new View.OnTouchListener(){
       PointF DownPT = new PointF(); // Record Mouse Position When Pressed Down
       PointF StartPT = new PointF(); // Record Start Position of 'img'
+
       @Override
       public boolean onTouch(View view, MotionEvent motionEvent){
         //@TODO: Remove these after...
@@ -211,7 +251,7 @@ public class GameView extends RelativeLayout{
   }
 
   void bird_eat_animation_start(){
-    birdImageView.setImageResource(R.drawable.b1_animation_eat_right);
+    birdImageView.setImageResource(bird_animation_eating_rid);
     AnimationDrawable eatAnimation = (AnimationDrawable) birdImageView.getDrawable();
     if(!eatAnimation.isRunning()){
       ((AnimationDrawable) birdImageView.getDrawable()).start();
@@ -220,12 +260,12 @@ public class GameView extends RelativeLayout{
 
   void bird_running_animation_start(){
     if(birdDirection == Constants.BIRD_DIRECTION.LEFT){
-     // Log.i("LEFT", "onTouch: LEFT!!");
+      // Log.i("LEFT", "onTouch: LEFT!!");
     } else{
-     // Log.i("RIGHT", "onTouch: RIGHT!!");
+      // Log.i("RIGHT", "onTouch: RIGHT!!");
     }
     if(!runAnimating){
-      birdImageView.setImageResource(R.drawable.b1_animation_run_right);
+      birdImageView.setImageResource(bird_animation_running_rid);
       ((AnimationDrawable) birdImageView.getDrawable()).start();
       runAnimating = true;
     }
@@ -233,79 +273,13 @@ public class GameView extends RelativeLayout{
 
   void bird_running_animation_stop(){
     if(runAnimating){
-      birdImageView.setImageResource(R.drawable.b1_animation_run_right);
+      birdImageView.setImageResource(bird_animation_running_rid);
       ((AnimationDrawable) birdImageView.getDrawable()).stop();
       runAnimating = false;
     }
   }
 
   void bird_stand(){
-    birdImageView.setImageResource(R.drawable.b1_stand_r);
-  }
-
-  public Drawable getNumberDrawable(int number){
-    Drawable numberDrawable = getResources().getDrawable(R.drawable.pos_0);
-    switch(number){
-      case -9:
-        numberDrawable = getResources().getDrawable(R.drawable.neg_9);
-        break;
-      case -8:
-        numberDrawable = getResources().getDrawable(R.drawable.neg_8);
-        break;
-      case -7:
-        numberDrawable = getResources().getDrawable(R.drawable.neg_7);
-        break;
-      case -6:
-        numberDrawable = getResources().getDrawable(R.drawable.neg_6);
-        break;
-      case -5:
-        numberDrawable = getResources().getDrawable(R.drawable.neg_5);
-        break;
-      case -4:
-        numberDrawable = getResources().getDrawable(R.drawable.neg_4);
-        break;
-      case -3:
-        numberDrawable = getResources().getDrawable(R.drawable.neg_3);
-        break;
-      case -2:
-        numberDrawable = getResources().getDrawable(R.drawable.neg_2);
-        break;
-      case -1:
-        numberDrawable = getResources().getDrawable(R.drawable.neg_1);
-        break;
-      case 0:
-        numberDrawable = getResources().getDrawable(R.drawable.pos_0);
-        break;
-      case 1:
-        numberDrawable = getResources().getDrawable(R.drawable.pos_1);
-        break;
-      case 2:
-        numberDrawable = getResources().getDrawable(R.drawable.pos_2);
-        break;
-      case 3:
-        numberDrawable = getResources().getDrawable(R.drawable.pos_3);
-        break;
-      case 4:
-        numberDrawable = getResources().getDrawable(R.drawable.pos_4);
-        break;
-      case 5:
-        numberDrawable = getResources().getDrawable(R.drawable.pos_5);
-        break;
-      case 6:
-        numberDrawable = getResources().getDrawable(R.drawable.pos_6);
-        break;
-      case 7:
-        numberDrawable = getResources().getDrawable(R.drawable.pos_7);
-        break;
-      case 8:
-        numberDrawable = getResources().getDrawable(R.drawable.pos_8);
-        break;
-      case 9:
-        numberDrawable = getResources().getDrawable(R.drawable.pos_9);
-        break;
-      default:
-        break;
-    }
-    return numberDrawable;
+    birdImageView.setImageResource(bird_static_standing_rid);
   }
 }

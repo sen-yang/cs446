@@ -1,6 +1,7 @@
 package sen.sen.numericonsandroid.Global;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -57,10 +58,19 @@ public class Helpers{
       md.update(textBytes, 0, textBytes.length);
       byte[] sha1hash = md.digest();
       return convertToHex(sha1hash);
-    }
-    catch(Exception e){
+    } catch(Exception e){
       e.printStackTrace();
       return text;
+    }
+  }
+
+  public static int getResId(String resName, Class<?> c){
+    try{
+      Field idField = c.getDeclaredField(resName);
+      return idField.getInt(idField);
+    } catch(Exception e){
+      e.printStackTrace();
+      return -1;
     }
   }
 }

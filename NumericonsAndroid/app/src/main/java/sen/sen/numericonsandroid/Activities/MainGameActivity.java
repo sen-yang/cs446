@@ -102,6 +102,8 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     droppedItemList = new ArrayList<>();
     gameController.addGameListener(this);
     updateFromServer(gameController.getGameState());
+    //gameView.setCharacterSprite(SharedPreferencesHelper.getSavedUser().getCharacterSprite());
+    gameView.setCharacterSprite(Constants.CHARACTER_SPRITE.BIRD_3);
   }
 
   @Override
@@ -121,7 +123,13 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
     multiPlayerModePlayerInfoView.setGravity(Gravity.END);
     multiPlayerModePlayerInfoView.setLayoutParams(linearLayoutParams);
-    //multiPlayerModePlayerInfoView.setPlayerList(gameController.getGameState().getPlayerList());
+
+    //@TODO: Remove this later, just for testing
+    if(gameController.getGameState().getPlayerList().size() == 2) {
+      gameController.getGameState().getPlayerList().get(0).setCharacterSprite(Constants.CHARACTER_SPRITE.BIRD_1);
+      gameController.getGameState().getPlayerList().get(1).setCharacterSprite(Constants.CHARACTER_SPRITE.BIRD_1);
+    }
+    multiPlayerModePlayerInfoView.setPlayerList(gameController.getGameState().getPlayerList());
     wrapperLayout.addView(multiPlayerModePlayerInfoView);
     gameView.addView(wrapperLayout);
   }
@@ -142,7 +150,6 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     for(Player player : gameState.getPlayerList()){
       if(player.getUsername().equals(SharedPreferencesHelper.getUsername())){
         currentPlayer = player;
-        //gameView.setCurrentPlayer(this.currentPlayer);
         break;
       }
     }

@@ -83,7 +83,24 @@ public class PlayerInfoView extends RelativeLayout{
   public void update(Player player){
     this.player = player;
     //TODO: update view and icon
+    int bird_rid;
+    //@TODO: CHnage this later...
+    switch(player.getCharacterSprite()) {
+      case BIRD_1:
+        bird_rid = R.drawable.bird1;
+        break;
+      case BIRD_2:
+        bird_rid = R.drawable.bird2;
+        break;
+      case BIRD_3:
+        bird_rid = R.drawable.bird3;
+        break;
+      default:
+        bird_rid = R.drawable.bird1;
+          break;
+    }
+    playerImageView.setImageResource(bird_rid);
     playerName.setText(player.getUsername());
-    playerCurrentNumber.setText(player.getCurrentNumber());
+    //playerCurrentNumber.setText(player.getCurrentNumber());
   }
 }

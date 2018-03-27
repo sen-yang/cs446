@@ -83,6 +83,12 @@ public class Player implements Serializable{
     return currentNumber;
   }
 
+  public Constants.CHARACTER_SPRITE getCharacterSprite() {return characterSprite;}
+
+  public void setCharacterSprite(Constants.CHARACTER_SPRITE characterSprite) {
+    this.characterSprite = characterSprite;
+  }
+
   public Constants.PLAYER_ACTION_TYPE getCurrentOperation(){
     return currentOperation;
   }
