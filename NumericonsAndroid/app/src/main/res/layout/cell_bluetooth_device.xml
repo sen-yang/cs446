@@ -1,31 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="horizontal"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_centerHorizontal="true"
+android:background="@color/transwhite"
+android:padding="10dp">
+<TextView
+    android:id="@+id/deviceNameTextView"
+    android:layout_width="100dp"
+    android:padding="@dimen/margin"
+    android:layout_height="30dp"
+    android:layout_marginLeft="@dimen/margin"
+    android:gravity="start"
+    android:textSize="@dimen/bluetoothcellTextSize"
+    android:text="lalala"/>
 
-    <TextView
-        android:id="@+id/deviceNameTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+<TextView
+    android:id="@+id/deviceAddressTextView"
+    android:layout_width="150dp"
+    android:padding="@dimen/margin"
+    android:layout_height="30dp"
+    android:layout_alignParentTop="true"
+    android:layout_toEndOf="@+id/deviceNameTextView"
+    android:layout_toRightOf="@+id/deviceNameTextView"
+    android:textSize="@dimen/bluetoothcellTextSize"
+    android:text="Jennifer" />
 
-    <TextView
-        android:id="@+id/deviceAddressTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-
-
-    <Button
-        android:id="@+id/inviteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="invite to game"
-        android:textSize="10sp"/>
-</LinearLayout>
+<Button
+    android:id="@+id/inviteButton"
+    android:layout_width="70dp"
+    android:layout_height="30dp"
+    android:padding="@dimen/margin"
+    android:layout_alignParentTop="true"
+    android:layout_toEndOf="@+id/deviceAddressTextView"
+    android:layout_toRightOf="@+id/deviceAddressTextView"
+    android:gravity="center"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:textSize="10sp"
+    android:text="invite" />
+</RelativeLayout>

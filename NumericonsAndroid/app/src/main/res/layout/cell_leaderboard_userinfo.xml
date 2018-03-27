@@ -41,6 +41,5 @@ android:padding="10dp">
         android:gravity="end"
         android:layout_weight="1"
         android:text="55" />
-
 </RelativeLayout>
 

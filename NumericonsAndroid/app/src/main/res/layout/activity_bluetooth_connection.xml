@@ -4,20 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bluetooth_background"
     tools:context="sen.sen.numericonsandroid.Activities.BluetoothConnectionActivity">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="320dp"
+        android:layout_height="350dp"
+        android:layout_above="@+id/refreshButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="31dp" />
 
     <Button
         android:id="@+id/refreshButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="refresh"
-        android:onClick="refreshButtonPressed"/>
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="31dp"
+        android:onClick="refreshButtonPressed"
+        android:text="refresh" />
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recyclerView"
-        android:layout_below="@+id/refreshButton"/>
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/recyclerView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:text="Blue Tooth"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/leaderBoardTitleSize" />
 </RelativeLayout>
