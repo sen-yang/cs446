@@ -6,7 +6,7 @@ Drop table users;
   (
       UID serial UNIQUE NOT NULL,
       username character varying(12) NOT NULL,
-      hashpassword character varying(16) NOT NULL,
+      hashpassword character varying(64) NOT NULL,
       email character varying(50) NOT NULL,
       characterSprite character varying(60),
       SessionID character varying(60) UNIQUE,

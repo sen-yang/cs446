@@ -1,6 +1,7 @@
 const DB = require('./Database/DatabaseConnector');
 const eloRank = require('elo-rank');
 var elo = new eloRank();
+var Constants = require('./Constants');
 var settings = {
   // tau : "Reasonable choices are between 0.3 and 1.2, though the system should
   //      be tested to decide which value results in greatest predictive accuracy."
@@ -156,7 +157,7 @@ db.CheckUser(userData)
       else failcallback("Username already exists, please choose another");
     })
     .catch(error => {
-
+      failcallback(error);
     console.log('ERROR:'+ error); // print the error;
   })
 }
@@ -199,24 +200,32 @@ db.CheckUser(userData)
 
 
 }
-  updateRating(winneruser, winnerScore, loseruser, loserScore, callback, failcallback){
-    db.updateRatingAndRank(winneruser,winnerScore)
+  updateRating(winneruser,loseruser,callback, failcallback){
+    var matches = [];
+    db.getRating(winneruser, loseruser)
     .then(data => {
-    console.log(winneruser + "\'s score is  updated")
-  })
-  .catch(error => {
-      console.log('ERROR:'+ error); // print the error;
-  });
+    console.log(data);
 
 
-    db.updateRatingAndRank(loseruser, loserScore)
-    .then(data => {
-      console.log("Test");
-    console.log(loseruser + "\'s score is  updated")
   })
-  .catch(error => {
-      console.log('ERROR:'+ error); // print the error;
-  });
+
+  //   db.updateRatingAndRank(winneruser,winnerScore)
+  //   .then(data => {
+  //   console.log(winneruser + "\'s score is  updated")
+  //
+  //
+  // })
+  // .catch(error => {
+  //     console.log('ERROR:'+ error); // print the error;
+  // });
+  //
+  //
+  //   db.updateRatingAndRank(loseruser, loserScore)
+  //   .then(data => {
+  // })
+  // .catch(error => {
+  //     console.log('ERROR:'+ error); // print the error;
+  // });
   }
 
 

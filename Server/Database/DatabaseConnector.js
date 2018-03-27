@@ -89,9 +89,6 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
       return db.any('insert into rankingsdata(UID, tau, rating, ratingdev, volatility) VALUES ((select UID from users where username=$1), 0.5, 1500, 200, 0.06)', [userData.username])
     }
 
-    getRatings(userData){
-        return db.any('select tau,rating,ratingdev,volatility from rankingsdata,users where users.UID=rankingsdata.UID and username=$1', [userData.username])
-    }
     CheckUser(userData){
         return db.any('select username from users where username=$1', [userData.username]);
     }
@@ -106,7 +103,7 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
     }
 
     getRating(winner,loser){
-      return db.any('select username,rating from users,rankingsdata where users.UID=rankingsdata.UID and (username=$1 OR username=$2)',[winner,loser] );
+      return db.any('select username, tau,rating,ratingdev,volatility from rankingsdata,users where users.UID=rankingsdata.UID(username=$1 OR username=$2)',[winner,loser] );
     }
     updateRatingAndRank(user, userscore){
       return db.any('update rankingsdata set rating=$1 from users where users.UID=rankingsdata.UID and users.username=$2',[userscore, user]);

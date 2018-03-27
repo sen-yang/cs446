@@ -5,7 +5,7 @@ const CC = new ConnectionController();
 
 
 //Examples for using ConnectionController
-
+//CC.updateRating("user1", "user2")
 
 function UpdateImage(){
   CC.updateCharSprite("user1","google.com",function(data){
@@ -20,7 +20,7 @@ function SelectImage(){
 ////////////Register////////////////////
 function Register(){//username, password, //email
   //hashing should be done on the client side.
- CC.Register("user6","notreallyhashed","emailtest", function(data){
+ CC.Register("user71","notreallyhashed","emailtest", function(data){
    if(data){
      console.log(data)
      //return registration successful
@@ -30,7 +30,7 @@ function Register(){//username, password, //email
      console.log("data exists");
    }
  },function(error){
-   console.log("nope dont works");
+   console.log("error");
  });
 }
 /////////////LOGIN///////////////////////////
