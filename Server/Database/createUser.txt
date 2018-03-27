@@ -42,20 +42,19 @@ Drop table users;
 
 
     INSERT INTO public.rankingsdata(
-  	tau, rank, rating, ratingdev, volatility)
-  	VALUES (1, 1, 1, 1, 1);
+  	UID, tau, rating, ratingdev, volatility)
+  	VALUES (1,0.5, 1500, 200, 0.06);
 
   	INSERT INTO public.rankingsdata(
-  	tau,	rank, rating, ratingdev, volatility)
-  	VALUES (2, 2, 1, 1, 1);
+  	UID, tau, rating, ratingdev, volatility)
+    VALUES (2,0.5, 1500, 200, 0.06);
 
   	INSERT INTO public.rankingsdata(
-  	tau,	rank, rating, ratingdev, volatility)
-  	VALUES (3, 3, 1, 1, 1);
+  	UID, tau, rating, ratingdev, volatility)
+    VALUES (3,0.5, 1500, 200, 0.06);
 
   	INSERT INTO public.rankingsdata(
-  	tau,	rank, rating, ratingdev, volatility)
-  	VALUES (4, 4, 1, 1, 1);
+  	UID, tau, rating, ratingdev, volatility)
+    VALUES (4,0.5, 1500, 200, 0.06);
 
-
-    create view seeRanks AS (select username,rank() over(order by rating desc) as rank from users u1,rankingsdata rd1 where u1.UID=rd1.UID);
+    create view seeRanks AS (select username,rating as rankRating, rank() over(order by rating desc) as rank from users u1,rankingsdata rd1 where u1.UID=rd1.UID);
