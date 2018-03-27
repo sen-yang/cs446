@@ -32,7 +32,7 @@
         android:layout_above="@+id/recyclerView"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="18dp"
-        android:text="Blue Tooth"
+        android:text="Bluetooth"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="@dimen/leaderBoardTitleSize" />
