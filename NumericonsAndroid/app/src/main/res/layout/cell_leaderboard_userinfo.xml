@@ -1,27 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="horizontal"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:background="@color/transwhite"
+android:padding="10dp">
     <TextView
         android:id="@+id/userRank"
-        android:layout_width="0dp"
+        android:layout_width="35dp"
+        android:padding="@dimen/margin"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_marginLeft="@dimen/marginDouble"
+        android:textAlignment="center"
+        android:textSize="@dimen/dropTextSize"
+        android:text="1."/>
 
     <TextView
         android:id="@+id/userName"
-        android:layout_width="0dp"
+        android:layout_width="150dp"
+        android:padding="@dimen/margin"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/userRank"
+        android:layout_toRightOf="@+id/userRank"
+        android:layout_weight="1"
+        android:textSize="@dimen/dropTextSize"
+        android:text="Jennifer" />
     <TextView
         android:id="@+id/userScore"
-        android:layout_width="0dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-</LinearLayout>
+        android:padding="@dimen/margin"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/userName"
+        android:layout_toRightOf="@+id/userName"
+        android:textSize="@dimen/dropTextSize"
+        android:textAlignment="textEnd"
+        android:gravity="end"
+        android:layout_weight="1"
+        android:text="55" />
+
+</RelativeLayout>
 

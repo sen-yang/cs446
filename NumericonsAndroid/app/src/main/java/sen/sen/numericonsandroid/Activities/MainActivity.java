@@ -120,6 +120,10 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
     Intent intent = new Intent(this, BluetoothConnectionActivity.class);
     startActivity(intent);
   }
+  public void onLeaderBoardButtonPressed(View view){
+    Intent intent = new Intent(this, LeaderBoardActivity.class);
+    startActivity(intent);
+  }
 
   public void changeNameButtonPressed(View view){
     AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -157,9 +161,6 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
     linearLayoutOnline.setVisibility(View.INVISIBLE);
   }
 
-  public void onLeaderBoardButtonPressed(View view){
-
-  }
   @Override
   public void onConnected(){
     runOnUiThread(new Runnable(){

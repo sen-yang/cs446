@@ -3,6 +3,7 @@ package sen.sen.numericonsandroid.CustomUI;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,11 +82,17 @@ public class LeaderBoardRecyclerViewAdaptor extends RecyclerView.Adapter<Recycle
 
     public UserHolder(View itemView){
       super(itemView);
+      userName = itemView.findViewById(R.id.userName);
+      userScore = itemView.findViewById(R.id.userScore);
+      userRank = itemView.findViewById(R.id.userRank);
     }
 
     void bindData(int position){
       user = userList.get(position);
       //todo bind views based on user info
+      userName.setText(user.getUsername());
+      userRank.setText(Integer.toString(position+1));
+      //userScore.setText(user.get);
     }
   }
 

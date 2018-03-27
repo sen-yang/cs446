@@ -29,16 +29,25 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
 
   @Override
-  public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState){
-    super.onCreate(savedInstanceState, persistentState);
-    recyclerView = findViewById(R.id.leaderBoardRecyclerView);
-
+  public void onCreate(Bundle savedInstanceState){
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_leaderboard);
     userList = new ArrayList<>();
+    User u1 = new User("Jenn", Constants.CHARACTER_SPRITE.BIRD_1);
+    User u2 = new User("Sen", Constants.CHARACTER_SPRITE.BIRD_2);
+    User u3 = new User("Zell", Constants.CHARACTER_SPRITE.BIRD_3);
+    userList.add(u1);
+    userList.add(u2);
+    userList.add(u3);
+
     isLoading = false;
     isMoreDataAvailable = true;
 
     linearLayoutManager = new LinearLayoutManager(this);
+    recyclerView = findViewById(R.id.leaderBoardRecyclerView);
     recyclerView.setLayoutManager(linearLayoutManager);
+
+
     adaptor = new LeaderBoardRecyclerViewAdaptor(userList);
     recyclerView.setAdapter(adaptor);
     recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
@@ -61,6 +70,12 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
   public void loadMore() {
     setLoading(true);
+    User u1 = new User("coco", Constants.CHARACTER_SPRITE.BIRD_1);
+    User u2 = new User("momo", Constants.CHARACTER_SPRITE.BIRD_2);
+    User u3 = new User("haha", Constants.CHARACTER_SPRITE.BIRD_3);
+    userList.add(u1);
+    userList.add(u2);
+    userList.add(u3);
     //@TODO: Load more users from server... loadMore(userList.size(),Constants.INFINITE_LOAD_SIZE);
   }
 

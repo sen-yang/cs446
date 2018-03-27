@@ -17,10 +17,13 @@
     <dimen name="buttonUnselectedSize">48dip</dimen>
     <dimen name="buttonSelectedSize">55dip</dimen>
     <dimen name="playerInfoTextSize">10</dimen>
+    <dimen name="leaderBoardTitleSize">40sp</dimen>
 
     <dimen name="margin">8dp</dimen>
     <dimen name="marginDouble">16dp</dimen>
     <dimen name="marginTriple">24dp</dimen>
     <dimen name="marginQuad">32dp</dimen>
+    <dimen name="marginPenta">40dp</dimen>
+    <dimen name="marginhex">48dp</dimen>
     <dimen name="marginHalf">4dp</dimen>
 </resources>

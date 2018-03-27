@@ -5,7 +5,9 @@
     <color name="colorAccent">#d4bae4</color>
     <color name="black">#0e0e0e</color>
     <color name="white">#ffffff</color>
+    <color name="transwhite">#aaffffff</color>
     <color name="darkBrown">#5b483d</color>
+    <color name="lightBown">#afa294</color>
     <color name="selectedGreen">#559955</color>
     <color name="brightGreen">#569536</color>
 </resources>
