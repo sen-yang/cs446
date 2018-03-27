@@ -22,6 +22,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import sen.sen.numericonsandroid.Global.BaseActivity;
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Global.Helpers;
 import sen.sen.numericonsandroid.Global.SharedPreferencesHelper;
@@ -30,7 +31,7 @@ import sen.sen.numericonsandroid.Models.User;
 import sen.sen.numericonsandroid.Networking.WebsocketController;
 import sen.sen.numericonsandroid.R;
 
-public class SettingsActivity extends AppCompatActivity implements WebsocketController.WebsocketListener{
+public class SettingsActivity extends BaseActivity implements WebsocketController.WebsocketListener{
   public static final String TAG = "SettingsActivity";
   private LinearLayout settingsLayout;
   private List<ImageView> spriteSelectImageViewList;
@@ -65,9 +66,9 @@ public class SettingsActivity extends AppCompatActivity implements WebsocketCont
     soundToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
       @Override
       public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked){
-        if(isChecked){
-          SharedPreferencesHelper.setSoundEnabled(isChecked);
-        }
+
+        SharedPreferencesHelper.setSoundEnabled(isChecked);
+        setSoundEnable(isChecked);
       }
     });
   }
@@ -176,7 +177,7 @@ public class SettingsActivity extends AppCompatActivity implements WebsocketCont
     errorTextView.setText(errorMessage);
 
     if(Helpers.isNonEmptyString(errorMessage)){
-      if(alertDialog.isShowing()){
+      if((alertDialog != null) &&  alertDialog.isShowing()){
         alertDialog.setMessage(errorMessage);
       }
       errorTextView.setVisibility(View.VISIBLE);

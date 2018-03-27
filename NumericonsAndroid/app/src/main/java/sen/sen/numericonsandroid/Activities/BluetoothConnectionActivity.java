@@ -22,13 +22,14 @@ import java.util.List;
 import java.util.Set;
 
 import sen.sen.numericonsandroid.CustomUI.BluetoothDevicesRecyclerViewAdaptor;
+import sen.sen.numericonsandroid.Global.BaseActivity;
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Networking.BluetoothController;
 import sen.sen.numericonsandroid.Networking.GameController;
 import sen.sen.numericonsandroid.R;
 
-public class BluetoothConnectionActivity extends AppCompatActivity implements BluetoothDevicesRecyclerViewAdaptor.AdaptorDelegate, BluetoothController.BluetoothListener{
+public class BluetoothConnectionActivity extends BaseActivity implements BluetoothDevicesRecyclerViewAdaptor.AdaptorDelegate, BluetoothController.BluetoothListener{
   private static final int REQUEST_ENABLE_BT = 6969;
   private static final int REQUEST_ENABLE_LOCATION = 9696;
 

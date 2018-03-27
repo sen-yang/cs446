@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sen.sen.numericonsandroid.CustomUI.LeaderBoardRecyclerViewAdaptor;
+import sen.sen.numericonsandroid.Global.BaseActivity;
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.User;
@@ -22,7 +23,7 @@ import sen.sen.numericonsandroid.R;
  * Created by Jennifer on 2018-03-20.
  */
 
-public class LeaderBoardActivity extends AppCompatActivity implements WebsocketController.WebsocketListener{
+public class LeaderBoardActivity extends BaseActivity implements WebsocketController.WebsocketListener{
   private RecyclerView recyclerView;
   private LeaderBoardRecyclerViewAdaptor adaptor;
   private LinearLayoutManager linearLayoutManager;

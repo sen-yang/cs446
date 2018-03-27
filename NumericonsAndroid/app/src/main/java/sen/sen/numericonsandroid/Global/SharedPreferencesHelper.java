@@ -1,6 +1,8 @@
 package sen.sen.numericonsandroid.Global;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
@@ -82,6 +84,7 @@ public class SharedPreferencesHelper{
     SharedPreferences.Editor editor = sharedPreferences.edit();
     editor.putBoolean(IS_SOUND_ENABLED, isSoundEnabled);
     editor.apply();
+
   }
 
   public static String getUsername(){
