@@ -6,23 +6,83 @@ db = new DB();
 module.exports = class ConnectionController{
     constructor(){
     }
-
-updateImage(username, newimageLink, callback){
+/////////////////////
+updateCharSprite(username, newimageLink, callback, failcallback){
   var userData = {
   "username": username,
    "image" : newimageLink
     }
-    db.updateImage(userData)
+    db.UpdateCharacterSprite(userData)
     .then(data => {
-      callback(true);
+      this.selectUser(username,callback,failcallback);
     })
     .catch(error => {
+        console.log('ERROR:'+ error); // print the error;
+        failcallback(error);
+    })
+}
+
+selectUser(username,  callback, failcallback){
+  var userData = {
+  "username": username,
+    }
+    db.SelectUser(userData)
+    .then(data => {
+      callback(data);
+    })
+    .catch(error => {
+        console.log('ERROR:'+ error); // print the error;
+        failcallback(error);
+    })
+}
+
+
+SelectCharSprite(username, callback,failcallback){
+  var userData = {
+  "username": username,
+    }
+    db.SelectCharacterSprite(userData)
+    .then(data => {
+      callback(data);
+    })
+    .catch(error => {
+      failcallback(error);
         console.log('ERROR:'+ error); // print the error;
     })
 
 
 }
+///////////////////////////////////////
+ LoginViaSessionID(SessionID, callback){
+   var userData = {
+   "SessionID": SessionID
+     }
+     db.LoginViaSessionID(userData)
+     .then(data => {
+       callback(data);
+     })
+     .catch(error => {
+         callback(false);
+         console.log('ERROR:'+ error); // print the error;
+     })
+ }
 
+ UpdateSessionID(username, SessionID,callback,failcallback){
+   var userData = {
+   "username": username,
+   "SessionID": SessionID
+     }
+       db.UpdateSessionID(userData)
+       .then(data => {
+         this.selectUser(username, callback,failcallback);
+       })
+       .catch(error => {
+         failcallback(error);
+           console.log('ERROR:'+ error); // print the error;
+       })
+     }
+
+///////////////////////////////////////
  Login(username, hashpassword, callback, failcallback){
   var userData = {
   "username": username,
@@ -31,10 +91,7 @@ updateImage(username, newimageLink, callback){
     db.Login(userData)
     .then(data => {
       //emit ranking information back to client
-      if(JSON.stringify(data)=="[]")
-      callback(false);
-      else
-      callback(true);//this function must check if the data is set.
+      callback(data);//this function must check if the data is set.
     })
     .catch(error => {
         console.log('ERROR:'+ error); // print the error;
@@ -43,7 +100,7 @@ updateImage(username, newimageLink, callback){
   }
 
 
- selectRankings(init, offset, callback){
+ selectRankings(init, offset, callback, failcallback){
   var userData = {
   "start": init,
    "end" : offset
@@ -52,7 +109,6 @@ updateImage(username, newimageLink, callback){
       db.selectRankings(userData)
       .then(data => {
         //emit ranking information back to client
-        console.log("ranking" + data);
         callback(data);
       })
       .catch(error => {
@@ -64,7 +120,7 @@ updateImage(username, newimageLink, callback){
 
 
 
- Register(username, hashpassword, email, callback,errorcallback){
+ Register(username, hashpassword, email,callback, failcallback){
    var userData = {
    "username": username,
    "hashpassword" : hashpassword,
@@ -73,15 +129,16 @@ updateImage(username, newimageLink, callback){
 
 db.CheckUser(userData)
     .then(data => {
+      console.log(data);
       if(JSON.stringify(data)=="[]")
-      this.createUser(username, hashpassword, email,  callback,errorcallback);
+      this.createUser(username, hashpassword, email, callback, failcallback);
       else callback(false);
     })
     .catch(error => {
-    })
-    console.log('ERROR:'+ error); // print the error;
 
-  }
+    console.log('ERROR:'+ error); // print the error;
+  })
+}
 
 
  createUser(username, hashpassword, email, callback,errorcallback){
@@ -93,10 +150,9 @@ db.CheckUser(userData)
   db.registerUser(userData)
       .then(data => {
           console.log("user have been registered");
-          callback(true);//send data to user about a successful registration
+          this.Login(username, hashpassword,callback,errorcallback);//send data to user about a successful registration
           //emit data to user client
           //if successful, emit registration sucessfull
-
       })
       .catch(errorcallback, error => {
           console.log('ERROR:'+ error); // print the error;
@@ -107,7 +163,7 @@ db.CheckUser(userData)
 }
 
 
- calculateUpdateRanking(Winnername, Losername, callback){
+ calculateUpdateRanking(Winnername, Losername,callback, failcallback){
   //TODO
   db.getRating(Winnername, Losername)
         .then(data => {
@@ -142,7 +198,7 @@ db.CheckUser(userData)
 
 
 }
-  updateRating(winneruser, winnerScore, loseruser, loserScore, callback){
+  updateRating(winneruser, winnerScore, loseruser, loserScore, callback, failcallback){
     db.updateRatingAndRank(winneruser,winnerScore)
     .then(data => {
     console.log(winneruser + "\'s score is  updated")
@@ -196,12 +252,13 @@ db.CheckUser(userData)
  changePass(userData, callback, errorcallback){
   db.updateUser(userData)
   .then(data => {
-      callback(true);
       //emit data to user client
       //if successful, emit registration sucessfull
+      this.selectUser(userData.username, callback, errorcallback);
 
   })
   .catch(error => {
+    errorcallback(error);
       console.log('ERROR:', error); // print the error;
   })
 
