@@ -49,7 +49,7 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
 
   selectRankings(userData){
     //select ranking between number userData.start and userData.end
-    return  db.any('select username from users,rankingsdata where rank BETWEEN $1 and $2 order by Rank desc', [userData.start, userData.end]);
+    return  db.any('select * from users,rankingsdata where rank BETWEEN $1 and $2 order by Rank desc', [userData.start, userData.end]);
   }
 
   UpdateSessionID(userData){
@@ -57,12 +57,14 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
   }
 
   LoginViaSessionID(userData){
-    return  db.any('select username from users where SessionID=$1', [userData.SessionID])
+    return  db.any('select * from users where SessionID=$1', [userData.SessionID])
+  }
+  SelectUser(userData){
+    return  db.any('select * from users,rankingsdata where username=$1 and users.UID = rankingsdata.UID', [userData.username])
   }
 
-
   Login(userData){
-    return  db.any('select username from users where username=$1 AND hashpassword=$2', [userData.username, userData.hashpassword])
+    return  db.any('select * from users,rankingsdata where username=$1 AND hashpassword=$2', [userData.username, userData.hashpassword])
     }
   UpdateCharacterSprite(userData){
     return  db.any('update users set characterSprite=$2  where username=$1', [userData.username, userData.image])

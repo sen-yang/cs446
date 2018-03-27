@@ -7,22 +7,37 @@ module.exports = class ConnectionController{
     constructor(){
     }
 /////////////////////
-updateCharSprite(username, newimageLink, callback){
+updateCharSprite(username, newimageLink, callback, failcallback){
   var userData = {
   "username": username,
    "image" : newimageLink
     }
     db.UpdateCharacterSprite(userData)
     .then(data => {
-      callback(true);
+      this.selectUser(username,callback,failcallback);
     })
     .catch(error => {
         console.log('ERROR:'+ error); // print the error;
+        failcallback(error);
+    })
+}
+
+selectUser(username,  callback, failcallback){
+  var userData = {
+  "username": username,
+    }
+    db.SelectUser(userData)
+    .then(data => {
+      callback(data);
+    })
+    .catch(error => {
+        console.log('ERROR:'+ error); // print the error;
+        failcallback(error);
     })
 }
 
 
-SelectCharSprite(username, callback){
+SelectCharSprite(username, callback,failcallback){
   var userData = {
   "username": username,
     }
@@ -31,6 +46,7 @@ SelectCharSprite(username, callback){
       callback(data);
     })
     .catch(error => {
+      failcallback(error);
         console.log('ERROR:'+ error); // print the error;
     })
 
@@ -51,17 +67,17 @@ SelectCharSprite(username, callback){
      })
  }
 
- UpdateSessionID(username, SessionID,callback){
+ UpdateSessionID(username, SessionID,callback,failcallback){
    var userData = {
    "username": username,
    "SessionID": SessionID
      }
        db.UpdateSessionID(userData)
        .then(data => {
-         callback(true);
+         this.selectUser(username, callback,failcallback);
        })
        .catch(error => {
-         callback(false);
+         failcallback(error);
            console.log('ERROR:'+ error); // print the error;
        })
      }
@@ -84,7 +100,7 @@ SelectCharSprite(username, callback){
   }
 
 
- selectRankings(init, offset, callback){
+ selectRankings(init, offset, callback, failcallback){
   var userData = {
   "start": init,
    "end" : offset
@@ -104,7 +120,7 @@ SelectCharSprite(username, callback){
 
 
 
- Register(username, hashpassword, email, callback,errorcallback){
+ Register(username, hashpassword, email,callback, failcallback){
    var userData = {
    "username": username,
    "hashpassword" : hashpassword,
@@ -115,7 +131,7 @@ db.CheckUser(userData)
     .then(data => {
       console.log(data);
       if(JSON.stringify(data)=="[]")
-      this.createUser(username, hashpassword, email,  callback,errorcallback);
+      this.createUser(username, hashpassword, email, callback, failcallback);
       else callback(false);
     })
     .catch(error => {
@@ -147,7 +163,7 @@ db.CheckUser(userData)
 }
 
 
- calculateUpdateRanking(Winnername, Losername, callback){
+ calculateUpdateRanking(Winnername, Losername,callback, failcallback){
   //TODO
   db.getRating(Winnername, Losername)
         .then(data => {
@@ -182,7 +198,7 @@ db.CheckUser(userData)
 
 
 }
-  updateRating(winneruser, winnerScore, loseruser, loserScore, callback){
+  updateRating(winneruser, winnerScore, loseruser, loserScore, callback, failcallback){
     db.updateRatingAndRank(winneruser,winnerScore)
     .then(data => {
     console.log(winneruser + "\'s score is  updated")
@@ -236,12 +252,13 @@ db.CheckUser(userData)
  changePass(userData, callback, errorcallback){
   db.updateUser(userData)
   .then(data => {
-      callback(true);
       //emit data to user client
       //if successful, emit registration sucessfull
+      this.selectUser(userData.username, callback, errorcallback);
 
   })
   .catch(error => {
+    errorcallback(error);
       console.log('ERROR:', error); // print the error;
   })
 

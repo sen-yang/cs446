@@ -12,6 +12,7 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "elo-rank": "^1.0.3",
+    "glicko2": "^0.8.4",
     "pg-promise": "^8.2.2",
     "uuid": "^3.2.1",
     "ws": "^4.1.0"

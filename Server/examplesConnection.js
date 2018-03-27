@@ -55,15 +55,9 @@ function Login(){
 function Changepassword(){
   //hashing done at client side for both old password and new one
                             //username // oldpassword, new password
-  CC.checkANDChangePassword("612z2z","notreallyhashed2", "notreallyhashed",function(data){
-    if(data){
-      //successful changed password
-      console.log("YES!!");
-
-    }else{
-      //nope.
-      console.log("NOPE");
-    }
+  CC.checkANDChangePassword("user2","password", "notreallyhashed",function(data){
+    console.log(data);
+    
   },function(error){
     console.log(error);
   });
@@ -78,7 +72,7 @@ console.log(data);
 }
 /////////////////////////////////update rank
 function UpdateRanking(){
-CC.calculateUpdateRanking("user2","user3", function(data){
+CC.calculateUpdateRanking("user1","user3", function(data){
 
 });
 
@@ -101,9 +95,10 @@ function LoginSessionID(){
 //
 // }
 //SelectImage();
-//register();
+//Register();
 //SelectRanks();
-InsertSessionID();
-LoginSessionID();
-
+// InsertSessionID();
+// LoginSessionID();
+//UpdateRanking();
+Changepassword();
 //////////////////////////////////////////////////////////
