@@ -160,14 +160,13 @@ function loginUser(message, client){
       let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.CONFIRMATION);
       websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
       websocketMessage.isConfirmed = false;
-      websocketMessage.errorMessage = "Bad session id";
+      websocketMessage.errorMessage = "Invalid sessionID";
       client.sendMessage(JSON.stringify(websocketMessage));
     });
   }
   else if(Helpers.isNonEmptyString(message.username) && Helpers.isNonEmptyString(message.password)){
     //sign in with username and password
     dbController.Login(message.username, message.password, (user)=>{
-      console.log("asdf", user);
       client.user = user;
       let newSessionID = genUUID();
       dbController.UpdateSessionID(user.username, newSessionID, (user)=>{
@@ -236,6 +235,7 @@ function updateUser(message, client){
         websocketMessage.confirmationType = Constants.CONFIRMATION_TYPE.USER_CONFIRMATION;
         websocketMessage.isConfirmed = true;
         websocketMessage.user = client.user;
+        console.log("asdf", user);
         websocketMessage.sessionID = user.sessionID;
         client.sendMessage(JSON.stringify(websocketMessage));
       }, (error) =>{
