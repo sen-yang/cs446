@@ -49,7 +49,7 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
 
   selectRankings(userData){
     //select ranking between number userData.start and userData.end
-    return  db.any('select * from seeranks where rank BETWEEN $1 and $2 order by Rank desc LIMIT 10', [userData.start, userData.end]);
+    return  db.any('select * from seeranks where rank BETWEEN $1 and $2 order by Rank asc LIMIT 20', [userData.start, userData.end]);
   }
 
   UpdateSessionID(userData){

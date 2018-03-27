@@ -9,7 +9,7 @@ android:background="@color/transwhite"
 android:padding="10dp">
 <TextView
     android:id="@+id/deviceNameTextView"
-    android:layout_width="100dp"
+    android:layout_width="110dp"
     android:padding="@dimen/margin"
     android:layout_height="30dp"
     android:layout_marginLeft="@dimen/margin"
@@ -19,7 +19,7 @@ android:padding="10dp">
 
 <TextView
     android:id="@+id/deviceAddressTextView"
-    android:layout_width="150dp"
+    android:layout_width="120dp"
     android:padding="@dimen/margin"
     android:layout_height="30dp"
     android:layout_alignParentTop="true"
@@ -30,7 +30,7 @@ android:padding="10dp">
 
 <Button
     android:id="@+id/inviteButton"
-    android:layout_width="70dp"
+    android:layout_width="90dp"
     android:layout_height="30dp"
     android:padding="@dimen/margin"
     android:layout_alignParentTop="true"
