@@ -2,10 +2,10 @@ const Rank = require('./Rank');
 const Constants = require('../Constants');
 
 module.exports = class User{
-  constructor(username, isTemporary){
+  constructor(username, isTemporary = false){
     this.UID = null;
     this.username = username;
-    this.isTemporary = false;
+    this.isTemporary = isTemporary;
     this.rank = new Rank();
     this.characterSprite = Constants.CHARACTER_SPRITE.BIRD_1;
   }
