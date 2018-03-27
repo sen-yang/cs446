@@ -209,6 +209,7 @@ db.CheckUser(userData)
 
       var winner;
       var loser;
+
     if(data[0].username==winner){
       winner = ranking.makePlayer(data[0].rating,data[0].ratingdev,data[0].volatility);
       loser = ranking.makePlayer(data[1].rating,data[1].ratingdev,data[1].volatility);
@@ -216,20 +217,25 @@ db.CheckUser(userData)
       loser = ranking.makePlayer(data[0].rating,data[0].ratingdev,data[0].volatility);
       winner = ranking.makePlayer(data[1].rating,data[1].ratingdev,data[1].volatility);
     }
-     matches.push[winner,loser, 1];
+
+     matches.push([winner,loser, 1]);
+
      ranking.updateRatings(matches);
-     userData1 ={
+
+     var userData1 ={
        "username" : winneruser,
        "rating" : winner.getRating(),
        "ratingdev": winner.getRd(),
        "volatility": winner.getVol()
      }
-     userData2 ={
+     var userData2 ={
        "username" : loseruser,
        "rating" : loser.getRating(),
        "ratingdev": loser.getRd(),
        "volatility": loser.getVol()
      }
+     console.log(userData1);
+          console.log(userData2);
      db.updateRating(userData1)
      .then(data => {
      console.log(winneruser + "\'s score is  updated")
@@ -246,7 +252,11 @@ db.CheckUser(userData)
        console.log('ERROR:'+ error); // print the error;
        failcallback(error);
    });
+callback(true);
  })
+ .catch(error => {
+     console.log('ERROR:'+ error); // print the error;
+ });
 }
 
 
