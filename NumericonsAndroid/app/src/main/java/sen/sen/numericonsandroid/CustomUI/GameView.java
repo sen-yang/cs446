@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -91,7 +92,13 @@ public class GameView extends RelativeLayout{
     addView(birdImageView, layoutParams);
 
     birdImageView.setOnTouchListener(basket_onTouchListener());
-    birdModel = new Basket(0, 0);
+    birdImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener(){
+      @Override
+      public void onGlobalLayout(){
+        birdImageView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+        birdModel = new Basket(birdImageView.getLeft(), birdImageView.getTop());
+      }
+    });
     droppedItemList = new ArrayList<>();
     textSize = getResources().getDimension(R.dimen.dropTextSize);
 
@@ -152,7 +159,6 @@ public class GameView extends RelativeLayout{
   }
 
   public void addDroppedItem(DroppedItem item){
-    Log.d("Add item", "addDroppedItem: " + item.getxPosition() + ", " + item.getyPosition());
     item.setAlive(true);
     droppedItemList.add(item);
   }
