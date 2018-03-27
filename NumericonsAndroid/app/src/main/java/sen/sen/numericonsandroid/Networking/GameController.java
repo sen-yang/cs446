@@ -41,7 +41,7 @@ public class GameController implements Serializable{
         public void run(){
           localGameManager.startGame(gameListener);
         }
-      }, Constants.GAME_START_DELAY);
+      }, Constants.GAME_READY_TIME);
     }
   }
 

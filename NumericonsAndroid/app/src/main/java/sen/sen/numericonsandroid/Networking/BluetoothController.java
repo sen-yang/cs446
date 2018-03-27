@@ -16,7 +16,6 @@ import java.util.UUID;
 
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Global.SharedPreferencesHelper;
-import sen.sen.numericonsandroid.Models.DroppedItem;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.PlayerAction;
 import sen.sen.numericonsandroid.Models.User;
@@ -321,7 +320,7 @@ public class BluetoothController{
       public void run(){
         localGameManager.startGame(localGameManagerListener);
       }
-    }, Constants.GAME_START_DELAY);
+    }, Constants.GAME_READY_TIME);
   }
 
   private GameListener localGameManagerListener = new GameListener(){
