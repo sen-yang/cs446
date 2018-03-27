@@ -1,6 +1,19 @@
 const DB = require('./Database/DatabaseConnector');
 const eloRank = require('elo-rank');
 var elo = new eloRank();
+var settings = {
+  // tau : "Reasonable choices are between 0.3 and 1.2, though the system should
+  //      be tested to decide which value results in greatest predictive accuracy."
+  tau : 0.5,
+  // rating : default rating
+  rating : 1500,
+  //rd : Default rating deviation
+  //     small number = good confidence on the rating accuracy
+  ratingdev : 200,
+  //vol : Default volatility (expected fluctation on the player rating)
+  volatility : 0.06
+};
+
 db = new DB();
 
 module.exports = class ConnectionController{
@@ -124,7 +137,7 @@ SelectCharSprite(username, callback,failcallback){
    var userData = {
    "username": username,
    "hashpassword" : hashpassword,
-   "email" : email
+   "email" : email,
      }
 
 db.CheckUser(userData)
@@ -146,11 +159,14 @@ db.CheckUser(userData)
    "username": username,
    "hashpassword" : hashpassword,
    "email" : email
+   "charactersprite": Constants.CHARACTER_SPRITE.BIRD_1
      }
   db.registerUser(userData)
       .then(data => {
           console.log("user have been registered");
-          this.Login(username, hashpassword,callback,errorcallback);//send data to user about a successful registration
+          console.log(username);
+          this.selectUser(username,callback,errorcallback);//send data to user about a successful registration
+
           //emit data to user client
           //if successful, emit registration sucessfull
       })

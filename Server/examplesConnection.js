@@ -20,7 +20,7 @@ function SelectImage(){
 ////////////Register////////////////////
 function Register(){//username, password, //email
   //hashing should be done on the client side.
- CC.Register("61zz72z2z","notreallyhashed","emailtest", function(data){
+ CC.Register("z7546462z","notreallyhashed","emailtest", function(data){
    if(data){
      console.log(data)
      //return registration successful
@@ -57,7 +57,7 @@ function Changepassword(){
                             //username // oldpassword, new password
   CC.checkANDChangePassword("user2","password", "notreallyhashed",function(data){
     console.log(data);
-    
+
   },function(error){
     console.log(error);
   });
@@ -95,10 +95,10 @@ function LoginSessionID(){
 //
 // }
 //SelectImage();
-//Register();
+Register();
 //SelectRanks();
 // InsertSessionID();
 // LoginSessionID();
+//Changepassword();
 //UpdateRanking();
-Changepassword();
 //////////////////////////////////////////////////////////

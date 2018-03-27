@@ -1,53 +1,58 @@
-CREATE TABLE public.users
-(
-    UID serial UNIQUE NOT NULL,
-    username character varying(12) NOT NULL,
-    hashpassword character varying(16) NOT NULL,
-    email character varying(50) NOT NULL,
-    characterSprite character varying(60),
-    SessionID character varying(60) UNIQUE,
-    PRIMARY KEY (UID, username)
-);
+Drop table rankingsdata;
+Drop table users;
 
-CREATE TABLE public.rankingsdata
-(
-    UID serial UNIQUE,
-    rank integer,
-    rating double precision,
-    ratingdev double precision,
-    volatility double precision,
-    PRIMARY KEY(UID),
-	constraint users_Rank
-	foreign key (UID)
-	REFERENCES public.users (UID)
-);
 
-INSERT INTO public.users(
-  username, hashpassword, email, characterSprite)
-	VALUES ( 'user1', 'password', '', 'characterSprite1');
- INSERT INTO public.users(
- username, hashpassword, email, characterSprite)
-	VALUES ( 'user2', 'password', '', 'characterSprite2');
-	INSERT INTO public.users(
- username, hashpassword, email, characterSprite)
-	VALUES ( 'user3', 'password', '', 'characterSprite3');
+  CREATE TABLE public.users
+  (
+      UID serial UNIQUE NOT NULL,
+      username character varying(12) NOT NULL,
+      hashpassword character varying(16) NOT NULL,
+      email character varying(50) NOT NULL,
+      characterSprite character varying(60),
+      SessionID character varying(60) UNIQUE,
+      PRIMARY KEY (UID, username)
+  );
+
+  CREATE TABLE public.rankingsdata
+  (
+      UID serial UNIQUE,
+      rank integer,
+      tau double precision,
+      rating double precision,
+      ratingdev double precision,
+      volatility double precision,
+      PRIMARY KEY(UID),
+  	constraint users_Rank
+  	foreign key (UID)
+  	REFERENCES public.users (UID)
+  );
+
   INSERT INTO public.users(
-  username, hashpassword, email, characterSprite)
-  VALUES ( 'user4', 'password', '', 'characterSprite3');
+    username, hashpassword, email, characterSprite)
+  	VALUES ( 'user1', 'password', '', 'characterSprite1');
+   INSERT INTO public.users(
+   username, hashpassword, email, characterSprite)
+  	VALUES ( 'user2', 'password', '', 'characterSprite2');
+  	INSERT INTO public.users(
+   username, hashpassword, email, characterSprite)
+  	VALUES ( 'user3', 'password', '', 'characterSprite3');
+    INSERT INTO public.users(
+    username, hashpassword, email, characterSprite)
+    VALUES ( 'user4', 'password', '', 'characterSprite3');
 
 
-  INSERT INTO public.rankingsdata(
-	uid, rank, rating, ratingdev, volatility)
-	VALUES (1, 1, 1, 1, 1);
+    INSERT INTO public.rankingsdata(
+  	tau, rank, rating, ratingdev, volatility)
+  	VALUES (1, 1, 1, 1, 1);
 
-	INSERT INTO public.rankingsdata(
-	uid, rank, rating, ratingdev, volatility)
-	VALUES (2, 2, 1, 1, 1);
+  	INSERT INTO public.rankingsdata(
+  	tau,	rank, rating, ratingdev, volatility)
+  	VALUES (2, 2, 1, 1, 1);
 
-	INSERT INTO public.rankingsdata(
-	uid, rank, rating, ratingdev, volatility)
-	VALUES (3, 3, 1, 1, 1);
+  	INSERT INTO public.rankingsdata(
+  	tau,	rank, rating, ratingdev, volatility)
+  	VALUES (3, 3, 1, 1, 1);
 
-	INSERT INTO public.rankingsdata(
-	uid, rank, rating, ratingdev, volatility)
-	VALUES (4, 4, 1, 1, 1);
+  	INSERT INTO public.rankingsdata(
+  	tau,	rank, rating, ratingdev, volatility)
+  	VALUES (4, 4, 1, 1, 1);
