@@ -66,16 +66,20 @@ SelectCharSprite(username, callback,failcallback){
 
 }
 ///////////////////////////////////////
- LoginViaSessionID(SessionID, callback){
+ LoginViaSessionID(SessionID, callback, failcallback){
    var userData = {
    "SessionID": SessionID
      }
      db.LoginViaSessionID(userData)
      .then(data => {
+       if(JSON.stringify(data)!="[]")
        callback(data);
+       else {
+         failcallback("Please Login again");
+       }
      })
      .catch(error => {
-         callback(false);
+         failcallback(error);
          console.log('ERROR:'+ error); // print the error;
      })
  }
@@ -104,7 +108,11 @@ SelectCharSprite(username, callback,failcallback){
     db.Login(userData)
     .then(data => {
       //emit ranking information back to client
+      if(JSON.stringify(data)!="[]")
       callback(data);//this function must check if the data is set.
+      else {
+        failcallback("Username or password is wrong, please try again");
+      }
     })
     .catch(error => {
         console.log('ERROR:'+ error); // print the error;
