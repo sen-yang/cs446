@@ -103,7 +103,8 @@
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:autoSizeTextType="uniform"/>
+                app:autoSizeTextType="uniform"
+                android:lines="1"/>
         </RelativeLayout>
 
         <LinearLayout

@@ -17,8 +17,8 @@ public class Constants{
   //game manager constants
   public static final int TICK_TIME = 1000 / 5; // (1s in ms) / fps
   public static final long GAME_READY_TIME = 5000;
-  public static final int MIN_TARGET = -99;
-  public static final int MAX_TARGET = 99;
+  public static final int MIN_TARGET = -999;
+  public static final int MAX_TARGET = 999;
   public static final int MIN_DROP = -9;
   public static final int MAX_DROP = 9;
   public static final float MIN_DROP_SPEED = 0.01f;
@@ -28,7 +28,7 @@ public class Constants{
   public static long FRAME_TIME = 1000 / 60; // (1s in ms) / fps
 
   public static long GLOBAL_ITEM_EFFECT_DURATION = 5000;
-  public static float EFFECT_ITEM_DROP_CHANCE = 0.05f;
+  public static float EFFECT_ITEM_DROP_CHANCE = 0.04f;
 
   public enum MESSAGE_TYPE{
     PING,
