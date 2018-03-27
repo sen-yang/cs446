@@ -181,10 +181,10 @@ public class LocalGameManager implements Serializable{
       dropSpeed *= 2;
     }
     if(Helpers.randomFloat(this.seed) < Constants.EFFECT_ITEM_DROP_CHANCE){
-      return new DroppedItem(Helpers.randomIntInRange(Constants.MIN_DROP, Constants.MAX_DROP, this.seed), Helpers.randomFloat(this.seed), dropSpeed);
+      return new DroppedItem(Constants.ITEM_TYPE.SPEED_INCREASE, Helpers.randomFloat(this.seed), dropSpeed);
     }
     else{
-      return new DroppedItem(Constants.ITEM_TYPE.SPEED_INCREASE, Helpers.randomFloat(this.seed), dropSpeed);
+      return new DroppedItem(Helpers.randomIntInRange(Constants.MIN_DROP, Constants.MAX_DROP, this.seed), Helpers.randomFloat(this.seed), dropSpeed);
     }
   }
 
