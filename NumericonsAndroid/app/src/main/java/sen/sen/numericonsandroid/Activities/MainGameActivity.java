@@ -103,8 +103,7 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
     droppedItemList = new ArrayList<>();
     gameController.addGameListener(this);
     updateFromServer(gameController.getGameState());
-    //gameView.setCharacterSprite(SharedPreferencesHelper.getSavedUser().getCharacterSprite());
-    gameView.setCharacterSprite(Constants.CHARACTER_SPRITE.BIRD_3);
+    gameView.setCharacterSprite(SharedPreferencesHelper.getSavedUser().getCharacterSprite());
   }
 
   @Override
@@ -269,6 +268,7 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
   };
 
   private void playerActionPerformed(Constants.PLAYER_ACTION_TYPE operationMode, int value, ImageView selectedButton){
+    playSoundEffect(SharedPreferencesHelper.getSavedUser().getCharacterSprite().getSoundEffectResId());
     if(selectedButton != null){
       int darkBrown = getResources().getColor(R.color.darkBrown);
       addButton.setBackgroundColor(darkBrown);

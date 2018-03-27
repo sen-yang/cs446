@@ -25,7 +25,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Leader Board"
+        android:text="@string/leaderboards"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="@dimen/leaderBoardTitleSize"

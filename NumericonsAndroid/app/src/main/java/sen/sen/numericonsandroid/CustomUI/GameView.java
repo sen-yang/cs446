@@ -20,6 +20,7 @@ import android.os.Handler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -172,7 +173,10 @@ public class GameView extends RelativeLayout{
     canvas.getClipBounds(itemClipBounds);
     itemClipBounds.right -= itemWidth;
 
-    for(DroppedItem item : droppedItemList){
+    Iterator<DroppedItem> iterator = droppedItemList.iterator();
+    while (iterator.hasNext()) {
+      DroppedItem item = iterator.next(); // must be called before you can call i.remove()
+      // Do something
       if(item.isAlive()){
         item.fall();
         int left = (int) ratioToPixel_Width(item.getxPosition());
@@ -186,6 +190,9 @@ public class GameView extends RelativeLayout{
         Drawable itemDrawable = numberDrawableMap.get(item.getNumber());
         itemDrawable.setBounds(itemRect);
         itemDrawable.draw(canvas);
+      }
+      else{
+        iterator.remove();
       }
     }
   }

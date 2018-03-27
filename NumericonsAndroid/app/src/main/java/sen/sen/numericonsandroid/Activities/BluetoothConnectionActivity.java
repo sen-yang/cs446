@@ -24,6 +24,7 @@ import java.util.Set;
 import sen.sen.numericonsandroid.CustomUI.BluetoothDevicesRecyclerViewAdaptor;
 import sen.sen.numericonsandroid.Global.BaseActivity;
 import sen.sen.numericonsandroid.Global.Constants;
+import sen.sen.numericonsandroid.Global.SharedPreferencesHelper;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Networking.BluetoothController;
 import sen.sen.numericonsandroid.Networking.GameController;
@@ -171,6 +172,7 @@ public class BluetoothConnectionActivity extends BaseActivity implements Bluetoo
 
   @Override
   public void inviteDeviceAtPosition(int position){
+    playSoundEffect(R.raw.peck);
     BluetoothController.getInstance().inviteDeviceToGame(bluetoothDeviceList.get(position));
   }
 
