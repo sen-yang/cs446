@@ -40,7 +40,7 @@ public class PlayerListInfoLayout extends LinearLayout{
   public void setPlayerList(List<Player> playerList){
     for(int i = 0; i < playerList.size(); i++){
       Player player = playerList.get(i);
-`      if(!player.getUsername().equals(SharedPreferencesHelper.getUsername())){
+      if(!player.getUsername().equals(SharedPreferencesHelper.getUsername())){
         this.playerList.add(player);
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
         layoutParams.setMargins(0, 0, 20, 0);
