@@ -5,7 +5,7 @@ const CC = new ConnectionController();
 
 
 //Examples for using ConnectionController
-CC.updateRating("user6", "user7")
+//CC.updateRating("user6", "user7")
 
 function UpdateImage(){
   CC.updateCharSprite("user1","google.com",function(data){

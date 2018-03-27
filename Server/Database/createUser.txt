@@ -56,3 +56,6 @@ Drop table users;
   	INSERT INTO public.rankingsdata(
   	tau,	rank, rating, ratingdev, volatility)
   	VALUES (4, 4, 1, 1, 1);
+
+
+    create view seeRanks AS (select username,rank() over(order by rating desc) as rank from users u1,rankingsdata rd1 where u1.UID=rd1.UID);
