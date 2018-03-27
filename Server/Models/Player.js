@@ -25,6 +25,7 @@ module.exports = class Player{
       case Constants.PLAYER_ACTION_TYPE.USE_ITEM:
         if(this.itemInInventory != null){
           itemUsedCallback(this.itemInInventory.itemType);
+          this.itemInInventory = null;
         }
         break;
       case Constants.PLAYER_ACTION_TYPE.GET_ITEM:
