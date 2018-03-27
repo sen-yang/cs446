@@ -124,11 +124,6 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
     multiPlayerModePlayerInfoView.setGravity(Gravity.END);
     multiPlayerModePlayerInfoView.setLayoutParams(linearLayoutParams);
 
-    //@TODO: Remove this later, just for testing
-//    if(gameController.getGameState().getPlayerList().size() == 2) {
-//      gameController.getGameState().getPlayerList().get(0).setCharacterSprite(Constants.CHARACTER_SPRITE.BIRD_1);
-//      gameController.getGameState().getPlayerList().get(1).setCharacterSprite(Constants.CHARACTER_SPRITE.BIRD_1);
-//    }
     multiPlayerModePlayerInfoView.setPlayerList(gameController.getGameState().getPlayerList());
     wrapperLayout.addView(multiPlayerModePlayerInfoView);
     gameView.addView(wrapperLayout);
