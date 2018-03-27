@@ -45,6 +45,7 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
   TextView targetNumberTextView;
   TextView totalNumberTextView;
   ProgressBar countDownTimer;
+  ImageView currentNumberImageView;
 
   //Buttons
   ImageView addButton;
@@ -75,6 +76,8 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
     gameView = findViewById(R.id.gameView);
     gameView.setDelegate(this);
 
+
+    setCurrentNumberImageView();
 
     //IF game type is multiPlayer, append multiPlayer layoutView
     //@TODO: PUT IF AND setPlayerList() BACK LATER! JUST FOR TESTING
@@ -274,5 +277,22 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
       selectedButton.setBackgroundColor(getResources().getColor(R.color.brightGreen));
     }
     gameController.sendPlayerAction(new PlayerAction(operationMode, value));
+  }
+
+  private void setCurrentNumberImageView(){
+    int rid = R.drawable.bird1;
+    switch(SharedPreferencesHelper.getSavedUser().getCharacterSprite()) {
+      case BIRD_1:
+        rid = R.drawable.bird1;
+        break;
+      case BIRD_2:
+        rid = R.drawable.bird2;
+        break;
+      case BIRD_3:
+        rid = R.drawable.bird3;
+        break;
+    }
+    currentNumberImageView = findViewById(R.id.currentNumberImageView);
+    currentNumberImageView.setImageResource(rid);
   }
 }
