@@ -34,6 +34,12 @@
         </activity>
         <activity android:name=".Activities.LeaderBoardActivity">
         </activity>
+
+        <service
+            android:name=".Services.AudioService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>
