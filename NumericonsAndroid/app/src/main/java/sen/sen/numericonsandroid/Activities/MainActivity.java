@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
     linearLayoutLocal.setVisibility(View.VISIBLE);
     linearLayoutOnline.setVisibility(View.INVISIBLE);
   }
-  
+
   @Override
   public void onConnected(){
     runOnUiThread(new Runnable(){

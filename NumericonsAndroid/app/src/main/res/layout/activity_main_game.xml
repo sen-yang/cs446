@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clipChildren="false"
     tools:context="sen.sen.numericonsandroid.Activities.MainGameActivity">
 
@@ -104,10 +105,11 @@
                 android:layout_marginRight="@dimen/marginTriple"
                 android:layout_toRightOf="@+id/currentNumberImageView"
                 android:gravity="right|center_vertical"
-                android:text="-123"
+                android:text="-123456"
                 android:textColor="@color/white"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:autoSizeTextType="uniform"/>
         </RelativeLayout>
 
         <LinearLayout
