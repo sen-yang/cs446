@@ -40,12 +40,12 @@ public class PlayerListInfoLayout extends LinearLayout{
   public void setPlayerList(List<Player> playerList){
     for(int i = 0; i < playerList.size(); i++){
       Player player = playerList.get(i);
-      if(!player.getUsername().equals(SharedPreferencesHelper.getUsername())) {
-        //TODO CHECK IF i is out of bound!
+`      if(!player.getUsername().equals(SharedPreferencesHelper.getUsername())){
         this.playerList.add(player);
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-        layoutParams.setMargins(0,0,20,0);
+        layoutParams.setMargins(0, 0, 20, 0);
         PlayerInfoView playerInfoView = new PlayerInfoView(getContext());
+        playerInfoView.setTag(i);
         addView(playerInfoView, layoutParams);
         playerInfoView.setPlayer(playerList.get(i));
         playerInfoViewList.add(playerInfoView);
@@ -53,15 +53,12 @@ public class PlayerListInfoLayout extends LinearLayout{
     }
   }
 
-  private void updateView(){
-    for(int i = 0; i < playerList.size(); i++){
-      //TODO CHECK IF i is out of bound!
-      if(i < playerInfoViewList.size()) {
-        if(playerInfoViewList.get(i) != null){
-          //If this playerInfoView already exist, update it
-          PlayerInfoView playerInfoView = playerInfoViewList.get(i);
-          playerInfoView.update(playerList.get(i));
-        }
+  public void updateView(List<Player> playerList){
+    for(PlayerInfoView playerInfoView : playerInfoViewList){
+      Player player = playerList.get((int)playerInfoView.getTag());
+
+      if(player != null){
+        playerInfoView.update(player);
       }
     }
   }

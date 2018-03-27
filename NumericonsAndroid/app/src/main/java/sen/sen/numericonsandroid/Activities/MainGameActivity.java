@@ -51,6 +51,7 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
   ImageView subButton;
   ImageView multiplyButton;
   ImageView divideButton;
+  PlayerListInfoLayout multiPlayerModePlayerInfoView;
 
   //Private GameState Items
   List<DroppedItem> droppedItemList;
@@ -119,7 +120,7 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
     wrapperLayout.setLayoutParams(layoutParams);
 
-    PlayerListInfoLayout multiPlayerModePlayerInfoView = new PlayerListInfoLayout(wrapperLayout.getContext());
+    multiPlayerModePlayerInfoView = new PlayerListInfoLayout(wrapperLayout.getContext());
     LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
     multiPlayerModePlayerInfoView.setGravity(Gravity.END);
     multiPlayerModePlayerInfoView.setLayoutParams(linearLayoutParams);
@@ -151,7 +152,7 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
     totalNumberTextView.setText(Integer.toString(currentPlayer.getCurrentNumber()));
     //TOTAL_GAME_TIME
     countDownTimer.setProgress((int)((((float) gameState.getTimeRemaining()) / TOTAL_GAME_TIME) * 100));
-
+    multiPlayerModePlayerInfoView.updateView(gameState.getPlayerList());
     //todo show other players
     if(gameStage == Constants.GAME_STAGE.FINISHED){
       AlertDialog.Builder builder;
