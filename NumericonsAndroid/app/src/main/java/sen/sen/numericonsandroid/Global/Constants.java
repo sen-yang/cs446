@@ -1,8 +1,8 @@
 package sen.sen.numericonsandroid.Global;
 
 public class Constants{
-//  public static final String SERVER_URL = "ws://sen.ddns.net";
-  public static final String SERVER_URL = "ws://192.168.1.30:6969";
+  public static final String SERVER_URL = "ws://sen.ddns.net";
+//  public static final String SERVER_URL = "ws://192.168.1.30:6969";
 
   public static final String GAME_CONTROLLER = "GAME_CONTROLLER";
 
