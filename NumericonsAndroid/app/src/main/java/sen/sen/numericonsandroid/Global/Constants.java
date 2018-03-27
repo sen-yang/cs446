@@ -23,6 +23,7 @@ public class Constants{
   public static final float MAX_DROP_SPEED = 0.05f;
   public static final float DROP_RATE = 225;
   public static final long GAME_START_DELAY = 5000;
+  public static long FRAME_TIME = 1000 / 60; // (1s in ms) / fps
 
   public enum MESSAGE_TYPE{
     PING,
