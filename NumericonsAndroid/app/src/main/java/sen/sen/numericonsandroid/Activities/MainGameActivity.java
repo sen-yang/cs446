@@ -25,6 +25,7 @@ import java.util.Random;
 import sen.sen.numericonsandroid.CustomUI.GameView;
 import sen.sen.numericonsandroid.CustomUI.PlayerListInfoLayout;
 import sen.sen.numericonsandroid.CustomUI.PowerUpListView;
+import sen.sen.numericonsandroid.Global.BaseActivity;
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Global.SharedPreferencesHelper;
 import sen.sen.numericonsandroid.Models.DroppedItem;
@@ -38,7 +39,7 @@ import sen.sen.numericonsandroid.R;
 import static sen.sen.numericonsandroid.Global.Constants.PLAYER_ACTION_TYPE.GET_NUMBER;
 import static sen.sen.numericonsandroid.Global.Constants.TOTAL_GAME_TIME;
 
-public class MainGameActivity extends AppCompatActivity implements GameListener, GameView.GameViewDelegate{
+public class MainGameActivity extends BaseActivity implements GameListener, GameView.GameViewDelegate{
   //View widgets
   GameView gameView;
   TextView targetNumberTextView;

@@ -233,7 +233,7 @@ public class WebsocketController{
   }
 
   private void handleMessage(String message){
-    Log.d(TAG, "Message recieved: " + message);
+    Log.d(TAG, "Message received: " + message);
     WebsocketMessage websocketMessage = gson.fromJson(message, WebsocketMessage.class);
 
     switch(websocketMessage.getType()){

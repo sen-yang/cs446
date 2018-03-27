@@ -82,7 +82,7 @@ function handleMessage(message, client){
       registerUser(message, client);
       break;
     case Constants.MESSAGE_TYPE.UPDATE_USER:
-      registerUser(message, client);
+      updateUser(message, client);
       break;
     case Constants.MESSAGE_TYPE.CREATE_USER:
       Register(message, client);
@@ -116,9 +116,11 @@ function registerUser(message, client){
     dbController.Register(message.username, message.password, "", (user) =>{
       client.user = user;
       websocketMessage.user = user;
+      websocketMessage.isConfirmed = true;
       client.sendMessage(JSON.stringify(websocketMessage));
     }, (error) =>{
-      //todo check if username exists
+      websocketMessage.errorMessage = error;
+      client.sendMessage(JSON.stringify(websocketMessage));
     });
     client.user = new User(message.username);
     websocketMessage.user = client.user;

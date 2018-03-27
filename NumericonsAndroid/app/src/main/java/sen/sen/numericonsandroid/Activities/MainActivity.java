@@ -4,8 +4,12 @@ import android.animation.Animator;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.media.AudioManager;
+import android.os.IBinder;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +25,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import sen.sen.numericonsandroid.Global.BaseActivity;
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Models.GameState;
 import sen.sen.numericonsandroid.Models.User;
@@ -28,8 +33,9 @@ import sen.sen.numericonsandroid.Networking.GameController;
 import sen.sen.numericonsandroid.Networking.LocalGameManager;
 import sen.sen.numericonsandroid.Networking.WebsocketController;
 import sen.sen.numericonsandroid.R;
+import sen.sen.numericonsandroid.Services.AudioService;
 
-public class MainActivity extends AppCompatActivity implements WebsocketController.WebsocketListener{
+public class MainActivity extends BaseActivity implements WebsocketController.WebsocketListener{
   private ProgressBar progressBar;
   private AlertDialog alertDialog;
 
@@ -82,11 +88,13 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
 
   public void onRankedGameButtonPressed(View view){
     WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.RANKED);
+    playSoundEffect(R.raw.peck);
     showSearching();
   }
 
   public void onGroupGameButtonPressed(View view){
     WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.GROUP_GAME);
+    playSoundEffect(R.raw.peck);
     showSearching();
   }
 
@@ -100,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
     if((alertDialog != null) && (alertDialog.isShowing())){
       alertDialog.dismiss();
     }
+    playSoundEffect(R.raw.peck);
   }
 
   private void showSearching(){
@@ -117,38 +126,45 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
 
   private void cancelSearch(){
     WebsocketController.getInstance().lookForMatch(Constants.GAME_TYPE.CANCEL);
+    playSoundEffect(R.raw.peck);
   }
 
   public void onBluetoothButtonPressed(View view){
     Intent intent = new Intent(this, BluetoothConnectionActivity.class);
     startActivity(intent);
+    playSoundEffect(R.raw.peck);
   }
   public void onLeaderBoardButtonPressed(View view){
     Intent intent = new Intent(this, LeaderBoardActivity.class);
     startActivity(intent);
+    playSoundEffect(R.raw.peck);
   }
 
   public void settingsButtonPressed(View view){
     Intent intent = new Intent(this, SettingsActivity.class);
     startActivity(intent);
+    playSoundEffect(R.raw.peck);
   }
 
   public void onMainActivityButtonPressed(View view){
     linearLayoutLocal.setVisibility(View.INVISIBLE);
     linearLayoutOnline.setVisibility(View.INVISIBLE);
     linearLayoutMain.setVisibility(View.VISIBLE);
+    playSoundEffect(R.raw.peck);
   }
 
   public void onOnlineGameButtonPressed(View view){
     linearLayoutMain.setVisibility(View.INVISIBLE);
     linearLayoutLocal.setVisibility(View.INVISIBLE);
     linearLayoutOnline.setVisibility(View.VISIBLE);
+    playSoundEffect(R.raw.peck);
   }
 
   public void onLocalGameButtonPressed(View view){
     linearLayoutMain.setVisibility(View.INVISIBLE);
     linearLayoutLocal.setVisibility(View.VISIBLE);
     linearLayoutOnline.setVisibility(View.INVISIBLE);
+    playSoundEffect(R.raw.peck);
   }
 
   @Override
@@ -193,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
         }
       }
     });
+    playSoundEffect(R.raw.peck);
   }
 
   @Override
