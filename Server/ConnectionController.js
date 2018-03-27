@@ -124,10 +124,10 @@ SelectCharSprite(username, callback,failcallback){
   }
 
 
- selectRankings(init, offset, callback, failcallback){
+ selectRankings(limit, offset, callback, failcallback){
   var userData = {
-  "start": init,
-   "end" : offset
+  "start": offset,
+   "end" : offset + limit
     }
 
       db.selectRankings(userData)
@@ -170,7 +170,7 @@ db.CheckUser(userData)
    "username": username,
    "hashpassword" : hashpassword,
    "email" : email,
-   "charactersprite": Constants.CHARACTER_SPRITE.BIRD_1
+   "characterSprite": Constants.CHARACTER_SPRITE.BIRD_1
      }
   db.registerUser(userData)
       .then(data => {
