@@ -49,15 +49,15 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
 
   selectRankings(userData){
     //select ranking between number userData.start and userData.end
-    return  db.any('select * from seeranks where rank BETWEEN $1 and $2 order by Rank desc', [userData.start, userData.end]);
+    return  db.any('select * from seeranks where rank BETWEEN $1 and $2 order by Rank desc LIMIT 10', [userData.start, userData.end]);
   }
 
   UpdateSessionID(userData){
-    return db.any ('update users set SessionID=$2 where username=$1',[userData.username, userData.SessionID]);
+    return db.any ('update users set "sessionID"=$2 where username=$1',[userData.username, userData.SessionID]);
   }
 
   LoginViaSessionID(userData){
-    return  db.any('select * from users where SessionID=$1', [userData.SessionID])
+    return  db.any('select * from users where "sessionID"=$1', [userData.SessionID])
   }
   SelectUser(userData){
     return  db.any('select * from users,rankingsdata where username=$1 and users.UID = rankingsdata.UID', [userData.username])
@@ -67,11 +67,11 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
     return  db.any('select * from users,rankingsdata where users.UID = rankingsdata.UID and username=$1 AND hashpassword=$2', [userData.username, userData.hashpassword])
     }
   UpdateCharacterSprite(userData){
-    return  db.any('update users set characterSprite=$2  where username=$1', [userData.username, userData.image])
+    return  db.any('update users set "characterSprite"=$2  where username=$1', [userData.username, userData.image])
 
   }
   SelectCharacterSprite(userData){
-    return  db.any('select characterSprite from users where username=$1', [userData.username, userData.image])
+    return  db.any('select "characterSprite" from users where username=$1', [userData.username, userData.image])
 
   }
     updateUser(userData){
@@ -80,7 +80,7 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
 
 
     registerUser(userData){
-      return db.any('insert into users(username, hashpassword, email, characterSprite) values($1,$2,$3,$4)', [userData.username, userData.hashpassword, userData.email, userData.charactersprite])
+      return db.any('insert into users(username, hashpassword, email, "characterSprite") values($1,$2,$3,$4)', [userData.username, userData.hashpassword, userData.email, userData.characterSprite])
     }
     UpdateRanking(userData){
       return db.any('update rankingsdata set rating=$2,tau=$3,ratingdev=$4,volatility=$5 from users where users.UID=rankingsdata.UID and users.username=$1', [userData.username])

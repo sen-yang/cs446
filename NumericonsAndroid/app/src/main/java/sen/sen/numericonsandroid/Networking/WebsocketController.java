@@ -233,7 +233,6 @@ public class WebsocketController{
   }
 
   private void handleMessage(String message){
-    Log.d(TAG, "Message received: " + message);
     WebsocketMessage websocketMessage = gson.fromJson(message, WebsocketMessage.class);
 
     switch(websocketMessage.getType()){
@@ -291,16 +290,23 @@ public class WebsocketController{
 
   private void handleConfirmationMessage(ConfirmationMessage confirmationMessage){
     if(confirmationMessage.getConfirmationType() == Constants.CONFIRMATION_TYPE.USER_CONFIRMATION){
-      SharedPreferencesHelper.saveUser(confirmationMessage.getUser());
-
-      if(Helpers.isNonEmptyString(confirmationMessage.getSessionID())){
-        SharedPreferencesHelper.saveSessionID(confirmationMessage.getSessionID());
+      if(confirmationMessage.isConfirmed()){
+        SharedPreferencesHelper.saveUser(confirmationMessage.getUser());
       }
+      else{
+        SharedPreferencesHelper.saveUser(null);
+      }
+      SharedPreferencesHelper.saveSessionID(confirmationMessage.getSessionID());
 
-      for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
-        if(listenerWeakReference.get() != null){
-          listenerWeakReference.get().userConfirmed(confirmationMessage.isConfirmed(), SharedPreferencesHelper.getSavedUser(), confirmationMessage.getErrorMessage());
+      if(confirmationMessage.isConfirmed()){
+        for(WeakReference<WebsocketListener> listenerWeakReference : websocketListenerList){
+          if(listenerWeakReference.get() != null){
+            listenerWeakReference.get().userConfirmed(confirmationMessage.isConfirmed(), SharedPreferencesHelper.getSavedUser(), confirmationMessage.getErrorMessage());
+          }
         }
+      }
+      else if(confirmationMessage.getErrorMessage().equals("Invalid sessionID")){
+        loginWithSessionOrTemporaryUser();
       }
     }
   }

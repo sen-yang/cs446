@@ -39,15 +39,13 @@ public class SharedPreferencesHelper{
   }
 
   public static void saveUser(User user){
-    if(user != null){
-      inMemoryUser = user;
-      SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getAppContext());
-      SharedPreferences.Editor editor = sharedPreferences.edit();
-      Gson gson = new Gson();
-      String json = gson.toJson(user);
-      editor.putString(USER, json);
-      editor.apply();
-    }
+    inMemoryUser = user;
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getAppContext());
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+    Gson gson = new Gson();
+    String json = gson.toJson(user);
+    editor.putString(USER, json);
+    editor.apply();
   }
 
   public static String getSavedSessionID(){
@@ -60,13 +58,11 @@ public class SharedPreferencesHelper{
   }
 
   public static void saveSessionID(String sessionID){
-    if(sessionID != null){
-      SharedPreferencesHelper.sessionID = sessionID;
-      SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getAppContext());
-      SharedPreferences.Editor editor = sharedPreferences.edit();
-      editor.putString(SESSION_ID, sessionID);
-      editor.apply();
-    }
+    SharedPreferencesHelper.sessionID = sessionID;
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getAppContext());
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+    editor.putString(SESSION_ID, sessionID);
+    editor.apply();
   }
 
   public static boolean GetSoundEnabled(){

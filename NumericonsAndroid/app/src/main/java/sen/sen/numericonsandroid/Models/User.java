@@ -1,5 +1,7 @@
 package sen.sen.numericonsandroid.Models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 import sen.sen.numericonsandroid.Global.Constants;
@@ -7,7 +9,7 @@ import sen.sen.numericonsandroid.Global.Constants;
 public class User implements Serializable{
   private String username;
   private Constants.CHARACTER_SPRITE characterSprite;
-  private int rankNumber;
+  private int rank;
   private int rankRating;
   private boolean isTemporary;
 
@@ -33,8 +35,8 @@ public class User implements Serializable{
     this.characterSprite = characterSprite;
   }
 
-  public int getRankNumber(){
-    return rankNumber;
+  public int getRank(){
+    return rank;
   }
 
   public int getRankRating(){

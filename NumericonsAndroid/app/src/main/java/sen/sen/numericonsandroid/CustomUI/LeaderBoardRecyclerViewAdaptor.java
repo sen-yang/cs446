@@ -91,7 +91,8 @@ public class LeaderBoardRecyclerViewAdaptor extends RecyclerView.Adapter<Recycle
       user = userList.get(position);
       //todo bind views based on user info
       userName.setText(user.getUsername());
-      userRank.setText(Integer.toString(position+1));
+      userScore.setText(Integer.toString(user.getRankRating()));
+      userRank.setText(Integer.toString(user.getRank()));
       //userScore.setText(user.get);
     }
   }

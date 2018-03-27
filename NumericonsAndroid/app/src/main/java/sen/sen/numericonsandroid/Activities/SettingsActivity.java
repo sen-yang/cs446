@@ -66,7 +66,6 @@ public class SettingsActivity extends BaseActivity implements WebsocketControlle
     soundToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
       @Override
       public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked){
-
         SharedPreferencesHelper.setSoundEnabled(isChecked);
         setSoundEnable(isChecked);
       }
@@ -92,6 +91,7 @@ public class SettingsActivity extends BaseActivity implements WebsocketControlle
   }
 
   public void loginButtonPressed(View view){
+    playSoundEffect(R.raw.peck);
     View loginDialogView = LayoutInflater.from(this).inflate(R.layout.layout_login_dialog, settingsLayout, false);
     final EditText usernameEditText = loginDialogView.findViewById(R.id.usernameEditText);
     final EditText passwordEditText = loginDialogView.findViewById(R.id.passwordEditText);
@@ -164,6 +164,7 @@ public class SettingsActivity extends BaseActivity implements WebsocketControlle
     }
 
     if((selectedSprite != newSelectedSprite)){
+      playSoundEffect(R.raw.peck);
       selectedSprite = newSelectedSprite;
       User user = new User(SharedPreferencesHelper.getUsername(), selectedSprite);
 
@@ -208,7 +209,9 @@ public class SettingsActivity extends BaseActivity implements WebsocketControlle
       @Override
       public void run(){
         if(isConfirmed){
-          alertDialog.dismiss();
+          if(alertDialog != null){
+            alertDialog.dismiss();
+          }
           setUser(user);
           setErrorMessage("");
           Toast.makeText(SettingsActivity.this, R.string.user_updated, Toast.LENGTH_LONG).show();

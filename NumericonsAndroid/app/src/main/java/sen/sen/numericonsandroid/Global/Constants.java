@@ -1,5 +1,7 @@
 package sen.sen.numericonsandroid.Global;
 
+import sen.sen.numericonsandroid.R;
+
 public class Constants{
   public static final String SERVER_URL = "ws://sen.ddns.net";
 //  public static final String SERVER_URL = "ws://192.168.1.30:6969";
@@ -69,9 +71,18 @@ public class Constants{
   }
 
   public enum CHARACTER_SPRITE{
-    BIRD_1,
-    BIRD_2,
-    BIRD_3
+    BIRD_1(R.raw.chirp),
+    BIRD_2(R.raw.quack),
+    BIRD_3(R.raw.hoot);
+
+    private int soundEffectResId;
+    CHARACTER_SPRITE(int soundEffectResId){
+      this.soundEffectResId = soundEffectResId;
+    }
+
+    public int getSoundEffectResId(){
+      return soundEffectResId;
+    }
   }
 
   public enum BIRD_DIRECTION{

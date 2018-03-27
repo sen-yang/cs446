@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -31,18 +32,11 @@ public class LeaderBoardActivity extends BaseActivity implements WebsocketContro
   private boolean isLoading;
   private boolean isMoreDataAvailable;
 
-
   @Override
   public void onCreate(Bundle savedInstanceState){
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_leaderboard);
     userList = new ArrayList<>();
-    User u1 = new User("Jenn", Constants.CHARACTER_SPRITE.BIRD_1);
-    User u2 = new User("Sen", Constants.CHARACTER_SPRITE.BIRD_2);
-    User u3 = new User("Zell", Constants.CHARACTER_SPRITE.BIRD_3);
-    userList.add(u1);
-    userList.add(u2);
-    userList.add(u3);
 
     isLoading = false;
     isMoreDataAvailable = true;
@@ -63,7 +57,7 @@ public class LeaderBoardActivity extends BaseActivity implements WebsocketContro
       @Override
       public void onScrolled(RecyclerView recyclerView, int dx, int dy){
         super.onScrolled(recyclerView, dx, dy);
-        if(((linearLayoutManager.findLastVisibleItemPosition() + Constants.INFINITE_LOAD_TRIGGER_SIZE) >= userList.size()) && isMoreDataAvailable && !isLoading) {
+        if(((linearLayoutManager.findLastVisibleItemPosition() + Constants.INFINITE_LOAD_TRIGGER_SIZE) >= userList.size()) && isMoreDataAvailable && !isLoading){
           loadMore();
         }
 
@@ -72,15 +66,23 @@ public class LeaderBoardActivity extends BaseActivity implements WebsocketContro
     loadMore();
   }
 
-  public void loadMore() {
-    setLoading(true);
-    User u1 = new User("coco", Constants.CHARACTER_SPRITE.BIRD_1);
-    User u2 = new User("momo", Constants.CHARACTER_SPRITE.BIRD_2);
-    User u3 = new User("haha", Constants.CHARACTER_SPRITE.BIRD_3);
-    userList.add(u1);
-    userList.add(u2);
-    userList.add(u3);
-    //@TODO: Load more users from server... loadMore(userList.size(),Constants.INFINITE_LOAD_SIZE);
+  @Override
+  protected void onResume(){
+    super.onResume();
+    WebsocketController.getInstance().addWebsocketListener(this);
+  }
+
+  @Override
+  protected void onPause(){
+    super.onPause();
+    WebsocketController.getInstance().removeWebsocketListener(this);
+  }
+
+  public void loadMore(){
+    if(!isLoading){
+      setLoading(true);
+      WebsocketController.getInstance().getRankings(Constants.INFINITE_LOAD_SIZE, userList.size());
+    }
   }
 
   private void setLoading(boolean loading){
@@ -115,19 +117,25 @@ public class LeaderBoardActivity extends BaseActivity implements WebsocketContro
   }
 
   @Override
-  public void newUserList(List<User> newUserList, boolean isError){
-    if(isError){
-      setLoading(false);
-      isMoreDataAvailable = false;
-      Toast.makeText(this, R.string.cannot_retrieve_users, Toast.LENGTH_LONG).show();
-    }
-    else{
-      userList.addAll(newUserList);
-      setLoading(false);
+  public void newUserList(final List<User> newUserList, final boolean isError){
+    runOnUiThread(new Runnable(){
+      @Override
+      public void run(){
+        if(isError){
+          setLoading(false);
+          isMoreDataAvailable = false;
+          Toast.makeText(LeaderBoardActivity.this, R.string.cannot_retrieve_users, Toast.LENGTH_LONG).show();
+        }
+        else{
+          Log.d("asdf", newUserList.toString());
+          userList.addAll(newUserList);
+          setLoading(false);
 
-      if(newUserList.size() < Constants.INFINITE_LOAD_SIZE){
-        isMoreDataAvailable = false;
+          if(newUserList.size() < Constants.INFINITE_LOAD_SIZE){
+            isMoreDataAvailable = false;
+          }
+        }
       }
-    }
+    });
   }
 }
