@@ -145,7 +145,7 @@ db.CheckUser(userData)
       console.log(data);
       if(JSON.stringify(data)=="[]")
       this.createUser(username, hashpassword, email, callback, failcallback);
-      else callback(false);
+      else failcallback("Username already exists, please choose another");
     })
     .catch(error => {
 
@@ -184,30 +184,6 @@ db.CheckUser(userData)
   //TODO
   db.getRating(Winnername, Losername)
         .then(data => {
-          var user1 = Object.values(data[0]);
-          var user2 = Object.values(data[1]);
-          var winnerrating, loserrating;
-          var winner,loser;
-          if(user1[0]==Winnername){
-            winner = user1[0];
-          winnerrating = user1[1];
-          loserrating = user2[1];
-          loser = user2[0];
-        }else{
-          winner = user2[0];
-          winnerrating = user2[1];
-          loserrating = user1[1];
-          loser = user1[0];
-        }
-        console.log("loser:" + loser);
-        var expectedScoreA = elo.getExpected(winnerrating, loserrating);
-        var expectedScoreB = elo.getExpected(loserrating, winnerrating);
-
-          //update score, 1 if won 0 if lost
-          var playerA = elo.updateRating(expectedScoreA, 1, winnerrating);
-          var playerB = elo.updateRating(expectedScoreB, 0, loserrating);
-
-          this.updateRating(winner,winnerrating, loser, loserrating,callback);
       })
       .catch(error => {
           console.log('ERROR:'+ error); // print the error;

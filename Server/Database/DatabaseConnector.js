@@ -89,7 +89,9 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
       return db.any('insert into rankingsdata(UID, tau, rating, ratingdev, volatility) VALUES ((select UID from users where username=$1), 0.5, 1500, 200, 0.06)', [userData.username])
     }
 
-
+    getRatings(userData){
+        return db.any('select tau,rating,ratingdev,volatility from rankingsdata,users where users.UID=rankingsdata.UID and username=$1', [userData.username])
+    }
     CheckUser(userData){
         return db.any('select username from users where username=$1', [userData.username]);
     }
