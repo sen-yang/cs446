@@ -58,7 +58,7 @@ public class PlayerInfoView extends RelativeLayout{
     playerCurrentNumber.setTextSize(15);
     playerCurrentNumber.setId(R.id.multiPlayerCurrentNumber);
 
-    RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(100, 100);
+    RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams((int) getResources().getDimension(R.dimen.playerInfoImageWidth), (int) getResources().getDimension(R.dimen.playerInfoImageHeight));
     RelativeLayout.LayoutParams nameParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     RelativeLayout.LayoutParams numberParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 

@@ -18,7 +18,7 @@ public class Constants{
   public static final int MIN_TARGET = -99;
   public static final int MAX_TARGET = 99;
   public static final int MIN_DROP = -9;
-  public static final int MAX_DROP = 10;
+  public static final int MAX_DROP = 9;
   public static final float MIN_DROP_SPEED = 0.005f;
   public static final float MAX_DROP_SPEED = 0.02f;
   public static final float DROP_RATE = 225;

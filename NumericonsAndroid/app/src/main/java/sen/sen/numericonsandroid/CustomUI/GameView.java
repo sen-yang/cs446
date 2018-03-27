@@ -43,6 +43,7 @@ public class GameView extends RelativeLayout{
 
   ImageView birdImageView;
   Rect clipBounds;
+  Rect itemClipBounds;
   Rect itemRect;
   Paint textPaint;
   private Basket birdModel;
@@ -99,6 +100,7 @@ public class GameView extends RelativeLayout{
     textPaint.setTextSize(textSize);
 
     clipBounds = new Rect();
+    itemClipBounds = new Rect();
     itemRect = new Rect();
     itemWidth = (int) getResources().getDimension(R.dimen.droppedItemWidth);
     itemHeight = (int) getResources().getDimension(R.dimen.droppedItemHeight);
@@ -156,18 +158,19 @@ public class GameView extends RelativeLayout{
   }
 
   private float ratioToPixel_Width(float ratio){
-    return ratio * clipBounds.width() + clipBounds.left;
+    return ratio * itemClipBounds.width() + clipBounds.left;
   }
 
   private float ratioToPixel_Height(float ratio){
-
-    return ratio * clipBounds.height() + clipBounds.top;
+    return ratio * itemClipBounds.height() + clipBounds.top;
   }
 
   @Override
   protected void onDraw(Canvas canvas){
     super.onDraw(canvas);
     canvas.getClipBounds(clipBounds);
+    canvas.getClipBounds(itemClipBounds);
+    itemClipBounds.right -= itemWidth;
 
     for(DroppedItem item : droppedItemList){
       if(item.isAlive()){

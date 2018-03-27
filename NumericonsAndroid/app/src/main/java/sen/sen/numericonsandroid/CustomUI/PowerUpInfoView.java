@@ -48,7 +48,8 @@ public class PowerUpInfoView extends RelativeLayout{
     powerUpName = new TextView(getContext());
     powerUpName.setText("COOL STUFF!");
 
-    RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(150, 150);
+    RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams((int)getResources().getDimension(R.dimen.powerUpImageWidth),
+                                                                              (int)getResources().getDimension(R.dimen.powerUpImageHeight));
     RelativeLayout.LayoutParams nameParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     imageParams.addRule(CENTER_HORIZONTAL);
     nameParams.addRule(RelativeLayout.BELOW, powerUPImage.getId());
