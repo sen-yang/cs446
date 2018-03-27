@@ -20,7 +20,7 @@ function SelectImage(){
 ////////////Register////////////////////
 function Register(){//username, password, //email
   //hashing should be done on the client side.
- CC.Register("z7546462z","notreallyhashed","emailtest", function(data){
+ CC.Register("user6","notreallyhashed","emailtest", function(data){
    if(data){
      console.log(data)
      //return registration successful
@@ -35,7 +35,7 @@ function Register(){//username, password, //email
 }
 /////////////LOGIN///////////////////////////
 function Login(){
-  CC.Login("612z2z","notreallyhashed",function(data){
+  CC.Login("61772z2z","notreallyhashed",function(data){
   //successful select login
 
   if (JSON.stringify(data)==[]){

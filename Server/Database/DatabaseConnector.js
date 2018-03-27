@@ -80,7 +80,7 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
 
 
     registerUser(userData){
-      return db.any('insert into users(username, hashpassword, email, characterSprite) values($1,$2,$3)', [userData.username, userData.hashpassword, userData.email, userData.charactersprite])
+      return db.any('insert into users(username, hashpassword, email, characterSprite) values($1,$2,$3,$4)', [userData.username, userData.hashpassword, userData.email, userData.charactersprite])
     }
     UpdateRanking(userData){
       return db.any('update rankingsdata set rating=$2,tau=$3,ratingdev=$4,volatility=$5 from users where users.UID=rankingsdata.UID and users.username=$1', [userData.username])

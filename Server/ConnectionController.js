@@ -158,12 +158,13 @@ db.CheckUser(userData)
    var userData = {
    "username": username,
    "hashpassword" : hashpassword,
-   "email" : email
+   "email" : email,
    "charactersprite": Constants.CHARACTER_SPRITE.BIRD_1
      }
   db.registerUser(userData)
       .then(data => {
           console.log("user have been registered");
+          db.addDefaultRanking(userData);
           console.log(username);
           this.selectUser(username,callback,errorcallback);//send data to user about a successful registration
 
