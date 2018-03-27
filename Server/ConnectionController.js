@@ -1,6 +1,21 @@
 const DB = require('./Database/DatabaseConnector');
-const eloRank = require('elo-rank');
-var elo = new eloRank();
+const Constants = require('./Constants');
+var glicko2 = require('glicko2');
+
+var settings = {
+  // tau : "Reasonable choices are between 0.3 and 1.2, though the system should
+  //      be tested to decide which value results in greatest predictive accuracy."
+  tau : 0.5,
+  // rating : default rating
+  rating : 1500,
+  //rd : Default rating deviation
+  //     small number = good confidence on the rating accuracy
+  rd : 200,
+  //vol : Default volatility (expected fluctation on the player rating)
+  vol : 0.06
+};
+
+var ranking = new glicko2.Glicko2(settings);
 db = new DB();
 
 module.exports = class ConnectionController{
@@ -28,7 +43,7 @@ selectUser(username,  callback, failcallback){
     }
     db.SelectUser(userData)
     .then(data => {
-      callback(data);
+      callback(data[0]);
     })
     .catch(error => {
         console.log('ERROR:'+ error); // print the error;
@@ -43,7 +58,7 @@ SelectCharSprite(username, callback,failcallback){
     }
     db.SelectCharacterSprite(userData)
     .then(data => {
-      callback(data);
+      callback(data[0]);
     })
     .catch(error => {
       failcallback(error);
@@ -53,16 +68,20 @@ SelectCharSprite(username, callback,failcallback){
 
 }
 ///////////////////////////////////////
- LoginViaSessionID(SessionID, callback){
+ LoginViaSessionID(SessionID, callback, failcallback){
    var userData = {
    "SessionID": SessionID
      }
      db.LoginViaSessionID(userData)
      .then(data => {
-       callback(data);
+       if(JSON.stringify(data)!="[]")
+       callback(data[0]);
+       else {
+         failcallback("Please Login again");
+       }
      })
      .catch(error => {
-         callback(false);
+         failcallback(error);
          console.log('ERROR:'+ error); // print the error;
      })
  }
@@ -91,7 +110,11 @@ SelectCharSprite(username, callback,failcallback){
     db.Login(userData)
     .then(data => {
       //emit ranking information back to client
-      callback(data);//this function must check if the data is set.
+      if(JSON.stringify(data)!="[]")
+      callback(data[0]);//this function must check if the data is set.
+      else {
+        failcallback("Username or password is wrong, please try again");
+      }
     })
     .catch(error => {
         console.log('ERROR:'+ error); // print the error;
@@ -124,7 +147,7 @@ SelectCharSprite(username, callback,failcallback){
    var userData = {
    "username": username,
    "hashpassword" : hashpassword,
-   "email" : email
+   "email" : email,
      }
 
 db.CheckUser(userData)
@@ -132,10 +155,10 @@ db.CheckUser(userData)
       console.log(data);
       if(JSON.stringify(data)=="[]")
       this.createUser(username, hashpassword, email, callback, failcallback);
-      else callback(false);
+      else failcallback("Username already exists, please choose another");
     })
     .catch(error => {
-
+      failcallback(error);
     console.log('ERROR:'+ error); // print the error;
   })
 }
@@ -145,12 +168,16 @@ db.CheckUser(userData)
    var userData = {
    "username": username,
    "hashpassword" : hashpassword,
-   "email" : email
+   "email" : email,
+   "charactersprite": Constants.CHARACTER_SPRITE.BIRD_1
      }
   db.registerUser(userData)
       .then(data => {
           console.log("user have been registered");
-          this.Login(username, hashpassword,callback,errorcallback);//send data to user about a successful registration
+          db.addDefaultRanking(userData);
+          console.log(username);
+          this.selectUser(username,callback,errorcallback);//send data to user about a successful registration
+
           //emit data to user client
           //if successful, emit registration sucessfull
       })
@@ -167,56 +194,70 @@ db.CheckUser(userData)
   //TODO
   db.getRating(Winnername, Losername)
         .then(data => {
-          var user1 = Object.values(data[0]);
-          var user2 = Object.values(data[1]);
-          var winnerrating, loserrating;
-          var winner,loser;
-          if(user1[0]==Winnername){
-            winner = user1[0];
-          winnerrating = user1[1];
-          loserrating = user2[1];
-          loser = user2[0];
-        }else{
-          winner = user2[0];
-          winnerrating = user2[1];
-          loserrating = user1[1];
-          loser = user1[0];
-        }
-        console.log("loser:" + loser);
-        var expectedScoreA = elo.getExpected(winnerrating, loserrating);
-        var expectedScoreB = elo.getExpected(loserrating, winnerrating);
 
-          //update score, 1 if won 0 if lost
-          var playerA = elo.updateRating(expectedScoreA, 1, winnerrating);
-          var playerB = elo.updateRating(expectedScoreB, 0, loserrating);
-
-          this.updateRating(winner,winnerrating, loser, loserrating,callback);
       })
       .catch(error => {
           console.log('ERROR:'+ error); // print the error;
       })
 
 
-}
-  updateRating(winneruser, winnerScore, loseruser, loserScore, callback, failcallback){
-    db.updateRatingAndRank(winneruser,winnerScore)
+    }
+  updateRating(winneruser,loseruser,callback, failcallback){
+    var matches = [];
+    db.getRating(winneruser, loseruser)
+    .then(data => {
+
+      var winner;
+      var loser;
+
+    if(data[0].username==winner){
+      winner = ranking.makePlayer(data[0].rating,data[0].ratingdev,data[0].volatility);
+      loser = ranking.makePlayer(data[1].rating,data[1].ratingdev,data[1].volatility);
+    }else {
+      loser = ranking.makePlayer(data[0].rating,data[0].ratingdev,data[0].volatility);
+      winner = ranking.makePlayer(data[1].rating,data[1].ratingdev,data[1].volatility);
+    }
+
+     matches.push([winner,loser, 1]);
+
+     ranking.updateRatings(matches);
+
+     var userData1 ={
+       "username" : winneruser,
+       "rating" : winner.getRating(),
+       "ratingdev": winner.getRd(),
+       "volatility": winner.getVol()
+     }
+     var userData2 ={
+       "username" : loseruser,
+       "rating" : loser.getRating(),
+       "ratingdev": loser.getRd(),
+       "volatility": loser.getVol()
+     }
+     console.log(userData1);
+          console.log(userData2);
+     db.updateRating(userData1)
+     .then(data => {
+     console.log(winneruser + "\'s score is  updated")
+   })
+    .catch(error => {
+        console.log('ERROR:'+ error); // print the error;
+        failcallback(error);
+    });
+    db.updateRating(userData2)
     .then(data => {
     console.log(winneruser + "\'s score is  updated")
   })
-  .catch(error => {
-      console.log('ERROR:'+ error); // print the error;
-  });
-
-
-    db.updateRatingAndRank(loseruser, loserScore)
-    .then(data => {
-      console.log("Test");
-    console.log(loseruser + "\'s score is  updated")
-  })
-  .catch(error => {
-      console.log('ERROR:'+ error); // print the error;
-  });
-  }
+   .catch(error => {
+       console.log('ERROR:'+ error); // print the error;
+       failcallback(error);
+   });
+callback(true);
+ })
+ .catch(error => {
+     console.log('ERROR:'+ error); // print the error;
+ });
+}
 
 
 

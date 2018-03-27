@@ -11,8 +11,10 @@ import sen.sen.numericonsandroid.Models.User;
 
 public class SharedPreferencesHelper{
   private static final String USER = "USER";
+  private static final String SESSION_ID = "SESSION_ID";
   private static final String IS_SOUND_ENABLED = "IS_SOUND_ENABLED";
   private static User inMemoryUser;
+  private static String sessionID;
   private static Boolean isSoundEnabled;
 
   public static User getSavedUser(){
@@ -35,13 +37,34 @@ public class SharedPreferencesHelper{
   }
 
   public static void saveUser(User user){
-    inMemoryUser = user;
+    if(user != null){
+      inMemoryUser = user;
+      SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getAppContext());
+      SharedPreferences.Editor editor = sharedPreferences.edit();
+      Gson gson = new Gson();
+      String json = gson.toJson(user);
+      editor.putString(USER, json);
+      editor.apply();
+    }
+  }
+
+  public static String getSavedSessionID(){
+    if(sessionID != null){
+      return sessionID;
+    }
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getAppContext());
-    SharedPreferences.Editor editor = sharedPreferences.edit();
-    Gson gson = new Gson();
-    String json = gson.toJson(user);
-    editor.putString(USER, json);
-    editor.apply();
+    sessionID = sharedPreferences.getString(SESSION_ID, "");
+    return sessionID;
+  }
+
+  public static void saveSessionID(String sessionID){
+    if(sessionID != null){
+      SharedPreferencesHelper.sessionID = sessionID;
+      SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getAppContext());
+      SharedPreferences.Editor editor = sharedPreferences.edit();
+      editor.putString(SESSION_ID, sessionID);
+      editor.apply();
+    }
   }
 
   public static boolean GetSoundEnabled(){

@@ -64,7 +64,7 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
   }
 
   Login(userData){
-    return  db.any('select * from users,rankingsdata where username=$1 AND hashpassword=$2', [userData.username, userData.hashpassword])
+    return  db.any('select * from users,rankingsdata where users.UID = rankingsdata.UID and username=$1 AND hashpassword=$2', [userData.username, userData.hashpassword])
     }
   UpdateCharacterSprite(userData){
     return  db.any('update users set characterSprite=$2  where username=$1', [userData.username, userData.image])
@@ -74,16 +74,20 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
     return  db.any('select characterSprite from users where username=$1', [userData.username, userData.image])
 
   }
-
     updateUser(userData){
       return db.any('update users set hashpassword=$2  where username=$1', [userData.username, userData.hashpassword])
     }
 
 
     registerUser(userData){
-      return db.any('insert into users(username, hashpassword, email) values($1,$2,$3)', [userData.username, userData.hashpassword, userData.email])
+      return db.any('insert into users(username, hashpassword, email, characterSprite) values($1,$2,$3,$4)', [userData.username, userData.hashpassword, userData.email, userData.charactersprite])
     }
-
+    UpdateRanking(userData){
+      return db.any('update rankingsdata set rating=$2,tau=$3,ratingdev=$4,volatility=$5 from users where users.UID=rankingsdata.UID and users.username=$1', [userData.username])
+    }
+    addDefaultRanking(userData){
+      return db.any('insert into rankingsdata(UID, tau, rating, ratingdev, volatility) VALUES ((select UID from users where username=$1), 0.5, 1500, 200, 0.06)', [userData.username])
+    }
 
     CheckUser(userData){
         return db.any('select username from users where username=$1', [userData.username]);
@@ -93,15 +97,16 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
       return db.any('select username from users where username=$1 AND hashpassword=$2', [userData.username, userData.oldpassword]);
     }
 
+
     updateRanking(userData){
-      return db.any('', [userData.username]);
+      return db.any('update rankingsdata set rating=$1 from users where users.UID=rankingsdata.UID and users.username=$1', [userData.username]);
     }
 
     getRating(winner,loser){
-      return db.any('select username,rating from users,rankingsdata where users.UID=rankingsdata.UID and (username=$1 OR username=$2)',[winner,loser] );
+      return db.any('select username, tau,rating,ratingdev,volatility from rankingsdata,users where users.UID=rankingsdata.UID and (users.username=$1 OR users.username=$2)',[winner,loser] );
     }
-    updateRatingAndRank(user, userscore){
-      return db.any('update rankingsdata set rating=$1 from users where users.UID=rankingsdata.UID and users.username=$2',[userscore, user]);
+    updateRating(userData){
+      return db.any('update rankingsdata set rating=$1,ratingdev=$2,volatility=$3 from users where users.UID=rankingsdata.UID and users.username=$4',[userData.rating,userData.ratingdev,userData.volatility, userData.username]);
     }
 };
 /////////////////////////////////////////////database interface/

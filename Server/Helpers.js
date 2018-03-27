@@ -20,13 +20,15 @@ module.exports.hasDuplicates = (array) =>{
   return (new Set(array)).size !== array.length;
 };
 
-
-
 module.exports.removeValueFromArray = (array, value) =>{
   let index = array.indexOf(value);
 
   if(index !== -1){
     array.splice(index, 1);
   }
+};
+
+module.exports.isNonEmptyString = (value) =>{
+  return ((typeof value === 'string') || (value instanceof String)) && (value.length > 0);
 };
 

@@ -114,4 +114,21 @@ module.exports = class GameManager{
       }
     }
   }
+
+  getRankedResults(resultsCallback){
+    if((this.gameState.playerList != null) && (this.gameState.playerList.length == 2)){
+      let winner = this.gameState.getWinner();
+      let loser = null;
+
+      this.gameState.playerList.forEach((player)=>{
+        if(player != winner){
+          loser = player;
+        }
+      });
+
+      if((winner != null) && (loser != null) && (winner != loser)){
+        resultsCallback(winner, loser);
+      }
+    }
+  }
 };

@@ -3,16 +3,24 @@ const GameManager = require('./GameManager');
 const Constants = require('../Constants');
 const Helpers = require('../Helpers');
 const WebsocketMessage = require('./WebsocketMessage');
+const ConnectionController = require('../ConnectionController');
+
+const dbController = new ConnectionController();
 
 module.exports = class GameRoom{
-  constructor(gameType,clientList, roomClearedCallback){
+  constructor(gameType, clientList, gameFinisedCallback){
     this.gameType = gameType;
     this.clientList = clientList;
     this.id = genUUID();
     this.gameManager = new GameManager(genUUID(), clientList);
-    this.roomClearedCallback = roomClearedCallback;
-    this.clientList.forEach((client)=>{
+    this.gameFinisedCallback = gameFinisedCallback;
+    this.hasTemporaryUser = false;
+    this.clientList.forEach((client) =>{
       client.currentRoom = this;
+
+      if(client.isTemporary == true){
+        this.hasTemporaryUser = true;
+      }
     });
   }
 
@@ -20,12 +28,12 @@ module.exports = class GameRoom{
     let websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.GAME_INIT);
     websocketMessage.gameState = this.gameManager.gameState;
     let messageString = JSON.stringify(websocketMessage);
-    this.clientList.forEach((client)=>{
+    this.clientList.forEach((client) =>{
       client.sendMessage(messageString);
     });
 
-    setTimeout(()=>{
-      this.gameManager.startGame((reason)=>{
+    setTimeout(() =>{
+      this.gameManager.startGame((reason) =>{
         this.gameStateUpdated(reason);
       });
     }, Constants.GAME_READY_TIME);
@@ -37,7 +45,7 @@ module.exports = class GameRoom{
       case Constants.MESSAGE_TYPE.GAME_STATE_UPDATE:
         websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.GAME_STATE_UPDATE);
         websocketMessage.gameState = this.gameManager.gameState;
-        this.clientList.forEach((client)=>{
+        this.clientList.forEach((client) =>{
           if(!client.sendMessage(JSON.stringify(websocketMessage))){
             this.clientDropped(client);
           }
@@ -46,7 +54,7 @@ module.exports = class GameRoom{
       case Constants.MESSAGE_TYPE.GAME_FINISH:
         websocketMessage = new WebsocketMessage(Constants.MESSAGE_TYPE.GAME_FINISH);
         websocketMessage.gameState = this.gameManager.gameState;
-        this.clientList.forEach((client)=>{
+        this.clientList.forEach((client) =>{
           if(!client.sendMessage(JSON.stringify(websocketMessage))){
             this.clientDropped(client);
           }
@@ -64,9 +72,20 @@ module.exports = class GameRoom{
   }
 
   clearRoom(){
-    this.clientList.forEach((client)=>{
+    this.clientList.forEach((client) =>{
       client.leaveRoom();
     });
-    this.roomClearedCallback(this);
+    this.updateUserRankings();
+    this.gameFinisedCallback(this);
+  }
+
+  updateUserRankings(){
+    if((this.gameType == Constants.GAME_TYPE.RANKED) && !this.hasTemporaryUser){
+      this.gameManager.getRankedResults((winner, loser) =>{
+        dbController.calculateUpdateRanking(winner.username, loser.username, () =>{
+          //todo ? wat i get
+        });
+      });
+    }
   }
 };

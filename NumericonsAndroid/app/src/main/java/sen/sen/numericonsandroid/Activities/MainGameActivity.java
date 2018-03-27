@@ -161,13 +161,13 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
     if(gameStage == Constants.GAME_STAGE.FINISHED){
       AlertDialog.Builder builder;
       builder = new AlertDialog.Builder(this);
-      String title = "You lose:(";
+      String title = getString(R.string.you_lose);
 
       if((gameState.getWinner() != null) && gameState.getWinner().getUsername().equals(SharedPreferencesHelper.getUsername())){
-        title = "You Win!";
+        title = getString(R.string.you_win);
       }
       builder.setTitle(title)
-             .setPositiveButton("Back", new DialogInterface.OnClickListener(){
+             .setPositiveButton(R.string.back, new DialogInterface.OnClickListener(){
                public void onClick(DialogInterface dialog, int which){
                  finish();
                }
@@ -184,8 +184,8 @@ public class MainGameActivity extends AppCompatActivity implements GameListener,
       public void run(){
         if(gameStage != Constants.GAME_STAGE.FINISHED){
           new AlertDialog.Builder(MainGameActivity.this)
-              .setTitle("You have been disconnected :(")
-              .setPositiveButton("Back", new DialogInterface.OnClickListener(){
+              .setTitle(R.string.you_have_been_disconnected)
+              .setPositiveButton(R.string.back, new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i){
                   finish();

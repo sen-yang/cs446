@@ -5,7 +5,7 @@ const CC = new ConnectionController();
 
 
 //Examples for using ConnectionController
-
+CC.updateRating("user6", "user7")
 
 function UpdateImage(){
   CC.updateCharSprite("user1","google.com",function(data){
@@ -20,7 +20,7 @@ function SelectImage(){
 ////////////Register////////////////////
 function Register(){//username, password, //email
   //hashing should be done on the client side.
- CC.Register("61zz72z2z","notreallyhashed","emailtest", function(data){
+ CC.Register("user73z41","notreallyhashed","emailtest", function(data){
    if(data){
      console.log(data)
      //return registration successful
@@ -30,12 +30,12 @@ function Register(){//username, password, //email
      console.log("data exists");
    }
  },function(error){
-   console.log("nope dont works");
+   console.log("error");
  });
 }
 /////////////LOGIN///////////////////////////
 function Login(){
-  CC.Login("612z2z","notreallyhashed",function(data){
+  CC.Login("61772z2z","notreallyhashed",function(data){
   //successful select login
 
   if (JSON.stringify(data)==[]){
@@ -57,7 +57,7 @@ function Changepassword(){
                             //username // oldpassword, new password
   CC.checkANDChangePassword("user2","password", "notreallyhashed",function(data){
     console.log(data);
-    
+
   },function(error){
     console.log(error);
   });
@@ -95,10 +95,10 @@ function LoginSessionID(){
 //
 // }
 //SelectImage();
-//Register();
+Register();
 //SelectRanks();
 // InsertSessionID();
 // LoginSessionID();
+//Changepassword();
 //UpdateRanking();
-Changepassword();
 //////////////////////////////////////////////////////////

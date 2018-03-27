@@ -8,6 +8,11 @@ import sen.sen.numericonsandroid.Models.User;
 
 public class RankingsMessage extends WebsocketMessage{
   private List<User>userList;
+  private boolean isError;
+
+  public boolean isError(){
+    return isError;
+  }
 
   public List<User> getUserList(){
     return userList;

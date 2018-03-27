@@ -158,8 +158,8 @@ public class BluetoothConnectionActivity extends AppCompatActivity implements Bl
   private void noBluetooth(){
     AlertDialog.Builder builder;
     builder = new AlertDialog.Builder(this);
-    builder.setTitle("Bluetooth not enabled :(")
-           .setPositiveButton("Back", new DialogInterface.OnClickListener(){
+    builder.setTitle(R.string.bluetooth_not_enabled)
+           .setPositiveButton(R.string.back, new DialogInterface.OnClickListener(){
              public void onClick(DialogInterface dialog, int which){
                finish();
              }
@@ -187,13 +187,13 @@ public class BluetoothConnectionActivity extends AppCompatActivity implements Bl
   public void invitedToMatch(final BluetoothDevice device){
     AlertDialog.Builder builder;
     builder = new AlertDialog.Builder(this);
-    builder.setTitle(device.getName() + " invited you to a match!")
-           .setPositiveButton("Accept", new DialogInterface.OnClickListener(){
+    builder.setTitle(getString(R.string.invited_you_to_a_match, device.getName()))
+           .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener(){
              public void onClick(DialogInterface dialog, int which){
                BluetoothController.getInstance().respondToInvitation(device, true);
              }
            })
-           .setNegativeButton("Decline", new DialogInterface.OnClickListener(){
+           .setNegativeButton(R.string.decline, new DialogInterface.OnClickListener(){
              @Override
              public void onClick(DialogInterface dialogInterface, int i){
                BluetoothController.getInstance().respondToInvitation(device, false);
@@ -205,10 +205,10 @@ public class BluetoothConnectionActivity extends AppCompatActivity implements Bl
   @Override
   public void matchConfirmed(BluetoothDevice device, boolean isConfirmed){
     if(isConfirmed){
-      Toast.makeText(this, device.getName() + " has accepted your match request ", Toast.LENGTH_LONG).show();
+      Toast.makeText(this, getString(R.string.has_accepted_your_match_request, device.getName()), Toast.LENGTH_LONG).show();
     }
     else{
-      Toast.makeText(this, device.getName() + " has declined your match request :(", Toast.LENGTH_LONG).show();
+      Toast.makeText(this, getString(R.string.has_declined_your_match_request, device.getName()), Toast.LENGTH_LONG).show();
     }
   }
 
