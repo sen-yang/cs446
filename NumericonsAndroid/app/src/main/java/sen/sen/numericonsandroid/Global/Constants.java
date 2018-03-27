@@ -16,7 +16,7 @@ public class Constants{
 
   //game manager constants
   public static final int TICK_TIME = 1000 / 5; // (1s in ms) / fps
-  public static final int GAME_READY_TIME = 5000;
+  public static final long GAME_READY_TIME = 5000;
   public static final int MIN_TARGET = -99;
   public static final int MAX_TARGET = 99;
   public static final int MIN_DROP = -9;

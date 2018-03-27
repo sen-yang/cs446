@@ -115,6 +115,7 @@ public class Player implements Serializable{
       JsonObject obj = new JsonObject();
       obj.addProperty("currentNumber", src.getCurrentNumber());
       obj.addProperty("username", src.getUsername());
+      obj.addProperty("characterSprite", src.getCharacterSprite().toString());
 
       return obj;
     }
