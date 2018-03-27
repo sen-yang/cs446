@@ -27,6 +27,9 @@ public class Constants{
   public static final long GAME_START_DELAY = 5000;
   public static long FRAME_TIME = 1000 / 60; // (1s in ms) / fps
 
+  public static long GLOBAL_ITEM_EFFECT_DURATION = 5000;
+  public static float EFFECT_ITEM_DROP_CHANCE = 0.5f;
+
   public enum MESSAGE_TYPE{
     PING,
 
@@ -55,6 +58,11 @@ public class Constants{
     CANCEL
   }
 
+  public enum ITEM_TYPE{
+    NUMBER,
+    SPEED_INCREASE
+  }
+
   public enum PLAYER_ACTION_TYPE{
     ADDITION,
     SUBTRACTION,
@@ -76,6 +84,7 @@ public class Constants{
     BIRD_3(R.raw.hoot);
 
     private int soundEffectResId;
+
     CHARACTER_SPRITE(int soundEffectResId){
       this.soundEffectResId = soundEffectResId;
     }

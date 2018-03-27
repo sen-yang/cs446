@@ -11,7 +11,7 @@ module.exports = class Player{
     this.characterSprite = client.user.characterSprite;
   }
 
-  doPlayerAction(playerAction){
+  doPlayerAction(playerAction, itemUsedCallback){
     switch(playerAction.commandType){
       case Constants.PLAYER_ACTION_TYPE.ADDITION:
       case Constants.PLAYER_ACTION_TYPE.SUBTRACTION:
@@ -23,7 +23,9 @@ module.exports = class Player{
         this.updateCurrentNumber(playerAction.value);
         break;
       case Constants.PLAYER_ACTION_TYPE.USE_ITEM:
-        //todo
+        if(this.itemInInventory != null){
+          itemUsedCallback(this.itemInInventory.itemType);
+        }
         break;
       case Constants.PLAYER_ACTION_TYPE.GET_ITEM:
         this.getItem(playerAction.item);
@@ -60,7 +62,8 @@ module.exports = class Player{
     return {
       currentNumber: this.currentNumber,
       username: this.username,
-      characterSprite: this.characterSprite
+      characterSprite: this.characterSprite,
+      itemInInventory: this.itemInInventory
     };
   }
 };

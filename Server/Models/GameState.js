@@ -18,6 +18,13 @@ module.exports = class GameState{
     this.startTime = 0;
     this.playerList = playerList;
     this.droppedItemList = [];
+    this.globalEffect = null;
+    this.globalEffectTimeRemaining = 0;
+  }
+
+  setGlobalEffect(itemEffect){
+    this.globalEffectTimeRemaining = Constants.ITEM_TYPE.GLOBAL_ITEM_EFFECT_DURATION;
+    this.globalEffect = itemEffect;
   }
 
   getWinner(){
@@ -42,7 +49,8 @@ module.exports = class GameState{
       isComplete: this.isComplete,
       winner: this.getWinner(),
       timeRemaining: this.timeRemaining,
-      droppedItemList: this.droppedItemList
+      droppedItemList: this.droppedItemList,
+      globalEffect: this.globalEffect
     };
   }
 };

@@ -55,7 +55,16 @@ public class LocalGameManager implements Serializable{
     Player player = this.findPlayerByUsername(username);
 
     if(player != null){
-      player.doPlayerAction(playerAction);
+      player.doPlayerAction(playerAction, new Player.ItemUsedCallback(){
+        @Override
+        public void itemUsed(Constants.ITEM_TYPE itemType){
+          switch(itemType){
+            case SPEED_INCREASE:
+              gameState.setGlobalEffect(Constants.ITEM_TYPE.SPEED_INCREASE);
+              break;
+          }
+        }
+      });
     }
   }
 
@@ -106,6 +115,13 @@ public class LocalGameManager implements Serializable{
     gameState.setPreviousTickTime(now);
     gameState.setTimeRemaining(gameState.getTimeRemaining() - gameState.getDelta());
 
+    if(this.gameState.getGlobalEffectTimeRemaining() > 0){
+      this.gameState.setGlobalEffectTimeRemaining(gameState.getGlobalEffectTimeRemaining() - this.gameState.getDelta());
+    }
+    if(this.gameState.getGlobalEffectTimeRemaining() <= 0){
+      this.gameState.setGlobalEffect(null);
+    }
+
     for(Player player : gameState.getPlayerList()){
       if(player.getCurrentNumber() == gameState.getTargetNumber()){
         gameState.setComplete(true);
@@ -140,7 +156,13 @@ public class LocalGameManager implements Serializable{
       if(gameState.isComplete()){
         gameListener.gameFinished(this.gameState);
       }
-      if((Helpers.randomFloat(seed) * Constants.DROP_RATE) > gameState.getDelta()){
+      else if((this.gameState.getGlobalEffect() == Constants.ITEM_TYPE.SPEED_INCREASE) && (Helpers.randomFloat(seed) * Constants.DROP_RATE + 50) > gameState.getDelta()){
+        List<DroppedItem> droppedItemList = new ArrayList<>();
+        droppedItemList.add(generateDrop());
+        gameState.setDroppedItemList(droppedItemList);
+        gameListener.gameStateUpdated(this.gameState);
+      }
+      else if((Helpers.randomFloat(seed) * Constants.DROP_RATE) > gameState.getDelta()){
         List<DroppedItem> droppedItemList = new ArrayList<>();
         droppedItemList.add(generateDrop());
         gameState.setDroppedItemList(droppedItemList);
@@ -153,7 +175,17 @@ public class LocalGameManager implements Serializable{
   }
 
   private DroppedItem generateDrop(){
-    return new DroppedItem(Helpers.randomIntInRange(Constants.MIN_DROP, Constants.MAX_DROP, this.seed), Helpers.randomFloat(this.seed), Helpers.randomFloatInRange(Constants.MIN_DROP_SPEED, Constants.MAX_DROP_SPEED, seed));
+    float dropSpeed = Helpers.randomFloatInRange(Constants.MIN_DROP_SPEED, Constants.MAX_DROP_SPEED, seed);
+
+    if(this.gameState.getGlobalEffect() == Constants.ITEM_TYPE.SPEED_INCREASE){
+      dropSpeed *= 2;
+    }
+    if(Helpers.randomFloat(this.seed) < Constants.EFFECT_ITEM_DROP_CHANCE){
+      return new DroppedItem(Helpers.randomIntInRange(Constants.MIN_DROP, Constants.MAX_DROP, this.seed), Helpers.randomFloat(this.seed), dropSpeed);
+    }
+    else{
+      return new DroppedItem(Constants.ITEM_TYPE.SPEED_INCREASE, Helpers.randomFloat(this.seed), dropSpeed);
+    }
   }
 
   private Player findPlayerByUsername(String username){
