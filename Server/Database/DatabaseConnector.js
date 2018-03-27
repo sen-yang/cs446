@@ -103,10 +103,10 @@ module.exports = class DatabaseConnector extends DatabaseInterface{
     }
 
     getRating(winner,loser){
-      return db.any('select username, tau,rating,ratingdev,volatility from rankingsdata,users where users.UID=rankingsdata.UID(username=$1 OR username=$2)',[winner,loser] );
+      return db.any('select username, tau,rating,ratingdev,volatility from rankingsdata,users where users.UID=rankingsdata.UID and (users.username=$1 OR users.username=$2)',[winner,loser] );
     }
-    updateRatingAndRank(user, userscore){
-      return db.any('update rankingsdata set rating=$1 from users where users.UID=rankingsdata.UID and users.username=$2',[userscore, user]);
+    updateRating(userData){
+      return db.any('update rankingsdata set rating=$1,ratingdev=$2,volatility=$3 from users where users.UID=rankingsdata.UID and users.username=$4',[userData.rating,userData.ratingdev,userData.volatility, userData.username]);
     }
 };
 /////////////////////////////////////////////database interface/

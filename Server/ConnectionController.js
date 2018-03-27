@@ -1,7 +1,7 @@
 const DB = require('./Database/DatabaseConnector');
 const Constants = require('./Constants');
-const eloRank = require('elo-rank');
-var elo = new eloRank();
+var glicko2 = require('glicko2');
+
 var settings = {
   // tau : "Reasonable choices are between 0.3 and 1.2, though the system should
   //      be tested to decide which value results in greatest predictive accuracy."
@@ -10,11 +10,12 @@ var settings = {
   rating : 1500,
   //rd : Default rating deviation
   //     small number = good confidence on the rating accuracy
-  ratingdev : 200,
+  rd : 200,
   //vol : Default volatility (expected fluctation on the player rating)
-  volatility : 0.06
+  vol : 0.06
 };
 
+var ranking = new glicko2.Glicko2(settings);
 db = new DB();
 
 module.exports = class ConnectionController{
@@ -42,7 +43,7 @@ selectUser(username,  callback, failcallback){
     }
     db.SelectUser(userData)
     .then(data => {
-      callback(data);
+      callback(data[0]);
     })
     .catch(error => {
         console.log('ERROR:'+ error); // print the error;
@@ -57,7 +58,7 @@ SelectCharSprite(username, callback,failcallback){
     }
     db.SelectCharacterSprite(userData)
     .then(data => {
-      callback(data);
+      callback(data[0]);
     })
     .catch(error => {
       failcallback(error);
@@ -74,7 +75,7 @@ SelectCharSprite(username, callback,failcallback){
      db.LoginViaSessionID(userData)
      .then(data => {
        if(JSON.stringify(data)!="[]")
-       callback(data);
+       callback(data[0]);
        else {
          failcallback("Please Login again");
        }
@@ -110,7 +111,7 @@ SelectCharSprite(username, callback,failcallback){
     .then(data => {
       //emit ranking information back to client
       if(JSON.stringify(data)!="[]")
-      callback(data);//this function must check if the data is set.
+      callback(data[0]);//this function must check if the data is set.
       else {
         failcallback("Username or password is wrong, please try again");
       }
@@ -193,40 +194,60 @@ db.CheckUser(userData)
   //TODO
   db.getRating(Winnername, Losername)
         .then(data => {
+
       })
       .catch(error => {
           console.log('ERROR:'+ error); // print the error;
       })
 
 
-}
+    }
   updateRating(winneruser,loseruser,callback, failcallback){
     var matches = [];
     db.getRating(winneruser, loseruser)
     .then(data => {
-    console.log(data);
 
-
+      var winner;
+      var loser;
+    if(data[0].username==winner){
+      winner = ranking.makePlayer(data[0].rating,data[0].ratingdev,data[0].volatility);
+      loser = ranking.makePlayer(data[1].rating,data[1].ratingdev,data[1].volatility);
+    }else {
+      loser = ranking.makePlayer(data[0].rating,data[0].ratingdev,data[0].volatility);
+      winner = ranking.makePlayer(data[1].rating,data[1].ratingdev,data[1].volatility);
+    }
+     matches.push[winner,loser, 1];
+     ranking.updateRatings(matches);
+     userData1 ={
+       "username" : winneruser,
+       "rating" : winner.getRating(),
+       "ratingdev": winner.getRd(),
+       "volatility": winner.getVol()
+     }
+     userData2 ={
+       "username" : loseruser,
+       "rating" : loser.getRating(),
+       "ratingdev": loser.getRd(),
+       "volatility": loser.getVol()
+     }
+     db.updateRating(userData1)
+     .then(data => {
+     console.log(winneruser + "\'s score is  updated")
+   })
+    .catch(error => {
+        console.log('ERROR:'+ error); // print the error;
+        failcallback(error);
+    });
+    db.updateRating(userData2)
+    .then(data => {
+    console.log(winneruser + "\'s score is  updated")
   })
-
-  //   db.updateRatingAndRank(winneruser,winnerScore)
-  //   .then(data => {
-  //   console.log(winneruser + "\'s score is  updated")
-  //
-  //
-  // })
-  // .catch(error => {
-  //     console.log('ERROR:'+ error); // print the error;
-  // });
-  //
-  //
-  //   db.updateRatingAndRank(loseruser, loserScore)
-  //   .then(data => {
-  // })
-  // .catch(error => {
-  //     console.log('ERROR:'+ error); // print the error;
-  // });
-  }
+   .catch(error => {
+       console.log('ERROR:'+ error); // print the error;
+       failcallback(error);
+   });
+ })
+}
 
 
 
