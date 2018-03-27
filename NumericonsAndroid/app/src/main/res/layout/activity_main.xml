@@ -6,12 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/main_activity_backgound"
-    tools:context="sen.sen.numericonsandroid.Activities.MainActivity">
+    tools:context="sen.sen.numericonsandroid.Activities.MainActivity"
+    android:animateLayoutChanges="true"
+    android:id="@+id/mainActivityLayout">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linearLayoutMain"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -22,47 +24,148 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.643">
+        app:layout_constraintVertical_bias="0.534">
 
         <Button
+            android:background="@drawable/wood_banner2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onRankedGameButtonPressed"
-            android:text="1v1 Ranked" />
+            android:layout_height="60dp"
+            android:scaleX="1.3"
+            android:layout_marginBottom="@dimen/margin"
+            android:onClick="onOnlineGameButtonPressed"
+            android:text="Online Game"
+            android:textColor="@color/white">
+        </Button>
 
         <Button
+            android:background="@drawable/wood_banner2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onGroupGameButtonPressed"
-            android:text="Group Game" />
+            android:layout_height="60dp"
+            android:scaleX="1.3"
+            android:layout_marginBottom="@dimen/margin"
+            android:onClick="onLocalGameButtonPressed"
+            android:textColor="@color/white"
+            android:text="Local Game" />
 
         <Button
+            android:background="@drawable/wood_banner2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onSinglePlayerButtonPressed"
-            android:text="Singleplayer" />
+            android:layout_height="60dp"
+            android:scaleX="1.3"
+            android:layout_marginBottom="@dimen/margin"
+            android:onClick="onLeaderBoardButtonPressed"
+            android:textColor="@color/white"
+            android:text="Leader Board" />
 
         <Button
+            android:background="@drawable/wood_banner2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onBluetoothButtonPressed"
-            android:text="Bluetooth" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
+            android:scaleX="1.3"
+            android:layout_marginBottom="@dimen/margin"
             android:onClick="changeNameButtonPressed"
+            android:textColor="@color/white"
             android:text="Change Name" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linearLayoutOnline"
+        android:layout_width="150dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.533">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="@dimen/margin"
+            android:background="@drawable/wood_banner2"
+            android:scaleX="1.3"
+            android:textColor="@color/white"
+            android:onClick="onRankedGameButtonPressed"
+            android:text="1v1 Ranked" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="@dimen/marginQuad"
+            android:background="@drawable/wood_banner2"
+            android:scaleX="1.3"
+            android:textColor="@color/white"
+            android:onClick="onGroupGameButtonPressed"
+            android:text="Group Game" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="@dimen/margin"
+            android:background="@drawable/wood_banner2"
+            android:scaleX="1.3"
+            android:textColor="@color/white"
+            android:onClick="onMainActivityButtonPressed"
+            android:text="Back" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutLocal"
+        android:layout_width="150dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.533">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="@dimen/margin"
+            android:background="@drawable/wood_banner2"
+            android:scaleX="1.3"
+            android:textColor="@color/white"
+            android:onClick="onSinglePlayerButtonPressed"
+            android:text="Singleplayer" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="@dimen/marginQuad"
+            android:background="@drawable/wood_banner2"
+            android:onClick="onBluetoothButtonPressed"
+            android:scaleX="1.3"
+            android:text="Bluetooth"
+            android:textColor="@color/white" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/margin"
+            android:background="@drawable/wood_banner2"
+            android:onClick="onMainActivityButtonPressed"
+            android:scaleX="1.3"
+            android:text="Back"
+            android:textColor="@color/white" />
+    </LinearLayout>
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="124dp"
         android:elevation="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutMain"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

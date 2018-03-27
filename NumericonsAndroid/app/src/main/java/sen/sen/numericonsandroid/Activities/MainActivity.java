@@ -1,13 +1,21 @@
 package sen.sen.numericonsandroid.Activities;
 
+import android.animation.Animator;
+import android.animation.LayoutTransition;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import sen.sen.numericonsandroid.Global.Constants;
@@ -22,11 +30,35 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
   private ProgressBar progressBar;
   private AlertDialog alertDialog;
 
+  private ConstraintLayout mainActivityLayout;
+  private LinearLayout linearLayoutMain;
+  private LinearLayout linearLayoutLocal;
+  private LinearLayout linearLayoutOnline;
+
   @Override
   protected void onCreate(Bundle savedInstanceState){
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     progressBar = findViewById(R.id.progressBar);
+    mainActivityLayout = findViewById(R.id.mainActivityLayout);
+    linearLayoutMain = findViewById(R.id.linearLayoutMain);
+    linearLayoutLocal = findViewById(R.id.linearLayoutLocal);
+    linearLayoutOnline = findViewById(R.id.linearLayoutOnline);
+
+    Animator scaleDown = ObjectAnimator.ofPropertyValuesHolder((Object)null, PropertyValuesHolder.ofFloat("translateX", 1, 0), PropertyValuesHolder.ofFloat("scaleY", 1, 0));
+    scaleDown.setDuration(300);
+    scaleDown.setInterpolator(new OvershootInterpolator());
+
+    Animator scaleUp = ObjectAnimator.ofPropertyValuesHolder((Object)null, PropertyValuesHolder.ofFloat("scaleX", 0, 1), PropertyValuesHolder.ofFloat("scaleY", 0, 1));
+    scaleUp.setDuration(300);
+    scaleUp.setStartDelay(300);
+    scaleUp.setInterpolator(new OvershootInterpolator());
+
+    LayoutTransition itemLayoutTransition = new LayoutTransition();
+    itemLayoutTransition.setAnimator(LayoutTransition.APPEARING, scaleUp);
+    itemLayoutTransition.setAnimator(LayoutTransition.DISAPPEARING, scaleDown);
+
+    mainActivityLayout.setLayoutTransition(itemLayoutTransition);
   }
 
   @Override
@@ -105,6 +137,28 @@ public class MainActivity extends AppCompatActivity implements WebsocketControll
       }
     });
     alertDialog = alert.show();
+  }
+
+  public void onMainActivityButtonPressed(View view){
+    linearLayoutLocal.setVisibility(View.INVISIBLE);
+    linearLayoutOnline.setVisibility(View.INVISIBLE);
+    linearLayoutMain.setVisibility(View.VISIBLE);
+  }
+
+  public void onOnlineGameButtonPressed(View view){
+    linearLayoutMain.setVisibility(View.INVISIBLE);
+    linearLayoutLocal.setVisibility(View.INVISIBLE);
+    linearLayoutOnline.setVisibility(View.VISIBLE);
+  }
+
+  public void onLocalGameButtonPressed(View view){
+    linearLayoutMain.setVisibility(View.INVISIBLE);
+    linearLayoutLocal.setVisibility(View.VISIBLE);
+    linearLayoutOnline.setVisibility(View.INVISIBLE);
+  }
+
+  public void onLeaderBoardButtonPressed(View view){
+
   }
   @Override
   public void onConnected(){
