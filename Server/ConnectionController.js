@@ -6,15 +6,29 @@ db = new DB();
 module.exports = class ConnectionController{
     constructor(){
     }
-
-updateImage(username, newimageLink, callback){
+/////////////////////
+updateCharSprite(username, newimageLink, callback){
   var userData = {
   "username": username,
    "image" : newimageLink
     }
-    db.updateImage(userData)
+    db.UpdateCharacterSprite(userData)
     .then(data => {
       callback(true);
+    })
+    .catch(error => {
+        console.log('ERROR:'+ error); // print the error;
+    })
+}
+
+
+SelectCharSprite(username, callback){
+  var userData = {
+  "username": username,
+    }
+    db.SelectCharacterSprite(userData)
+    .then(data => {
+      callback(data);
     })
     .catch(error => {
         console.log('ERROR:'+ error); // print the error;
@@ -22,7 +36,37 @@ updateImage(username, newimageLink, callback){
 
 
 }
+///////////////////////////////////////
+ LoginViaSessionID(SessionID, callback){
+   var userData = {
+   "SessionID": SessionID
+     }
+     db.LoginViaSessionID(userData)
+     .then(data => {
+       callback(data);
+     })
+     .catch(error => {
+         callback(false);
+         console.log('ERROR:'+ error); // print the error;
+     })
+ }
 
+ UpdateSessionID(username, SessionID,callback){
+   var userData = {
+   "username": username,
+   "SessionID": SessionID
+     }
+       db.UpdateSessionID(userData)
+       .then(data => {
+         callback(true);
+       })
+       .catch(error => {
+         callback(false);
+           console.log('ERROR:'+ error); // print the error;
+       })
+     }
+
+///////////////////////////////////////
  Login(username, hashpassword, callback, failcallback){
   var userData = {
   "username": username,
@@ -31,10 +75,7 @@ updateImage(username, newimageLink, callback){
     db.Login(userData)
     .then(data => {
       //emit ranking information back to client
-      if(JSON.stringify(data)=="[]")
-      callback(false);
-      else
-      callback(true);//this function must check if the data is set.
+      callback(data);//this function must check if the data is set.
     })
     .catch(error => {
         console.log('ERROR:'+ error); // print the error;
@@ -52,7 +93,6 @@ updateImage(username, newimageLink, callback){
       db.selectRankings(userData)
       .then(data => {
         //emit ranking information back to client
-        console.log("ranking" + data);
         callback(data);
       })
       .catch(error => {
@@ -73,15 +113,16 @@ updateImage(username, newimageLink, callback){
 
 db.CheckUser(userData)
     .then(data => {
+      console.log(data);
       if(JSON.stringify(data)=="[]")
       this.createUser(username, hashpassword, email,  callback,errorcallback);
       else callback(false);
     })
     .catch(error => {
-    })
-    console.log('ERROR:'+ error); // print the error;
 
-  }
+    console.log('ERROR:'+ error); // print the error;
+  })
+}
 
 
  createUser(username, hashpassword, email, callback,errorcallback){
@@ -93,10 +134,9 @@ db.CheckUser(userData)
   db.registerUser(userData)
       .then(data => {
           console.log("user have been registered");
-          callback(true);//send data to user about a successful registration
+          this.Login(username, hashpassword,callback,errorcallback);//send data to user about a successful registration
           //emit data to user client
           //if successful, emit registration sucessfull
-
       })
       .catch(errorcallback, error => {
           console.log('ERROR:'+ error); // print the error;
