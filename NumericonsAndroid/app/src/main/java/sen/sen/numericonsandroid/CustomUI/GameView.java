@@ -49,12 +49,10 @@ public class GameView extends RelativeLayout{
   Rect clipBounds;
   Rect itemClipBounds;
   Rect itemRect;
-  Paint textPaint;
   private Basket birdModel;
   private Handler handler;
   private Runnable autoRun;
   private GameViewDelegate delegate;
-  private GameState gameState;
   private Constants.CHARACTER_SPRITE characterSprite;
   private Map<Integer, Drawable> numberDrawableMap;
   private Drawable speedIncreaseDrawable;
@@ -74,9 +72,6 @@ public class GameView extends RelativeLayout{
   public void setDelegate(GameViewDelegate delegate){
     this.delegate = delegate;
   }
-
-  //@TODO: Remove this later...just for testing
-  private float textSize;
   List<DroppedItem> droppedItemList;
 
   public GameView(Context context){
@@ -106,11 +101,6 @@ public class GameView extends RelativeLayout{
       }
     });
     droppedItemList = new ArrayList<>();
-    textSize = getResources().getDimension(R.dimen.dropTextSize);
-
-    textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    textPaint.setColor(Color.rgb(180, 40, 130));
-    textPaint.setTextSize(textSize);
 
     clipBounds = new Rect();
     itemClipBounds = new Rect();
@@ -196,30 +186,35 @@ public class GameView extends RelativeLayout{
     Iterator<DroppedItem> iterator = droppedItemList.iterator();
     while(iterator.hasNext()){
       DroppedItem item = iterator.next();
+      if(item.getyPosition() >= 1) {
+        item.isAlive = false;
+        iterator.remove();
+      }
+      if(item.isAlive) {
+        item.fall();
+        int left = (int) ratioToPixel_Width(item.getxPosition());
+        int top = (int) ratioToPixel_Height(item.getyPosition());
+        itemRect.set(left, top, left + itemWidth, top + itemHeight);
 
-      item.fall();
-      int left = (int) ratioToPixel_Width(item.getxPosition());
-      int top = (int) ratioToPixel_Height(item.getyPosition());
-      itemRect.set(left, top, left + itemWidth, top + itemHeight);
-
-      if(itemRect.top - birdModel.getyPosition() <= 10){
-        if(checkCollision(item, itemRect)){
-          iterator.remove();
+        if(itemRect.top - birdModel.getyPosition() <= 10){
+          if(checkCollision(item, itemRect)){
+            item.isAlive = false;
+            iterator.remove();
+          }
         }
+        Drawable itemDrawable;
+        switch(item.getItemType()){
+          case NUMBER:
+            itemDrawable = numberDrawableMap.get(item.getNumber());
+            break;
+          case SPEED_INCREASE:
+          default:
+            itemDrawable = speedIncreaseDrawable;
+            break;
+        }
+        itemDrawable.setBounds(itemRect);
+        itemDrawable.draw(canvas);
       }
-      Drawable itemDrawable;
-      switch(item.getItemType()){
-        case NUMBER:
-          itemDrawable = numberDrawableMap.get(item.getNumber());
-          break;
-        case SPEED_INCREASE:
-        default:
-          itemDrawable = speedIncreaseDrawable;
-          break;
-      }
-      itemDrawable.setBounds(itemRect);
-      itemDrawable.draw(canvas);
-
     }
   }
 

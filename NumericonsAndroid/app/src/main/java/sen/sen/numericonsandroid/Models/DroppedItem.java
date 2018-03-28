@@ -17,6 +17,7 @@ public class DroppedItem implements Serializable{
   private float xPosition;
   private float yPosition;
   private float ySpeed;
+  public boolean isAlive = true;
   private Constants.ITEM_TYPE itemType;
 
   private Drawable numberImage;
