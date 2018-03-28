@@ -28,6 +28,8 @@ public class GameState implements Serializable{
   private List<Player> playerList;
   private long timeRemaining;
   private List<DroppedItem> droppedItemList;
+  private Constants.ITEM_TYPE globalEffect;
+  private long globalEffectTimeRemaining = 0;
 
   public GameState(String seedString, List<Player> playerList){
     //todo generate from seed
@@ -149,6 +151,23 @@ public class GameState implements Serializable{
     this.startTime = startTime;
   }
 
+  public Constants.ITEM_TYPE getGlobalEffect(){
+    return globalEffect;
+  }
+
+  public void setGlobalEffect(Constants.ITEM_TYPE globalEffect){
+    this.globalEffect = globalEffect;
+    setGlobalEffectTimeRemaining(Constants.GLOBAL_ITEM_EFFECT_DURATION);
+  }
+
+  public long getGlobalEffectTimeRemaining(){
+    return globalEffectTimeRemaining;
+  }
+
+  public void setGlobalEffectTimeRemaining(long globalEffectTimeRemaining){
+    this.globalEffectTimeRemaining = globalEffectTimeRemaining;
+  }
+
   public static class GameStateAdapter implements JsonSerializer<GameState>{
     @Override
     public JsonElement serialize(GameState src, Type typeOfSrc, JsonSerializationContext context){
@@ -158,6 +177,7 @@ public class GameState implements Serializable{
       obj.addProperty("isComplete", src.isComplete());
       obj.add("winner", context.serialize(src.getWinner()));
       obj.addProperty("timeRemaining", src.getTimeRemaining());
+      obj.add("globalEffect", context.serialize(src.getGlobalEffect()));
       obj.add("droppedItemList", context.serialize(src.getDroppedItemList()));
 
       return obj;

@@ -20,6 +20,10 @@ public class Player implements Serializable{
   private boolean lost;
   private Constants.CHARACTER_SPRITE characterSprite;
 
+  public interface ItemUsedCallback{
+    void itemUsed(Constants.ITEM_TYPE itemType);
+  }
+
   public Player(int targetNumber, User user){
     this.targetNumber = targetNumber;
     this.username = user.getUsername();
@@ -30,7 +34,7 @@ public class Player implements Serializable{
     itemInInventory = null;
   }
 
-  public void doPlayerAction(PlayerAction playerAction){
+  public void doPlayerAction(PlayerAction playerAction, ItemUsedCallback itemUsedCallback){
     switch(playerAction.getCommandType()){
       case ADDITION:
       case SUBTRACTION:
@@ -42,10 +46,13 @@ public class Player implements Serializable{
         this.updateCurrentNumber(playerAction.getValue());
         break;
       case USE_ITEM:
-        //todo
+        if(itemInInventory != null && itemUsedCallback != null){
+          itemUsedCallback.itemUsed(itemInInventory.getItemType());
+          itemInInventory = null;
+        }
         break;
       case GET_ITEM:
-        this.getItem(playerAction.getItem());
+        this.catchItem(playerAction.getItem());
         break;
     }
   }
@@ -71,7 +78,7 @@ public class Player implements Serializable{
     }
   }
 
-  public void getItem(DroppedItem droppedItem){
+  public void catchItem(DroppedItem droppedItem){
     this.itemInInventory = droppedItem;
   }
 
@@ -83,9 +90,11 @@ public class Player implements Serializable{
     return currentNumber;
   }
 
-  public Constants.CHARACTER_SPRITE getCharacterSprite() {return characterSprite;}
+  public Constants.CHARACTER_SPRITE getCharacterSprite(){
+    return characterSprite;
+  }
 
-  public void setCharacterSprite(Constants.CHARACTER_SPRITE characterSprite) {
+  public void setCharacterSprite(Constants.CHARACTER_SPRITE characterSprite){
     this.characterSprite = characterSprite;
   }
 
@@ -109,6 +118,10 @@ public class Player implements Serializable{
     this.lost = lost;
   }
 
+  public DroppedItem getItemInInventory(){
+    return itemInInventory;
+  }
+
   public static class PlayerAdapter implements JsonSerializer<Player>{
     @Override
     public JsonElement serialize(Player src, Type typeOfSrc, JsonSerializationContext context){
@@ -116,6 +129,7 @@ public class Player implements Serializable{
       obj.addProperty("currentNumber", src.getCurrentNumber());
       obj.addProperty("username", src.getUsername());
       obj.addProperty("characterSprite", src.getCharacterSprite().toString());
+      obj.add("itemInInventory", context.serialize(src.itemInInventory));
 
       return obj;
     }

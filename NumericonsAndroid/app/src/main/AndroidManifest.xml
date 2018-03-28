@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.MainActivity">
+        <activity android:name=".Activities.MainActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -28,11 +29,14 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.Fullscreen">
         </activity>
-        <activity android:name=".Activities.BluetoothConnectionActivity">
+        <activity android:name=".Activities.BluetoothConnectionActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Activities.SettingsActivity">
+        <activity android:name=".Activities.SettingsActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Activities.LeaderBoardActivity">
+        <activity android:name=".Activities.LeaderBoardActivity"
+                  android:screenOrientation="portrait">
         </activity>
 
         <service

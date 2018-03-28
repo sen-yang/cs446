@@ -220,6 +220,7 @@ public class BluetoothController{
   }
 
   private void handleMessage(String message){
+    Log.d("asdf", message);
     WebsocketMessage websocketMessage = null;
     try{
       websocketMessage = gson.fromJson(message, WebsocketMessage.class);

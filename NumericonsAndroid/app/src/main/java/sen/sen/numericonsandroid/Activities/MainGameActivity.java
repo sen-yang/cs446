@@ -2,16 +2,11 @@ package sen.sen.numericonsandroid.Activities;
 
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -20,11 +15,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import sen.sen.numericonsandroid.CustomUI.GameView;
 import sen.sen.numericonsandroid.CustomUI.PlayerListInfoLayout;
-import sen.sen.numericonsandroid.CustomUI.PowerUpListView;
 import sen.sen.numericonsandroid.Global.BaseActivity;
 import sen.sen.numericonsandroid.Global.Constants;
 import sen.sen.numericonsandroid.Global.SharedPreferencesHelper;
@@ -36,7 +29,9 @@ import sen.sen.numericonsandroid.Networking.GameController;
 import sen.sen.numericonsandroid.Networking.GameListener;
 import sen.sen.numericonsandroid.R;
 
+import static sen.sen.numericonsandroid.Global.Constants.PLAYER_ACTION_TYPE.GET_ITEM;
 import static sen.sen.numericonsandroid.Global.Constants.PLAYER_ACTION_TYPE.GET_NUMBER;
+import static sen.sen.numericonsandroid.Global.Constants.PLAYER_ACTION_TYPE.USE_ITEM;
 import static sen.sen.numericonsandroid.Global.Constants.TOTAL_GAME_TIME;
 
 public class MainGameActivity extends BaseActivity implements GameListener, GameView.GameViewDelegate{
@@ -52,6 +47,7 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
   ImageView subButton;
   ImageView multiplyButton;
   ImageView divideButton;
+  ImageView itemInInventoryImageView;
   PlayerListInfoLayout multiPlayerModePlayerInfoView;
 
   //Private GameState Items
@@ -93,6 +89,7 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
     subButton = findViewById(R.id.minusButton);
     multiplyButton = findViewById(R.id.multiplyButton);
     divideButton = findViewById(R.id.divideButton);
+    itemInInventoryImageView = findViewById(R.id.itemInInventoryImageView);
 
     //Setup Event Listener
     addButton.setOnClickListener(addHandler);
@@ -152,9 +149,19 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
         break;
       }
     }
+    if((currentPlayer.getItemInInventory() != null) && (currentPlayer.getItemInInventory().getItemType() == Constants.ITEM_TYPE.SPEED_INCREASE)){
+      itemInInventoryImageView.setImageResource(R.drawable.star);
+      itemInInventoryImageView.setClickable(true);
+    }
+    else{
+      itemInInventoryImageView.setClickable(false);
+      itemInInventoryImageView.setImageDrawable(null);
+    }
+    gameView.setEffectInUse((gameState.getGlobalEffect() != null) && (gameState.getGlobalEffect() == Constants.ITEM_TYPE.SPEED_INCREASE));
+
     totalNumberTextView.setText(Integer.toString(currentPlayer.getCurrentNumber()));
     //TOTAL_GAME_TIME
-    countDownTimer.setProgress((int)((((float) gameState.getTimeRemaining()) / TOTAL_GAME_TIME) * 100));
+    countDownTimer.setProgress((int) ((((float) gameState.getTimeRemaining()) / TOTAL_GAME_TIME) * 100));
     multiPlayerModePlayerInfoView.updateView(gameState.getPlayerList());
     //todo show other players
     if(gameStage == Constants.GAME_STAGE.FINISHED){
@@ -230,11 +237,14 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
 
   @Override
   public void updateScore(int value){
-    //todo
-    switch(operationMode){
-      case ADDITION:
-    }
     playerActionPerformed(GET_NUMBER, value, null);
+  }
+
+  @Override
+  public void getItem(DroppedItem item){
+    PlayerAction playerAction = new PlayerAction(GET_ITEM, 0);
+    playerAction.setItem(item);
+    gameController.sendPlayerAction(playerAction);
   }
 
   View.OnClickListener addHandler = new View.OnClickListener(){
@@ -266,6 +276,10 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
     }
   };
 
+  public void useItemButtonPressed(View view){
+    playerActionPerformed(USE_ITEM, 0, null);
+  }
+
   private void playerActionPerformed(Constants.PLAYER_ACTION_TYPE operationMode, int value, ImageView selectedButton){
     playSoundEffect(SharedPreferencesHelper.getSavedUser().getCharacterSprite().getSoundEffectResId());
     if(selectedButton != null){
@@ -281,7 +295,7 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
 
   private void setCurrentNumberImageView(){
     int rid = R.drawable.bird1;
-    switch(SharedPreferencesHelper.getSavedUser().getCharacterSprite()) {
+    switch(SharedPreferencesHelper.getSavedUser().getCharacterSprite()){
       case BIRD_1:
         rid = R.drawable.bird1;
         break;

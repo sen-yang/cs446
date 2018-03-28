@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:clipChildren="false"
-    tools:context="sen.sen.numericonsandroid.Activities.MainGameActivity">
-
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                tools:context="sen.sen.numericonsandroid.Activities.MainGameActivity">
 
 
     <sen.sen.numericonsandroid.CustomUI.GameView
         android:id="@+id/gameView"
-        android:layout_toRightOf="@+id/sideBarLayout"
         android:layout_width="match_parent"
-        android:background="@drawable/gameview"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/sideBarLayout"
+        android:background="@drawable/gameview">
 
         <ProgressBar
             android:id="@+id/countDownTimer"
@@ -28,17 +27,20 @@
             android:layout_alignParentTop="true"
             android:max="100"
             android:min="0"
-            tools:visibility="visible" />
+            tools:visibility="visible"/>
 
-        <!--<sen.sen.numericonsandroid.CustomUI.PowerUpListView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_marginTop="70dp"-->
-            <!--android:orientation="vertical">-->
-        <!--</sen.sen.numericonsandroid.CustomUI.PowerUpListView>-->
     </sen.sen.numericonsandroid.CustomUI.GameView>
+
+    <ImageView
+        android:layout_width="@dimen/droppedItemWidth"
+        android:layout_height="@dimen/droppedItemHeight"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/marginDouble"
+        android:background="@color/transparentBlack"
+        android:id="@+id/itemInInventoryImageView"
+        android:onClick="useItemButtonPressed"/>
+
     <LinearLayout
         android:id="@+id/sideBarLayout"
         android:layout_width="90dp"
@@ -58,7 +60,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/marginDouble"
-                android:src="@drawable/target" />
+                android:src="@drawable/target"/>
 
             <TextView
                 android:id="@+id/targetNumberTextView"
@@ -87,7 +89,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/marginDouble"
-                android:src="@drawable/add" />
+                android:src="@drawable/add"/>
 
             <TextView
                 android:id="@+id/currentNumberTextView"
@@ -101,7 +103,8 @@
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:autoSizeTextType="uniform"/>
+                app:autoSizeTextType="uniform"
+                android:lines="1"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -114,51 +117,55 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/white" />
+                android:background="@color/white"/>
 
             <ImageView
                 android:id="@+id/addButton"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:src="@drawable/add" />
+                android:src="@drawable/add"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/white" />
+                android:background="@color/white"/>
 
             <ImageView
                 android:id="@+id/minusButton"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:src="@drawable/minus" />
+                android:src="@drawable/minus"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/white" />
+                android:background="@color/white"/>
+
             <ImageView
                 android:id="@+id/multiplyButton"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:src="@drawable/times" />
+                android:src="@drawable/times"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/white" />
+                android:background="@color/white"/>
 
             <ImageView
                 android:id="@+id/divideButton"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:src="@drawable/divides" />
+                android:src="@drawable/divides"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/white" />
+                android:background="@color/white"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

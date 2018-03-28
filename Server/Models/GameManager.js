@@ -48,6 +48,13 @@ module.exports = class GameManager{
     this.gameState.previousTickTime = now;
     this.gameState.timeRemaining -= this.gameState.delta;
 
+    if(this.gameState.globalEffectTimeRemaining > 0){
+      this.gameState.globalEffectTimeRemaining -= this.gameState.delta;
+    }
+    if(this.gameState.globalEffectTimeRemaining <= 0){
+      this.gameState.globalEffect = null;
+    }
+
     this.gameState.playerList.every((player) =>{
       if(player.currentNumber == this.gameState.targetNumber){
         this.gameState.isComplete = true;
@@ -85,14 +92,32 @@ module.exports = class GameManager{
       return Constants.MESSAGE_TYPE.GAME_FINISH;
     }
     this.gameState.droppedItemList = [];
-    if(Helpers.randomFloat(this.seed) * Constants.DROP_RATE > this.gameState.delta){
-      this.gameState.droppedItemList.push(this.generateDrop());
+
+    if(this.gameState.globalEffect == Constants.ITEM_TYPE.SPEED_INCREASE){
+      if(Helpers.randomFloat(this.seed) * (Constants.DROP_RATE + 50) > this.gameState.delta){
+        this.gameState.droppedItemList.push(this.generateDrop());
+      }
+    }
+    else{
+      if(Helpers.randomFloat(this.seed) * Constants.DROP_RATE > this.gameState.delta){
+        this.gameState.droppedItemList.push(this.generateDrop());
+      }
     }
     return Constants.MESSAGE_TYPE.GAME_STATE_UPDATE;
   }
 
   generateDrop(){
-    return new DroppedItem(Helpers.randomNumberInRange(Constants.MIN_DROP, Constants.MAX_DROP, true, this.seed), Helpers.randomFloat(this.seed), Helpers.randomNumberInRange(Constants.MIN_DROP_SPEED, Constants.MAX_DROP_SPEED, false));
+    let dropSpeed = Helpers.randomNumberInRange(Constants.MIN_DROP_SPEED, Constants.MAX_DROP_SPEED, false);
+
+    if(this.gameState.globalEffect == Constants.ITEM_TYPE.SPEED_INCREASE){
+      dropSpeed *= 2;
+    }
+    if(Helpers.randomFloat(this.seed) < Constants.EFFECT_ITEM_DROP_CHANCE){
+      return new DroppedItem(0, Helpers.randomFloat(this.seed), dropSpeed, Constants.ITEM_TYPE.SPEED_INCREASE);
+    }
+    else{
+      return new DroppedItem(Helpers.randomNumberInRange(Constants.MIN_DROP, Constants.MAX_DROP, true, this.seed), Helpers.randomFloat(this.seed), dropSpeed, Constants.ITEM_TYPE.NUMBER);
+    }
   }
 
   userLeft(username){
@@ -102,7 +127,13 @@ module.exports = class GameManager{
   }
 
   playerActionPerformed(username, playerAction){
-    this.findPlayerByUsername(username).doPlayerAction(playerAction);
+    this.findPlayerByUsername(username).doPlayerAction(playerAction, (itemUsed) =>{
+      switch(itemUsed){
+        case Constants.ITEM_TYPE.SPEED_INCREASE:
+          this.gameState.setGlobalEffect(Constants.ITEM_TYPE.SPEED_INCREASE);
+          break;
+      }
+    });
   }
 
   findPlayerByUsername(username){
@@ -120,7 +151,7 @@ module.exports = class GameManager{
       let winner = this.gameState.getWinner();
       let loser = null;
 
-      this.gameState.playerList.forEach((player)=>{
+      this.gameState.playerList.forEach((player) =>{
         if(player != winner){
           loser = player;
         }

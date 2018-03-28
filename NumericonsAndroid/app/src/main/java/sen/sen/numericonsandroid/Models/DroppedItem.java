@@ -17,18 +17,25 @@ public class DroppedItem implements Serializable{
   private float xPosition;
   private float yPosition;
   private float ySpeed;
-  private boolean alive;
-  private int itemType;
+  private Constants.ITEM_TYPE itemType;
 
   private Drawable numberImage;
 
   public DroppedItem(){
   }
+
   public DroppedItem(int number, float xPosition, float ySpeed){
+    this.itemType = Constants.ITEM_TYPE.NUMBER;
     this.number = number;
     this.xPosition = xPosition;
     this.ySpeed = ySpeed;
-    this.alive = true;
+    this.yPosition = 0;
+  }
+
+  public DroppedItem(Constants.ITEM_TYPE itemType, float xPosition, float ySpeed){
+    this.itemType = itemType;
+    this.xPosition = xPosition;
+    this.ySpeed = ySpeed;
     this.yPosition = 0;
   }
 
@@ -64,15 +71,12 @@ public class DroppedItem implements Serializable{
     this.ySpeed = ySpeed;
   }
 
-  public boolean isAlive(){
-    return alive;
-  }
-
-  public void setAlive(boolean alive){
-    this.alive = alive;
-  }
   public void fall(){
     long timePass = System.currentTimeMillis() - startTimer;
     yPosition = (ySpeed / SPEEDOFFSET) * (timePass / TIMEROFFSET);
+  }
+
+  public Constants.ITEM_TYPE getItemType(){
+    return itemType;
   }
 }

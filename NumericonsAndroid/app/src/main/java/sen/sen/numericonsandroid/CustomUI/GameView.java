@@ -41,6 +41,8 @@ public class GameView extends RelativeLayout{
 
   public interface GameViewDelegate{
     void updateScore(int value);
+
+    void getItem(DroppedItem item);
   }
 
   ImageView birdImageView;
@@ -55,12 +57,15 @@ public class GameView extends RelativeLayout{
   private GameState gameState;
   private Constants.CHARACTER_SPRITE characterSprite;
   private Map<Integer, Drawable> numberDrawableMap;
+  private Drawable speedIncreaseDrawable;
+  private Paint effectOverlayPaint;
 
   private int bird_animation_running_rid;
   private int bird_animation_eating_rid;
   private int bird_static_standing_rid;
   private int itemWidth;
   private int itemHeight;
+  private boolean effectInUse;
 
 
   boolean runAnimating = false;
@@ -119,6 +124,12 @@ public class GameView extends RelativeLayout{
     for(int i = 0; i <= 9; i++){
       numberDrawableMap.put(i, getResources().getDrawable(Helpers.getResId("pos_" + i, R.drawable.class)));
     }
+    //todo change
+    speedIncreaseDrawable = getResources().getDrawable(R.drawable.star);
+    effectOverlayPaint = new Paint();
+    effectOverlayPaint.setARGB(80, 200, 40, 40);
+    effectOverlayPaint.setStyle(Paint.Style.FILL);
+
     handler = new Handler();
     autoRun = new Runnable(){
       public void run(){
@@ -160,7 +171,6 @@ public class GameView extends RelativeLayout{
   }
 
   public void addDroppedItem(DroppedItem item){
-    item.setAlive(true);
     droppedItemList.add(item);
   }
 
@@ -179,49 +189,73 @@ public class GameView extends RelativeLayout{
     canvas.getClipBounds(itemClipBounds);
     itemClipBounds.right -= itemWidth;
 
+    if(effectInUse){
+      canvas.drawRect(canvas.getClipBounds(), effectOverlayPaint);
+    }
+
     Iterator<DroppedItem> iterator = droppedItemList.iterator();
-    while (iterator.hasNext()) {
-      DroppedItem item = iterator.next(); // must be called before you can call i.remove()
-      // Do something
-      if(item.isAlive()){
-        item.fall();
-        int left = (int) ratioToPixel_Width(item.getxPosition());
-        int top = (int) ratioToPixel_Height(item.getyPosition());
-        itemRect.set(left, top, left + itemWidth, top + itemHeight);
+    while(iterator.hasNext()){
+      DroppedItem item = iterator.next();
 
-        if(itemRect.top - birdModel.getyPosition() <= 10){
-          checkCollision(item, itemRect);
+      item.fall();
+      int left = (int) ratioToPixel_Width(item.getxPosition());
+      int top = (int) ratioToPixel_Height(item.getyPosition());
+      itemRect.set(left, top, left + itemWidth, top + itemHeight);
+
+      if(itemRect.top - birdModel.getyPosition() <= 10){
+        if(checkCollision(item, itemRect)){
+          iterator.remove();
         }
+      }
+      Drawable itemDrawable;
+      switch(item.getItemType()){
+        case NUMBER:
+          itemDrawable = numberDrawableMap.get(item.getNumber());
+          break;
+        case SPEED_INCREASE:
+        default:
+          itemDrawable = speedIncreaseDrawable;
+          break;
+      }
+      itemDrawable.setBounds(itemRect);
+      itemDrawable.draw(canvas);
 
-        Drawable itemDrawable = numberDrawableMap.get(item.getNumber());
-        itemDrawable.setBounds(itemRect);
-        itemDrawable.draw(canvas);
-      }
-      else{
-        iterator.remove();
-      }
     }
   }
 
   boolean outOfBound(float x, float halfWidth){
     if(x < clipBounds.left || x + 2 * halfWidth > clipBounds.right){
       return true;
-    } else{
+    }
+    else{
       return false;
     }
   }
 
-  void checkCollision(DroppedItem item, Rect itemBounds){
+  public void setEffectInUse(boolean effectInUse){
+    this.effectInUse = effectInUse;
+  }
+
+  private boolean checkCollision(DroppedItem item, Rect itemBounds){
     if(itemBounds.intersect((int) birdModel.getxPosition(),
-                                       (int) birdModel.getyPosition(),
-                                       (int) birdModel.getxPosition() + birdImageView.getWidth(),
-                                       (int) birdModel.getyPosition() + birdImageView.getHeight())){
-      item.setAlive(false);
+                            (int) birdModel.getyPosition(),
+                            (int) birdModel.getxPosition() + birdImageView.getWidth(),
+                            (int) birdModel.getyPosition() + birdImageView.getHeight())){
       bird_eat_animation_start();
       if(this.delegate != null){
-        this.delegate.updateScore(item.getNumber());
+        switch(item.getItemType()){
+          case NUMBER:
+            this.delegate.updateScore(item.getNumber());
+            break;
+          case SPEED_INCREASE:
+          default:
+            this.delegate.getItem(item);
+            break;
+        }
       }
+      return true;
     }
+    return false;
   }
 
   View.OnTouchListener basket_onTouchListener(){
@@ -261,7 +295,8 @@ public class GameView extends RelativeLayout{
   void updateDirection(float xPosition){
     if(birdModel.getxPosition() > xPosition){
       birdDirection = Constants.BIRD_DIRECTION.LEFT;
-    } else{
+    }
+    else{
       birdDirection = Constants.BIRD_DIRECTION.RIGHT;
     }
   }
@@ -277,7 +312,8 @@ public class GameView extends RelativeLayout{
   void bird_running_animation_start(){
     if(birdDirection == Constants.BIRD_DIRECTION.LEFT){
       // Log.i("LEFT", "onTouch: LEFT!!");
-    } else{
+    }
+    else{
       // Log.i("RIGHT", "onTouch: RIGHT!!");
     }
     if(!runAnimating){
