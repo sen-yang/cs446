@@ -17,7 +17,7 @@ public class DroppedItem implements Serializable{
   private float xPosition;
   private float yPosition;
   private float ySpeed;
-  public boolean isAlive = true;
+  private boolean isAlive = true;
   private Constants.ITEM_TYPE itemType;
 
   private Drawable numberImage;
@@ -70,6 +70,14 @@ public class DroppedItem implements Serializable{
 
   public void setySpeed(long ySpeed){
     this.ySpeed = ySpeed;
+  }
+
+  public boolean getisAlive(){
+    return isAlive;
+  }
+
+  public void setAlive(boolean alive){
+    isAlive = alive;
   }
 
   public void fall(){

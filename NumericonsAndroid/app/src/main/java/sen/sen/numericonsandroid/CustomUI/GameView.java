@@ -187,10 +187,10 @@ public class GameView extends RelativeLayout{
     while(iterator.hasNext()){
       DroppedItem item = iterator.next();
       if(item.getyPosition() >= 1) {
-        item.isAlive = false;
+        item.setAlive(false);
         iterator.remove();
       }
-      if(item.isAlive) {
+      if(item.getisAlive()) {
         item.fall();
         int left = (int) ratioToPixel_Width(item.getxPosition());
         int top = (int) ratioToPixel_Height(item.getyPosition());
@@ -198,7 +198,7 @@ public class GameView extends RelativeLayout{
 
         if(itemRect.top - birdModel.getyPosition() <= 10){
           if(checkCollision(item, itemRect)){
-            item.isAlive = false;
+            item.setAlive(false);
             iterator.remove();
           }
         }

@@ -160,7 +160,6 @@ public class MainGameActivity extends BaseActivity implements GameListener, Game
     gameView.setEffectInUse((gameState.getGlobalEffect() != null) && (gameState.getGlobalEffect() == Constants.ITEM_TYPE.SPEED_INCREASE));
 
     totalNumberTextView.setText(Integer.toString(currentPlayer.getCurrentNumber()));
-    //TOTAL_GAME_TIME
     countDownTimer.setProgress((int) ((((float) gameState.getTimeRemaining()) / TOTAL_GAME_TIME) * 100));
     multiPlayerModePlayerInfoView.updateView(gameState.getPlayerList());
     //todo show other players
