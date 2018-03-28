@@ -72,6 +72,7 @@ public class GameView extends RelativeLayout{
   public void setDelegate(GameViewDelegate delegate){
     this.delegate = delegate;
   }
+
   List<DroppedItem> droppedItemList;
 
   public GameView(Context context){
@@ -186,34 +187,27 @@ public class GameView extends RelativeLayout{
     Iterator<DroppedItem> iterator = droppedItemList.iterator();
     while(iterator.hasNext()){
       DroppedItem item = iterator.next();
-      if(item.getyPosition() >= 1) {
-        item.setAlive(false);
-        iterator.remove();
-      }
-      if(item.getisAlive()) {
-        item.fall();
-        int left = (int) ratioToPixel_Width(item.getxPosition());
-        int top = (int) ratioToPixel_Height(item.getyPosition());
-        itemRect.set(left, top, left + itemWidth, top + itemHeight);
 
-        if(itemRect.top - birdModel.getyPosition() <= 10){
-          if(checkCollision(item, itemRect)){
-            item.setAlive(false);
-            iterator.remove();
-          }
-        }
-        Drawable itemDrawable;
-        switch(item.getItemType()){
-          case NUMBER:
-            itemDrawable = numberDrawableMap.get(item.getNumber());
-            break;
-          case SPEED_INCREASE:
-          default:
-            itemDrawable = speedIncreaseDrawable;
-            break;
-        }
-        itemDrawable.setBounds(itemRect);
-        itemDrawable.draw(canvas);
+      item.fall();
+      int left = (int) ratioToPixel_Width(item.getxPosition());
+      int top = (int) ratioToPixel_Height(item.getyPosition());
+      itemRect.set(left, top, left + itemWidth, top + itemHeight);
+
+      Drawable itemDrawable;
+      switch(item.getItemType()){
+        case NUMBER:
+          itemDrawable = numberDrawableMap.get(item.getNumber());
+          break;
+        case SPEED_INCREASE:
+        default:
+          itemDrawable = speedIncreaseDrawable;
+          break;
+      }
+      itemDrawable.setBounds(itemRect);
+      itemDrawable.draw(canvas);
+
+      if(((itemRect.top - birdModel.getyPosition() <= 10) && checkCollision(item, itemRect)) || (item.getyPosition() >= 1)){
+        iterator.remove();
       }
     }
   }

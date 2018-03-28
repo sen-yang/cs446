@@ -17,6 +17,7 @@ public class LocalGameManager implements Serializable{
   private GameState gameState;
   private Thread gameLoop;
   private GameListener gameListener;
+  private int gay = 0;
 
   public LocalGameManager(String seedString, List<User> userList){
     this.seed = seedString;
@@ -151,21 +152,19 @@ public class LocalGameManager implements Serializable{
       }
       gameState.setWinner(minPlayer);
     }
+    List<DroppedItem> droppedItemList = new ArrayList<>();
+    gameState.setDroppedItemList(droppedItemList);
 
     if(gameListener != null){
       if(gameState.isComplete()){
         gameListener.gameFinished(this.gameState);
       }
       else if((this.gameState.getGlobalEffect() == Constants.ITEM_TYPE.SPEED_INCREASE) && (Helpers.randomFloat(seed) * Constants.DROP_RATE + 50) > gameState.getDelta()){
-        List<DroppedItem> droppedItemList = new ArrayList<>();
         droppedItemList.add(generateDrop());
-        gameState.setDroppedItemList(droppedItemList);
         gameListener.gameStateUpdated(this.gameState);
       }
       else if((Helpers.randomFloat(seed) * Constants.DROP_RATE) > gameState.getDelta()){
-        List<DroppedItem> droppedItemList = new ArrayList<>();
         droppedItemList.add(generateDrop());
-        gameState.setDroppedItemList(droppedItemList);
         gameListener.gameStateUpdated(this.gameState);
       }
       else{
