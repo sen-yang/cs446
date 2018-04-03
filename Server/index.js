@@ -18,7 +18,6 @@ const server = new WebSocketServer(config, function(){
   console.log('Server started on port', Constants.PORT_NUMBER);
 });
 
-let connectedClients = [];
 let gameRooms = {};
 let clientsSearchingForRanked = [];
 let clientsSearchingForGroup = [];
@@ -26,7 +25,6 @@ let clientsSearchingForGroup = [];
 server.on('connection', function(ws){
   console.log('connected');
   let client = new WebsocketClient(ws);
-  connectedClients[client.id] = client;
 
   ws.on('message', (message) =>{
     console.log('received: ', message);
@@ -51,20 +49,11 @@ function verifyClient(info){
 }
 
 function clientDisconnected(client){
-  delete connectedClients[client.id];
-
-  for(var i = clientsSearchingForRanked.length; i >= 0; i--){
-    if(clientsSearchingForRanked[i] == client){
-      clientsSearchingForRanked.splice(i, 1);
-      break;
-    }
+  if(client.currentRoom != null){
+    client.currentRoom.clientDropped(client);
+    client.currentRoom = null;
   }
-  for(var i = clientsSearchingForGroup.length; i >= 0; i--){
-    if(clientsSearchingForGroup[i] == client){
-      clientsSearchingForGroup.splice(i, 1);
-      break;
-    }
-  }
+  clearSearchingClient(client);
 }
 
 // client message handlers
