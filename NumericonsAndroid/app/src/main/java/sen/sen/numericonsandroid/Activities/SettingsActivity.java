@@ -98,6 +98,7 @@ public class SettingsActivity extends BaseActivity implements WebsocketControlle
 
     alertDialog = new AlertDialog.Builder(this)
         .setTitle(R.string.login_or_sign_up)
+        .setMessage("")
         .setView(loginDialogView)
         .setPositiveButton(R.string.login, null)
         .setNegativeButton(R.string.cancel, null)
@@ -180,6 +181,7 @@ public class SettingsActivity extends BaseActivity implements WebsocketControlle
     if(Helpers.isNonEmptyString(errorMessage)){
       if((alertDialog != null) &&  alertDialog.isShowing()){
         alertDialog.setMessage(errorMessage);
+        Log.d("asdf", errorMessage);
       }
       errorTextView.setVisibility(View.VISIBLE);
     }
