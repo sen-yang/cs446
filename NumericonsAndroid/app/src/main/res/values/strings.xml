@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Rise of the Numericons</string>
+    <string name="app_name">Numericons</string>
     <string name="login">Login</string>
     <string name="switch_accounts">Switch Accounts</string>
     <string name="login_or_sign_up">Login/Sign up</string>

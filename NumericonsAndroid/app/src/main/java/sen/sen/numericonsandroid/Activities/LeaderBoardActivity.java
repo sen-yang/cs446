@@ -127,7 +127,6 @@ public class LeaderBoardActivity extends BaseActivity implements WebsocketContro
           Toast.makeText(LeaderBoardActivity.this, R.string.cannot_retrieve_users, Toast.LENGTH_LONG).show();
         }
         else{
-          Log.d("asdf", newUserList.toString());
           userList.addAll(newUserList);
           setLoading(false);
 

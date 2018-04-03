@@ -17,7 +17,6 @@ public class LocalGameManager implements Serializable{
   private GameState gameState;
   private Thread gameLoop;
   private GameListener gameListener;
-  private int gay = 0;
 
   public LocalGameManager(String seedString, List<User> userList){
     this.seed = seedString;

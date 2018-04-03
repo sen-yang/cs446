@@ -220,7 +220,6 @@ public class BluetoothController{
   }
 
   private void handleMessage(String message){
-    Log.d("asdf", message);
     WebsocketMessage websocketMessage = null;
     try{
       websocketMessage = gson.fromJson(message, WebsocketMessage.class);
@@ -335,38 +334,44 @@ public class BluetoothController{
     }
 
     @Override
-    public void gameStarted(GameState gameState){
+    public void gameStarted(final GameState gameState){
       WebsocketMessage websocketMessage = new GameStateMessage(Constants.MESSAGE_TYPE.GAME_START, gameState);
-      bluetoothChatService.write(gson.toJson(websocketMessage).getBytes());
+      String websocketMessageString = gson.toJson(websocketMessage);
+      bluetoothChatService.write(websocketMessageString.getBytes());
+      GameState newGameState = gson.fromJson(websocketMessageString, GameStateMessage.class).getGameState();
 
       for(WeakReference<GameListener> listenerWeakReference : gameListenerList){
         if(listenerWeakReference.get() != null){
-          listenerWeakReference.get().gameStarted(gameState);
+          listenerWeakReference.get().gameStarted(newGameState);
         }
       }
     }
 
     @Override
-    public void gameFinished(GameState gameState){
+    public void gameFinished(final GameState gameState){
       WebsocketMessage websocketMessage = new GameStateMessage(Constants.MESSAGE_TYPE.GAME_FINISH, gameState);
-      bluetoothChatService.write(gson.toJson(websocketMessage).getBytes());
+      String websocketMessageString = gson.toJson(websocketMessage);
+      bluetoothChatService.write(websocketMessageString.getBytes());
+      GameState newGameState = gson.fromJson(websocketMessageString, GameStateMessage.class).getGameState();
 
       for(WeakReference<GameListener> listenerWeakReference : gameListenerList){
         if(listenerWeakReference.get() != null){
-          listenerWeakReference.get().gameFinished(gameState);
+          listenerWeakReference.get().gameFinished(newGameState);
         }
       }
       reset();
     }
 
     @Override
-    public void gameStateUpdated(GameState gameState){
+    public void gameStateUpdated(final GameState gameState){
       WebsocketMessage websocketMessage = new GameStateMessage(Constants.MESSAGE_TYPE.GAME_STATE_UPDATE, gameState);
-      bluetoothChatService.write(gson.toJson(websocketMessage).getBytes());
+      String websocketMessageString = gson.toJson(websocketMessage);
+      bluetoothChatService.write(websocketMessageString.getBytes());
+      GameState newGameState = gson.fromJson(websocketMessageString, GameStateMessage.class).getGameState();
 
       for(WeakReference<GameListener> listenerWeakReference : gameListenerList){
         if(listenerWeakReference.get() != null){
-          listenerWeakReference.get().gameStateUpdated(gameState);
+          listenerWeakReference.get().gameStateUpdated(newGameState);
         }
       }
     }
