@@ -20,6 +20,7 @@ import sen.sen.numericonsandroid.R;
 public class AudioService extends Service{
   private static final String TAG = "AudioService";
   private static final int MAX_SOUND_STREAMDS = 5;
+  private static final float MUSIC_VOLUME = 0.5f;
 
   private MediaPlayer mediaPlayer;
   private SoundPool soundPool;
@@ -54,7 +55,7 @@ public class AudioService extends Service{
     binder = new AudioServiceBinder();
     mediaPlayer = MediaPlayer.create(this, R.raw.background_music);
     mediaPlayer.setLooping(true); // Set looping
-    mediaPlayer.setVolume(1, 1);
+    mediaPlayer.setVolume(MUSIC_VOLUME, MUSIC_VOLUME);
 
     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
       AudioAttributes attrs = new AudioAttributes.Builder()
@@ -103,7 +104,7 @@ public class AudioService extends Service{
     this.isSoundEnabled = isSoundEnabled;
 
     if(isSoundEnabled){
-      mediaPlayer.setVolume(1, 1);
+      mediaPlayer.setVolume(MUSIC_VOLUME, MUSIC_VOLUME);
     }
     else{
       mediaPlayer.setVolume(0, 0);
