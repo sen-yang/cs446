@@ -20,7 +20,7 @@ import sen.sen.numericonsandroid.R;
 public class AudioService extends Service{
   private static final String TAG = "AudioService";
   private static final int MAX_SOUND_STREAMDS = 5;
-  private static final float MUSIC_VOLUME = 0.5f;
+  private static final float MUSIC_VOLUME = 0.4f;
 
   private MediaPlayer mediaPlayer;
   private SoundPool soundPool;
