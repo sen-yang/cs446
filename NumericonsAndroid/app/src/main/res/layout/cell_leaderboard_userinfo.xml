@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:orientation="horizontal"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_centerHorizontal="true"
     android:background="@color/transwhite"
-android:padding="10dp">
+    android:padding="10dp">
     <TextView
         android:id="@+id/userRank"
         android:layout_width="35dp"
@@ -15,7 +16,9 @@ android:padding="10dp">
         android:layout_marginLeft="@dimen/marginDouble"
         android:textAlignment="center"
         android:textSize="@dimen/dropTextSize"
-        android:text="1."/>
+        android:text="1"
+        android:lines="1"
+        app:autoSizeTextType="uniform"/>
 
     <TextView
         android:id="@+id/userName"
@@ -27,7 +30,9 @@ android:padding="10dp">
         android:layout_toRightOf="@+id/userRank"
         android:layout_weight="1"
         android:textSize="@dimen/dropTextSize"
-        android:text="Jennifer" />
+        android:text="Jennifer"
+        android:lines="1"
+        app:autoSizeTextType="uniform"/>
     <TextView
         android:id="@+id/userScore"
         android:layout_width="80dp"
@@ -40,6 +45,8 @@ android:padding="10dp">
         android:textAlignment="textEnd"
         android:gravity="end"
         android:layout_weight="1"
-        android:text="rating" />
+        android:text="rating"
+        android:lines="1"
+        app:autoSizeTextType="uniform"/>
 </RelativeLayout>
 

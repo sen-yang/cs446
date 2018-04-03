@@ -2,6 +2,7 @@ package sen.sen.numericonsandroid.CustomUI;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
+import sen.sen.numericonsandroid.Global.SharedPreferencesHelper;
 import sen.sen.numericonsandroid.Models.User;
 import sen.sen.numericonsandroid.R;
 
@@ -90,10 +92,17 @@ public class LeaderBoardRecyclerViewAdaptor extends RecyclerView.Adapter<Recycle
     void bindData(int position){
       user = userList.get(position);
       //todo bind views based on user info
-      userName.setText(user.getUsername());
       userScore.setText(Integer.toString(user.getRankRating()));
       userRank.setText(Integer.toString(user.getRank()));
-      //userScore.setText(user.get);
+
+      if(user.getUsername().equals(SharedPreferencesHelper.getUsername())){
+        userName.setTypeface(null, Typeface.BOLD);
+        userName.setText(user.getUsername() + " (You)");
+      }
+      else{
+        userName.setTypeface(null, Typeface.NORMAL);
+        userName.setText(user.getUsername());
+      }
     }
   }
 
