@@ -3,6 +3,7 @@ package sen.sen.numericonsandroid.CustomUI;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -51,6 +52,7 @@ public class PlayerInfoView extends RelativeLayout{
     playerName.setId(R.id.multiPlayerName);
     playerName.setTextSize(15);
     playerName.setTextColor(Color.WHITE);
+    playerName.setFilters( new InputFilter[] {new InputFilter.LengthFilter(15) } );
 
     playerCurrentNumber = new TextView(getContext());
     playerCurrentNumber.setText("73");
